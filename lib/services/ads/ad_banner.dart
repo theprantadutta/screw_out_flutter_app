@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -38,19 +37,13 @@ class SharedBanner extends ChangeNotifier {
 
   bool _started = false;
 
-  /// Computes the slot size for the device's real width. Cheap native call,
-  /// needs no consent — done at startup so Home reserves the right space
-  /// from its very first frame.
+  /// Fixes the slot size before anything draws. Standard 320×50 banner:
+  /// the most compact format, and every creative fills it exactly (large
+  /// adaptive banners reserve ~100 dp and often serve a shorter creative,
+  /// leaving empty bands around the ad).
   Future<void> prepareSize() async {
     if (_size != null || _disabled) return;
-    final view = ui.PlatformDispatcher.instance.views.first;
-    final width = (view.physicalSize.width / view.devicePixelRatio).truncate();
-    try {
-      _size = await AdSize.getLargeAnchoredAdaptiveBannerAdSize(width) ??
-          AdSize.banner;
-    } on Object {
-      _size = AdSize.banner;
-    }
+    _size = AdSize.banner;
     notifyListeners();
     if (_started) _load();
   }
