@@ -131,11 +131,12 @@ final class GameEngine {
     return null;
   }
 
-  SavedGame save() => SavedGame(
+  SavedGame save({Map<String, Object?> meta = const {}}) => SavedGame(
     levelId: level.id,
     state: _state,
     history: [for (final e in _history) e.toJson()],
     bonusSlots: _bonusSlots,
+    meta: meta,
   );
 
   /// Releases every unreleased panel whose screws are all out, returning their
@@ -179,6 +180,7 @@ final class SavedGame {
     required this.state,
     required this.history,
     this.bonusSlots = 0,
+    this.meta = const {},
   });
 
   final int levelId;
@@ -186,11 +188,15 @@ final class SavedGame {
   final List<Map<String, Object?>> history;
   final int bonusSlots;
 
+  /// Session data owned by the caller (hints left, mastery flags, time…).
+  final Map<String, Object?> meta;
+
   Map<String, Object?> toJson() => {
     'levelId': levelId,
     'state': state.toJson(),
     'history': history,
     'bonusSlots': bonusSlots,
+    'meta': meta,
   };
 
   factory SavedGame.fromJson(Map<String, Object?> j) => SavedGame(
@@ -200,6 +206,7 @@ final class SavedGame {
       for (final h in j['history']! as List) (h as Map).cast<String, Object?>(),
     ],
     bonusSlots: (j['bonusSlots'] as num? ?? 0).toInt(),
+    meta: (j['meta'] as Map?)?.cast<String, Object?>() ?? const {},
   );
 }
 
