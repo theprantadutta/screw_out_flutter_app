@@ -1,23 +1,41 @@
 {
   "@@locale": "en",
   "appName": "Screw Out",
-
   "pause": "Pause",
   "back": "Back",
   "settings": "Settings",
   "coinsBalance": "{coins} coins",
-  "@coinsBalance": { "placeholders": { "coins": { "type": "int" } } },
-
+  "@coinsBalance": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
   "tray": "TRAY",
   "trayFull": "TRAY FULL",
   "undo": "UNDO",
   "hintCount": "HINT · {count}",
-  "@hintCount": { "placeholders": { "count": { "type": "String" } } },
+  "@hintCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "hintUnlimited": "∞",
-
   "paused": "Paused",
   "pausedMeta": "{code} · MOVE {moves}",
-  "@pausedMeta": { "placeholders": { "code": { "type": "String" }, "moves": { "type": "int" } } },
+  "@pausedMeta": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "moves": {
+        "type": "int"
+      }
+    }
+  },
   "resume": "Resume",
   "sound": "SOUND",
   "haptics": "HAPTICS",
@@ -26,125 +44,290 @@
   "exitToSheets": "EXIT TO SHEETS",
   "restartConfirmTitle": "Restart this sheet?",
   "restartConfirmBody": "You'll lose {moves} moves of progress.",
-  "@restartConfirmBody": { "placeholders": { "moves": { "type": "int" } } },
+  "@restartConfirmBody": {
+    "placeholders": {
+      "moves": {
+        "type": "int"
+      }
+    }
+  },
   "cancel": "CANCEL",
-
   "stuckTitle": "No open slots left.",
   "stuckRescueTitle": "OR BUY ONE EXTRA SLOT FOR THIS SHEET",
   "stuckReasonHolding": "{plate} still holds {count, plural, =1{one screw} other{{count} screws}} on the board. Undo frees a slot.",
-  "@stuckReasonHolding": { "placeholders": { "plate": { "type": "String" }, "count": { "type": "int" } } },
+  "@stuckReasonHolding": {
+    "placeholders": {
+      "plate": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "stuckReasonGeneric": "Every slot is taken and no plate can drop. Undo frees a slot.",
   "undoLastMove": "Undo last move",
   "hint": "HINT",
   "rescueSlot": "EXTRA SLOT",
   "rescueSlotCoins": "EXTRA SLOT · {coins} ¢",
-  "@rescueSlotCoins": { "placeholders": { "coins": { "type": "int" } } },
+  "@rescueSlotCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
   "rescueSlotAd": "EXTRA SLOT · VIDEO",
   "rescueSlotPro": "EXTRA SLOT · PRO",
-
   "outOfHintsTitle": "Want one more hint?",
   "hintsLeftZero": "HINTS · 0 LEFT",
   "outOfHintsBody": "A hint rings one useful next screw. It never solves the sheet.",
   "watchVideo": "Watch a short video",
   "watchVideoMeta": "OPTIONAL · ~30 S · +1 HINT",
   "useCoins": "Use {coins} coins",
-  "@useCoins": { "placeholders": { "coins": { "type": "int" } } },
+  "@useCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
   "useCoinsMeta": "BALANCE {balance} ¢",
-  "@useCoinsMeta": { "placeholders": { "balance": { "type": "int" } } },
+  "@useCoinsMeta": {
+    "placeholders": {
+      "balance": {
+        "type": "int"
+      }
+    }
+  },
   "keepThinking": "Keep thinking",
   "notEnoughCoins": "Not enough coins yet.",
   "adUnavailable": "No video available right now.",
-
   "cleared": "{code} · CLEARED",
-  "@cleared": { "placeholders": { "code": { "type": "String" } } },
+  "@cleared": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
   "disassembled": "Disassembled.",
   "approved": "APPROVED",
   "statMoves": "MOVES",
   "statTime": "TIME",
   "statMastery": "MASTERY",
   "nextSheet": "Next sheet — {code}",
-  "@nextSheet": { "placeholders": { "code": { "type": "String" } } },
+  "@nextSheet": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
   "replay": "REPLAY",
   "sheets": "SHEETS",
   "home": "HOME",
   "dailyDone": "Daily sheet done",
   "backHome": "Back home",
-
   "chapterComplete": "CHAPTER {chapter} · COMPLETE",
-  "@chapterComplete": { "placeholders": { "chapter": { "type": "String" } } },
+  "@chapterComplete": {
+    "placeholders": {
+      "chapter": {
+        "type": "String"
+      }
+    }
+  },
   "chapterSheetsMastered": "{done} / {total} SHEETS · {mastered} MASTERED ◆",
-  "@chapterSheetsMastered": { "placeholders": { "done": { "type": "int" }, "total": { "type": "int" }, "mastered": { "type": "int" } } },
+  "@chapterSheetsMastered": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "mastered": {
+        "type": "int"
+      }
+    }
+  },
   "rewardCoins": "COINS",
   "themeUnlocked": "THEME UNLOCKED",
   "nextChapter": "NEXT · CHAPTER {chapter}",
-  "@nextChapter": { "placeholders": { "chapter": { "type": "String" } } },
+  "@nextChapter": {
+    "placeholders": {
+      "chapter": {
+        "type": "String"
+      }
+    }
+  },
   "startChapter": "Start Chapter {chapter}",
-  "@startChapter": { "placeholders": { "chapter": { "type": "String" } } },
+  "@startChapter": {
+    "placeholders": {
+      "chapter": {
+        "type": "String"
+      }
+    }
+  },
   "equipTheme": "EQUIP {name}",
-  "@equipTheme": { "placeholders": { "name": { "type": "String" } } },
-
+  "@equipTheme": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "tutorialStep1": "STEP 1 · TAP THE SCREW",
   "tutorialLands": "↓ IT LANDS IN THE TRAY",
   "skipTutorial": "SKIP TUTORIAL",
-
   "splashTagline": "A PUZZLE OF LAYERS",
   "splashFooter": "REV 1.0 · SHEET 001",
-
   "homeFigure": "FIG. 1\nEXPLODED VIEW\n{plates} PLATES · {screws}\nFASTENERS",
-  "@homeFigure": { "placeholders": { "plates": { "type": "int" }, "screws": { "type": "int" } } },
+  "@homeFigure": {
+    "placeholders": {
+      "plates": {
+        "type": "int"
+      },
+      "screws": {
+        "type": "int"
+      }
+    }
+  },
   "chapterOf": "CHAPTER {chapter}/{total}",
-  "@chapterOf": { "placeholders": { "chapter": { "type": "String" }, "total": { "type": "String" } } },
+  "@chapterOf": {
+    "placeholders": {
+      "chapter": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
   "fastenerCount": "×{count} {count, plural, =1{FASTENER} other{FASTENERS}}",
-  "@fastenerCount": { "placeholders": { "count": { "type": "int" } } },
+  "@fastenerCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "nextSheetLabel": "NEXT SHEET",
   "chapterLabel": "CHAPTER {chapter}",
-  "@chapterLabel": { "placeholders": { "chapter": { "type": "String" } } },
+  "@chapterLabel": {
+    "placeholders": {
+      "chapter": {
+        "type": "String"
+      }
+    }
+  },
   "campaign": "CAMPAIGN",
   "campaignProgress": "{done} / {total}",
-  "@campaignProgress": { "placeholders": { "done": { "type": "int" }, "total": { "type": "int" } } },
+  "@campaignProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "continueSheet": "Continue — {code}",
-  "@continueSheet": { "placeholders": { "code": { "type": "String" } } },
+  "@continueSheet": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
   "daily": "DAILY",
   "themes": "THEMES",
   "allCleared": "All sheets cleared",
-
   "sheetsCount": "{done} / {total} SHEETS",
-  "@sheetsCount": { "placeholders": { "done": { "type": "int" }, "total": { "type": "int" } } },
+  "@sheetsCount": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "fiveChapters": "Five chapters",
   "chaptersTitle": "Chapters",
   "masteryNote": "◆ MASTERY = CLEARED WITHOUT A HINT OR RESTART. PURELY COSMETIC — NEVER NEEDED TO PROGRESS.",
   "chapterProgress": "{done}/{total}",
-  "@chapterProgress": { "placeholders": { "done": { "type": "int" }, "total": { "type": "int" } } },
+  "@chapterProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "lockedChapter": "LOCKED",
   "downloadChapter": "DOWNLOAD",
   "downloading": "DOWNLOADING…",
   "comingSoon": "MORE SHEETS SOON",
-
   "newMechanic": "NEW: {mechanic}",
-  "@newMechanic": { "placeholders": { "mechanic": { "type": "String" } } },
-  "sheetMeta": "{plates} PLATES · {screws} SCREWS · TRAY {tray}",
-  "@sheetMeta": { "placeholders": { "plates": { "type": "int" }, "screws": { "type": "int" }, "tray": { "type": "int" } } },
+  "@newMechanic": {
+    "placeholders": {
+      "mechanic": {
+        "type": "String"
+      }
+    }
+  },
+  "sheetMeta": "{plates} plates · {layers} layers · tray {tray}",
+  "@sheetMeta": {
+    "placeholders": {
+      "plates": {
+        "type": "int"
+      },
+      "layers": {
+        "type": "int"
+      },
+      "tray": {
+        "type": "int"
+      }
+    }
+  },
+  "theCampaign": "THE CAMPAIGN",
+  "campaignFooter": "Chapters unlock by finishing the one before. Mastery marks are optional — hints never block progress.",
+  "chapterBonus": "CHAPTER BONUS",
   "play": "Play",
-
   "dailySheet": "DAILY SHEET",
   "dailyTitle": "TITLE",
   "dailyPlates": "PLATES",
   "dailyReward": "REWARD",
   "dailyBody": "Same sheet for everyone today. No timer. {streak, plural, =0{Start a streak —} =1{1-day streak —} other{{streak}-day streak —}} missing a day costs nothing.",
-  "@dailyBody": { "placeholders": { "streak": { "type": "int" } } },
+  "@dailyBody": {
+    "placeholders": {
+      "streak": {
+        "type": "int"
+      }
+    }
+  },
   "startDaily": "Start today's sheet",
   "dailyCompleted": "Done for today — back tomorrow",
   "replayDaily": "Replay today's sheet",
-
   "themesTitle": "Themes",
   "themesCaption": "COSMETIC · NEVER CHANGES RULES",
   "equipped": "EQUIPPED",
   "owned": "OWNED",
   "priceCoins": "{coins} ¢",
-  "@priceCoins": { "placeholders": { "coins": { "type": "int" } } },
+  "@priceCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
   "proIncluded": "PRO",
   "previewOnly": "PREVIEW",
-
   "settingsTitle": "Settings",
   "feedbackSection": "FEEDBACK",
   "soundEffects": "Sound effects",
@@ -160,7 +343,13 @@
   "signInGoogle": "Sign in with Google",
   "signInApple": "Sign in with Apple",
   "signedInAs": "Signed in · {name}",
-  "@signedInAs": { "placeholders": { "name": { "type": "String" } } },
+  "@signedInAs": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "guestCaption": "PLAYING AS GUEST · SIGN IN TO SAVE PROGRESS",
   "signOut": "SIGN OUT",
   "deleteAccount": "DELETE ACCOUNT",
@@ -169,7 +358,13 @@
   "restore": "RESTORE",
   "proTitle": "Screw Out Pro",
   "proPerks": "NO ADS · UNLIMITED HINTS · ALL THEMES · FREE RESCUES · {coins} ¢ MONTHLY",
-  "@proPerks": { "placeholders": { "coins": { "type": "int" } } },
+  "@proPerks": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
   "proMonthly": "MONTHLY",
   "proYearly": "YEARLY",
   "proActive": "PRO · ACTIVE",
@@ -180,13 +375,20 @@
   "privacyChoices": "Privacy choices",
   "licenses": "Licenses & credits",
   "versionFooter": "SCREW OUT · REV {version} ({build})",
-  "@versionFooter": { "placeholders": { "version": { "type": "String" }, "build": { "type": "String" } } },
-
+  "@versionFooter": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
   "notificationPrimerTitle": "A nudge for the daily sheet?",
   "notificationPrimerBody": "One quiet reminder in the evening when you haven't played. Never more.",
   "allow": "ALLOW",
   "notNow": "NOT NOW",
-
   "offline": "OFFLINE",
   "somethingWentWrong": "Something went wrong.",
   "tryAgain": "Try again",
@@ -194,5 +396,88 @@
   "purchasePending": "Purchase pending — it will apply once confirmed.",
   "purchaseFailed": "Purchase didn't go through.",
   "signInToPurchase": "Sign in first so your purchase follows you.",
-  "restored": "Purchases restored."
+  "restored": "Purchases restored.",
+  "finishChapterFirst": "Finish Chapter {chapter} first.",
+  "@finishChapterFirst": {
+    "placeholders": {
+      "chapter": {
+        "type": "String"
+      }
+    }
+  },
+  "moreSheetsTitle": "More sheets",
+  "moreSheetsCaption": "New drawing sets arrive here",
+  "languageEnglish": "English",
+  "equip": "EQUIP",
+  "buyFor": "BUY · {coins} ¢",
+  "@buyFor": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
+  "close": "CLOSE",
+  "coinPackAmount": "+{coins} ¢",
+  "@coinPackAmount": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteConfirm": "TAP AGAIN TO DELETE",
+  "licensesTitle": "Licenses",
+  "licensesCaption": "OPEN-SOURCE NOTICES",
+  "playLevel": "Play {code}",
+  "@playLevel": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "lockedLevel": "Sheet {number}, locked",
+  "@lockedLevel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "platesScrews": "{plates} · {screws}",
+  "@platesScrews": {
+    "placeholders": {
+      "plates": {
+        "type": "int"
+      },
+      "screws": {
+        "type": "int"
+      }
+    }
+  },
+  "signInFailed": "Sign-in didn't complete.",
+  "themePurchased": "Theme unlocked.",
+  "proPerYear": "/ YEAR",
+  "proPerMonth": "/ MONTH",
+  "sheetsTotal": "{count} SHEETS",
+  "@sheetsTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dailyWeekDone": "Done",
+  "masteredCount": "{count} MASTERED",
+  "@masteredCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "reminderTitle": "Today's sheet is ready",
+  "reminderBody": "One fresh drawing, same for everyone. No timer."
 }

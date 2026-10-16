@@ -232,6 +232,7 @@ class _PlateWidget extends StatelessWidget {
                         shadowLift: lift,
                         outline: outline,
                         outlineOpacity: outlineOpacity,
+                        plateColors: visuals.theme.plates,
                       ),
                     ),
                   ),
@@ -363,7 +364,7 @@ class _ScrewWidgetState extends State<_ScrewWidget> {
                                       scale: headScale,
                                       child: CustomPaint(
                                         size: Size.square(head),
-                                        painter: ScrewHeadPainter(unit: scale),
+                                        painter: ScrewHeadPainter(unit: scale, fill: v.theme.screwFill, line: v.theme.screwLine),
                                       ),
                                     ),
                                   ),

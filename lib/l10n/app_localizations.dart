@@ -613,8 +613,26 @@ abstract class AppLocalizations {
   /// No description provided for @sheetMeta.
   ///
   /// In en, this message translates to:
-  /// **'{plates} PLATES · {screws} SCREWS · TRAY {tray}'**
-  String sheetMeta(int plates, int screws, int tray);
+  /// **'{plates} plates · {layers} layers · tray {tray}'**
+  String sheetMeta(int plates, int layers, int tray);
+
+  /// No description provided for @theCampaign.
+  ///
+  /// In en, this message translates to:
+  /// **'THE CAMPAIGN'**
+  String get theCampaign;
+
+  /// No description provided for @campaignFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapters unlock by finishing the one before. Mastery marks are optional — hints never block progress.'**
+  String get campaignFooter;
+
+  /// No description provided for @chapterBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'CHAPTER BONUS'**
+  String get chapterBonus;
 
   /// No description provided for @play.
   ///
@@ -981,6 +999,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Purchases restored.'**
   String get restored;
+
+  /// No description provided for @finishChapterFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish Chapter {chapter} first.'**
+  String finishChapterFirst(String chapter);
+
+  /// No description provided for @moreSheetsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'More sheets'**
+  String get moreSheetsTitle;
+
+  /// No description provided for @moreSheetsCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'New drawing sets arrive here'**
+  String get moreSheetsCaption;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @equip.
+  ///
+  /// In en, this message translates to:
+  /// **'EQUIP'**
+  String get equip;
+
+  /// No description provided for @buyFor.
+  ///
+  /// In en, this message translates to:
+  /// **'BUY · {coins} ¢'**
+  String buyFor(int coins);
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'CLOSE'**
+  String get close;
+
+  /// No description provided for @coinPackAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'+{coins} ¢'**
+  String coinPackAmount(int coins);
+
+  /// No description provided for @deleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'TAP AGAIN TO DELETE'**
+  String get deleteConfirm;
+
+  /// No description provided for @licensesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses'**
+  String get licensesTitle;
+
+  /// No description provided for @licensesCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'OPEN-SOURCE NOTICES'**
+  String get licensesCaption;
+
+  /// No description provided for @playLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Play {code}'**
+  String playLevel(String code);
+
+  /// No description provided for @lockedLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sheet {number}, locked'**
+  String lockedLevel(int number);
+
+  /// No description provided for @platesScrews.
+  ///
+  /// In en, this message translates to:
+  /// **'{plates} · {screws}'**
+  String platesScrews(int plates, int screws);
+
+  /// No description provided for @signInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in didn\'t complete.'**
+  String get signInFailed;
+
+  /// No description provided for @themePurchased.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme unlocked.'**
+  String get themePurchased;
+
+  /// No description provided for @proPerYear.
+  ///
+  /// In en, this message translates to:
+  /// **'/ YEAR'**
+  String get proPerYear;
+
+  /// No description provided for @proPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'/ MONTH'**
+  String get proPerMonth;
+
+  /// No description provided for @sheetsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} SHEETS'**
+  String sheetsTotal(int count);
+
+  /// No description provided for @dailyWeekDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get dailyWeekDone;
+
+  /// No description provided for @masteredCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} MASTERED'**
+  String masteredCount(int count);
+
+  /// No description provided for @reminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s sheet is ready'**
+  String get reminderTitle;
+
+  /// No description provided for @reminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'One fresh drawing, same for everyone. No timer.'**
+  String get reminderBody;
 }
 
 class _AppLocalizationsDelegate

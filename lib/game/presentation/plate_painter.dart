@@ -17,8 +17,12 @@ class PlatePainter extends CustomPainter {
     this.shadowLift = 0,
     this.outline,
     this.outlineOpacity = 0,
+    this.plateColors = BpColor.plates,
     super.repaint,
   });
+
+  /// Plate fills by pattern index (cosmetic theme).
+  final List<Color> plateColors;
 
   final Panel panel;
 
@@ -55,7 +59,7 @@ class PlatePainter extends CustomPainter {
     );
 
     final pattern = panel.pattern;
-    canvas.drawRRect(shape, Paint()..color = BpColor.plates[pattern.index]);
+    canvas.drawRRect(shape, Paint()..color = plateColors[pattern.index % plateColors.length]);
 
     if (pattern != PlatePattern.solid) {
       canvas.save();
@@ -168,6 +172,7 @@ class PlatePainter extends CustomPainter {
       old.shadowLift != shadowLift ||
       old.outline != outline ||
       old.outlineOpacity != outlineOpacity ||
+      old.plateColors != plateColors ||
       old.holes.length != holes.length;
 }
 
@@ -179,7 +184,12 @@ class ScrewHeadPainter extends CustomPainter {
     this.crossLength = 12,
     this.shadow = true,
     this.lifted = false,
+    this.fill = BpColor.sheet,
+    this.line = BpColor.line,
   });
+
+  final Color fill;
+  final Color line;
 
   /// dp per design pixel (the board scale).
   final double unit;
@@ -202,16 +212,16 @@ class ScrewHeadPainter extends CustomPainter {
           ..maskFilter = MaskFilter.blur(BlurStyle.normal, (lifted ? 5 : 3) * unit),
       );
     }
-    canvas.drawCircle(c, r, Paint()..color = BpColor.sheet);
+    canvas.drawCircle(c, r, Paint()..color = fill);
     canvas.drawCircle(
       c,
       r - unit,
       Paint()
-        ..color = BpColor.line
+        ..color = line
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2 * unit,
     );
-    final white = Paint()..color = BpColor.line;
+    final white = Paint()..color = line;
     final len = crossLength * unit;
     final w = 2 * unit;
     canvas.drawRect(Rect.fromCenter(center: c, width: len, height: w), white);
@@ -223,5 +233,7 @@ class ScrewHeadPainter extends CustomPainter {
       old.unit != unit ||
       old.crossLength != crossLength ||
       old.shadow != shadow ||
-      old.lifted != lifted;
+      old.lifted != lifted ||
+      old.fill != fill ||
+      old.line != line;
 }

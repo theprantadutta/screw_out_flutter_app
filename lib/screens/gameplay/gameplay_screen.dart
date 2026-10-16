@@ -16,6 +16,7 @@ import '../../l10n/app_localizations.dart';
 import '../../presentation/bloc/game/game_cubit.dart';
 import '../../presentation/bloc/game/game_host.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
+import '../../services/cosmetics.dart';
 import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import 'widgets/game_sheets.dart';
@@ -51,14 +52,19 @@ class GameplayScreen extends StatefulWidget {
     this.feedback = const NoFeedback(),
     this.adAvailable = false,
     this.tutorial,
+    this.theme,
   });
+
+  /// Equipped cosmetic board theme (Blueprint when null).
+  final BoardTheme? theme;
 
   final int coins;
   final GameplayCallbacks callbacks;
   final GameFeedback feedback;
   final bool adAvailable;
 
-  /// First-run spotlight (DWG 001), drawn above the board.
+  /// First-run coach mark (DWG 001), drawn full-screen above board, tray
+  /// and actions. It must let taps through where it wants them to land.
   final Widget Function(GameplayVisuals visuals)? tutorial;
 
   @override
@@ -89,6 +95,7 @@ class _GameplayScreenState extends State<GameplayScreen>
       feedback: widget.feedback,
       reducedMotion: reduced,
     );
+    if (widget.theme != null) _visuals.theme = widget.theme!;
     _sheet = AnimationController(vsync: this, duration: BpMotion.sheet, reverseDuration: BpMotion.sheetOut);
     _objective = AnimationController(
       vsync: this,
@@ -224,6 +231,7 @@ class _GameplayScreenState extends State<GameplayScreen>
             title: s.level.title,
             coins: (s.reward != null && !_coinsCounted) ? s.reward!.balanceBefore : widget.coins,
             showControls: !won,
+            showCoins: widget.tutorial == null,
             onPause: _cubit.pause,
             pauseLabel: l.pause,
           ),
@@ -268,16 +276,15 @@ class _GameplayScreenState extends State<GameplayScreen>
                     onStamp: widget.feedback.success,
                   ),
                 ),
-              if (widget.tutorial != null) Positioned.fill(child: widget.tutorial!(_visuals)),
             ],
           ),
         ),
-        // Actions.
+        // Actions (hidden while the first-run coach mark is up).
         Positioned(
           left: BpSpace.gameplay,
           right: BpSpace.gameplay,
           bottom: actionsBottom,
-          child: Row(
+          child: widget.tutorial != null ? const SizedBox.shrink() : Row(
             children: [
               Expanded(
                 child: BpOutlineButton(
@@ -387,6 +394,9 @@ class _GameplayScreenState extends State<GameplayScreen>
               child: _sheetFor(context, l, s, settings),
             ),
           ),
+        // First-run coach mark: above board, tray and actions.
+        if (widget.tutorial != null && _shownOverlay == GameOverlay.none)
+          Positioned.fill(child: widget.tutorial!(_visuals)),
         // Flyers above everything.
         Positioned.fill(child: FlyerLayer(visuals: _visuals)),
       ],
@@ -503,6 +513,7 @@ class _Header extends StatelessWidget {
     required this.title,
     required this.coins,
     required this.showControls,
+    this.showCoins = true,
     required this.onPause,
     required this.pauseLabel,
   });
@@ -511,6 +522,7 @@ class _Header extends StatelessWidget {
   final String title;
   final int coins;
   final bool showControls;
+  final bool showCoins;
   final VoidCallback onPause;
   final String pauseLabel;
 
@@ -535,7 +547,7 @@ class _Header extends StatelessWidget {
             semanticLabel: pauseLabel,
           ),
         ),
-        Align(alignment: Alignment.centerRight, child: BpCoinChip(coins: coins)),
+        if (showCoins) Align(alignment: Alignment.centerRight, child: BpCoinChip(coins: coins)),
       ],
     ],
   );

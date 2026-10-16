@@ -168,9 +168,14 @@ class _Slot extends StatelessWidget {
                 offset: Offset(0, dy),
                 child: Transform.scale(
                   scale: scale.clamp(0.0, 2.0),
-                  child: const CustomPaint(
-                    size: Size.square(BpSize.trayScrew),
-                    painter: ScrewHeadPainter(crossLength: 10, shadow: false),
+                  child: CustomPaint(
+                    size: const Size.square(BpSize.trayScrew),
+                    painter: ScrewHeadPainter(
+                      crossLength: 10,
+                      shadow: false,
+                      fill: visuals.theme.screwFill,
+                      line: visuals.theme.screwLine,
+                    ),
                   ),
                 ),
               ),

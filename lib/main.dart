@@ -1,122 +1,264 @@
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:go_router/go_router.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'app.dart';
+import 'core/di/injection.dart';
+import 'core/network/connectivity_service.dart';
+import 'core/network/install_identity.dart';
+import 'core/theme/blueprint_tokens.dart';
+import 'data/database/app_database.dart';
+import 'firebase_options.dart';
+import 'game/generator/daily.dart';
+import 'presentation/bloc/auth/auth_cubit.dart';
+import 'presentation/bloc/premium/premium_cubit.dart';
+import 'presentation/bloc/progress/progress_cubit.dart';
+import 'presentation/bloc/settings/settings_cubit.dart';
+import 'router/app_router.dart';
+import 'screens/licenses/licenses_screen.dart';
+import 'services/ads/ad_service.dart';
+import 'services/analytics/analytics.dart';
+import 'services/analytics/telemetry.dart';
+import 'services/app_log.dart';
+import 'services/level_pack_service.dart';
+import 'services/level_repository.dart';
+import 'services/notifications/notification_service.dart';
+import 'services/ports.dart';
+import 'services/purchases/purchase_service.dart';
+import 'services/sync/sync_engine.dart';
+import 'services/user_service.dart';
+import 'widgets/bp/bp_buttons.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+Future<void> main() async {
+  final binding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: binding);
+  try {
+    final firebase = await _preBoot();
+    configureDependencies(firebase: firebase);
+    final ready = _bootstrapServices(firebase: firebase);
+    final router = createAppRouter(
+      ready: ready,
+      observers: [AnalyticsRouteObserver(getIt<AnalyticsPort>())],
+      downloadChapter: getIt<LevelPackService>().downloadChapter,
     );
+    _wireRouter(router, ready);
+    _AppLifecycle(firebase: firebase).attach();
+    runApp(ScrewOutApp(router: router));
+  } on Object catch (e, s) {
+    AppLog.error('Startup failed', e, s);
+    runApp(_StartupFailureApp(error: e));
+  } finally {
+    binding.addPostFrameCallback((_) => FlutterNativeSplash.remove());
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+/// Everything that must exist before the first frame. Returns whether
+/// Firebase is available.
+Future<bool> _preBoot() async {
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  try {
+    await dotenv.load(fileName: '.env');
+  } on Object catch (e) {
+    AppLog.warn('.env missing — using production defaults: $e');
+  }
+  var firebase = false;
+  try {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    firebase = true;
+  } on Object catch (e) {
+    AppLog.warn('Firebase unavailable — accounts, push and analytics off: $e');
+  }
+  registerFontLicenses();
+  await InstallIdentity.load();
+  return firebase;
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+/// Async start-up the splash waits on (25 s budget, like snake-classic).
+Future<void> _bootstrapServices({required bool firebase}) async {
+  Future<void> run() async {
+    final db = getIt<AppDatabase>();
+    await db.initializeDefaults();
+    await getIt<LevelRepository>().load();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+    final settings = getIt<SettingsCubit>();
+    final osReducedMotion = WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations;
+    await settings.load(osReducedMotion: osReducedMotion);
+    await getIt<ProgressCubit>().initialize();
+    await getIt<PremiumCubit>().initialize();
+    await getIt<ConnectivityService>().initialize();
+
+    // UI tick: sound + selection haptic on every Blueprint button.
+    final sound = getIt<SoundPort>();
+    bpUiTick = () {
+      if (settings.state.sound) sound.play(Sfx.tick);
+      if (settings.state.haptics) HapticFeedback.selectionClick();
+    };
+
+    final user = getIt<UserService>();
+    final purchases = getIt<PurchaseService>();
+    final notifications = getIt<NotificationService>();
+    final packs = getIt<LevelPackService>();
+    user.onSession.addAll([
+      purchases.onSession,
+      notifications.registerToken,
+      () => packs.refresh(force: true),
+    ]);
+    user.onSignedOut.add(() => getIt<PremiumCubit>().apply(isPro: false, adsRemoved: false));
+
+    getIt<SyncEngine>().start();
+    getIt<TelemetryUploader>().start();
+    if (firebase) {
+      await getIt<AuthCubit>().initialize();
+    }
+    // Store, ads and push never block the first screen.
+    unawaited(purchases.initialize());
+    unawaited(getIt<AdService>().initialize());
+    if (firebase) {
+      unawaited(notifications.initialize().then((_) => notifications.registerToken()));
+    }
+    unawaited(packs.prefetchIfNear(getIt<ProgressCubit>().state.currentLevel));
+    unawaited(_scheduleReminder());
+  }
+
+  await run().timeout(
+    const Duration(seconds: 25),
+    onTimeout: () => AppLog.warn('Bootstrap exceeded 25 s — continuing with what is ready'),
+  );
+}
+
+/// Deep links, the notification soft-ask and reminder rescheduling.
+void _wireRouter(GoRouter router, Future<void> ready) {
+  final notifications = getIt<NotificationService>()..navigate = router.go;
+  unawaited(
+    ready.then((_) {
+      notifications.markAppReady();
+      _PrimerTrigger(router, notifications).attach();
+      getIt<SettingsCubit>().stream.listen((_) => unawaited(_scheduleReminder()));
+      getIt<ProgressCubit>().stream
+          .map((p) => p.dailyDone.length)
+          .distinct()
+          .listen((_) => unawaited(_scheduleReminder()));
+    }),
+  );
+}
+
+Future<void> _scheduleReminder() async {
+  final settings = getIt<SettingsCubit>().state;
+  final done = getIt<ProgressCubit>().state.dailyDone.contains(DailySheets.dateKey(DateTime.now()));
+  await getIt<NotificationService>().scheduleDailyReminder(
+    enabled: settings.dailyReminder,
+    todayDone: done,
+    localeCode: settings.localeCode ?? 'en',
+  );
+}
+
+/// Shows the notification soft-ask once, after the 3rd cleared sheet, the
+/// next time the player is on a menu screen (never mid-level).
+class _PrimerTrigger {
+  _PrimerTrigger(this._router, this._notifications);
+
+  final GoRouter _router;
+  final NotificationService _notifications;
+  bool _done = false;
+
+  void attach() => _router.routerDelegate.addListener(_check);
+
+  void _check() {
+    if (_done) return;
+    final cleared = getIt<ProgressCubit>().state.totalCleared;
+    if (cleared < 3) return;
+    final path = _router.routerDelegate.currentConfiguration.uri.path;
+    if (path.startsWith('/play') || path.startsWith('/daily/play') || path == '/') return;
+    _done = true;
+    Future<void>.delayed(const Duration(milliseconds: 600), () {
+      final context = rootNavigatorKey.currentContext;
+      if (context != null && context.mounted) {
+        unawaited(_notifications.maybeShowPrimer(context, clearedSheets: cleared));
+      }
     });
   }
+}
+
+/// Resume / pause wiring (snake-classic's lifecycle observer).
+class _AppLifecycle with WidgetsBindingObserver {
+  _AppLifecycle({required this.firebase});
+
+  final bool firebase;
+
+  void attach() => WidgetsBinding.instance.addObserver(this);
 
   @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        unawaited(_onResume());
+      case AppLifecycleState.paused:
+        unawaited(_onPause());
+      default:
+        break;
+    }
+  }
+
+  Future<void> _onResume() async {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    getIt<TelemetryRecorder>().onForeground();
+    if (firebase) unawaited(getIt<UserService>().ensureBackendSession());
+    getIt<SyncEngine>().schedule(immediate: true);
+    unawaited(getIt<PurchaseService>().onResume());
+    unawaited(getIt<AdService>().onResumed());
+    unawaited(getIt<LevelPackService>().prefetchIfNear(getIt<ProgressCubit>().state.currentLevel));
+  }
+
+  Future<void> _onPause() async {
+    getIt<TelemetryRecorder>().onBackground();
+    getIt<AdService>().onBackgrounded();
+    unawaited(getIt<SyncEngine>().syncNow());
+    unawaited(getIt<TelemetryUploader>().upload());
+    unawaited(_scheduleReminder());
+  }
+}
+
+/// Dependency-free recovery screen when start-up itself fails.
+class _StartupFailureApp extends StatelessWidget {
+  const _StartupFailureApp({required this.error});
+
+  final Object error;
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Scaffold(
+      backgroundColor: BpColor.sheet,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(BpSpace.screen),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Screw Out.', style: BpType.screenTitle.copyWith(color: BpColor.line)),
+              const SizedBox(height: BpSpace.s4),
+              Text(
+                'SOMETHING WENT WRONG WHILE STARTING.\nCLOSE THE APP AND OPEN IT AGAIN.',
+                style: BpType.label.copyWith(color: BpColor.textSecondary),
+              ),
+              if (kDebugMode) ...[
+                const SizedBox(height: BpSpace.s4),
+                Text('$error', style: BpType.caption.copyWith(color: BpColor.blocked)),
+              ],
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
+    ),
+  );
 }

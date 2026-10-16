@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Must match NotificationService.channelId and the API's push channel. -->
+    <string name="default_notification_channel_id" translatable="false">screw_out_notifications</string>
+    <string name="default_notification_channel_name">Screw Out</string>
+    <string name="default_notification_channel_desc">Daily sheet reminders and account notices</string>
+</resources>

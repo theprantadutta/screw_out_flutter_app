@@ -29,6 +29,8 @@ class FlyerLayer extends StatelessWidget {
             for (final f in visuals.flights)
               _Flyer(
                 key: ObjectKey(f),
+                fill: visuals.theme.screwFill,
+                line: visuals.theme.screwLine,
                 flight: f,
                 from: box.globalToLocal(f.from),
                 to: box.globalToLocal(f.to),
@@ -41,9 +43,11 @@ class FlyerLayer extends StatelessWidget {
 }
 
 class _Flyer extends StatelessWidget {
-  const _Flyer({super.key, required this.flight, required this.from, required this.to});
+  const _Flyer({super.key, required this.flight, required this.from, required this.to, required this.fill, required this.line});
 
   final Flight flight;
+  final Color fill;
+  final Color line;
   final Offset from;
   final Offset to;
 
@@ -82,7 +86,7 @@ class _Flyer extends StatelessWidget {
           ),
         );
       },
-      child: CustomPaint(painter: ScrewHeadPainter(unit: flight.unit, lifted: true)),
+      child: CustomPaint(painter: ScrewHeadPainter(unit: flight.unit, lifted: true, fill: fill, line: line)),
     );
   }
 }

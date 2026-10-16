@@ -1,0 +1,34 @@
+SCREW OUT — ADMOB IDS
+=====================
+
+Fill in the values after the "=" signs (no quotes, no spaces) and tell Claude
+"admob ids are filled". They get copied into lib/services/ads/ad_config.dart
+(release builds) and the Android manifest / iOS Info.plist. Debug builds
+always use Google's test ids, so leaving this empty is safe.
+
+Where to find them: AdMob console → Apps → Screw Out → App settings (app id)
+and → Ad units (unit ids). App ids contain "~", unit ids contain "/".
+
+Publisher id (already in app-ads.txt): pub-9242904787767394
+
+
+# ---------- ANDROID ----------
+ANDROID_APP_ID= ca-app-pub-9242904787767394~9211828883                # ca-app-pub-9242904787767394~XXXXXXXXXX
+ANDROID_REWARDED= ca-app-pub-9242904787767394/1367243862              # +1 hint, extra tray slot (always optional)
+ANDROID_INTERSTITIAL= ca-app-pub-9242904787767394/4696114785          # between sheets only, frequency capped
+ANDROID_BANNER= ca-app-pub-9242904787767394/8639229227                # menu screens only, never during play
+ANDROID_APP_OPEN= ca-app-pub-9242904787767394/7264322393              # on return after 30+ min away
+
+
+# ---------- iOS ----------
+IOS_APP_ID= ca-app-pub-9242904787767394~2123676352                    # ca-app-pub-9242904787767394~XXXXXXXXXX
+IOS_REWARDED= ca-app-pub-9242904787767394/3957748187
+IOS_INTERSTITIAL= ca-app-pub-9242904787767394/7741080520
+IOS_BANNER= ca-app-pub-9242904787767394/2488753843
+IOS_APP_OPEN= ca-app-pub-9242904787767394/8577404061
+
+
+# Notes
+# - "Remove ads" and Pro turn off interstitial, banner and app-open ads.
+#   Rewarded videos stay as an optional choice for free players.
+# - If you don't want a format, leave its line empty and it is skipped.

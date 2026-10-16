@@ -331,9 +331,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String sheetMeta(int plates, int screws, int tray) {
-    return '$plates PLATES · $screws SCREWS · TRAY $tray';
+  String sheetMeta(int plates, int layers, int tray) {
+    return '$plates plates · $layers layers · tray $tray';
   }
+
+  @override
+  String get theCampaign => 'THE CAMPAIGN';
+
+  @override
+  String get campaignFooter =>
+      'Chapters unlock by finishing the one before. Mastery marks are optional — hints never block progress.';
+
+  @override
+  String get chapterBonus => 'CHAPTER BONUS';
 
   @override
   String get play => 'Play';
@@ -536,4 +546,89 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get restored => 'Purchases restored.';
+
+  @override
+  String finishChapterFirst(String chapter) {
+    return 'Finish Chapter $chapter first.';
+  }
+
+  @override
+  String get moreSheetsTitle => 'More sheets';
+
+  @override
+  String get moreSheetsCaption => 'New drawing sets arrive here';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get equip => 'EQUIP';
+
+  @override
+  String buyFor(int coins) {
+    return 'BUY · $coins ¢';
+  }
+
+  @override
+  String get close => 'CLOSE';
+
+  @override
+  String coinPackAmount(int coins) {
+    return '+$coins ¢';
+  }
+
+  @override
+  String get deleteConfirm => 'TAP AGAIN TO DELETE';
+
+  @override
+  String get licensesTitle => 'Licenses';
+
+  @override
+  String get licensesCaption => 'OPEN-SOURCE NOTICES';
+
+  @override
+  String playLevel(String code) {
+    return 'Play $code';
+  }
+
+  @override
+  String lockedLevel(int number) {
+    return 'Sheet $number, locked';
+  }
+
+  @override
+  String platesScrews(int plates, int screws) {
+    return '$plates · $screws';
+  }
+
+  @override
+  String get signInFailed => 'Sign-in didn\'t complete.';
+
+  @override
+  String get themePurchased => 'Theme unlocked.';
+
+  @override
+  String get proPerYear => '/ YEAR';
+
+  @override
+  String get proPerMonth => '/ MONTH';
+
+  @override
+  String sheetsTotal(int count) {
+    return '$count SHEETS';
+  }
+
+  @override
+  String get dailyWeekDone => 'Done';
+
+  @override
+  String masteredCount(int count) {
+    return '$count MASTERED';
+  }
+
+  @override
+  String get reminderTitle => 'Today\'s sheet is ready';
+
+  @override
+  String get reminderBody => 'One fresh drawing, same for everyone. No timer.';
 }

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../core/theme/blueprint_tokens.dart';
 import '../../presentation/bloc/game/game_events.dart';
+import '../../services/cosmetics.dart';
 import '../domain/board.dart';
 import '../domain/game_state.dart';
 import '../domain/level.dart';
@@ -65,6 +66,9 @@ class GameplayVisuals extends ChangeNotifier {
 
   /// dp per level unit, set by the board on layout.
   double scale = 1;
+
+  /// Equipped cosmetic theme (plate + screw colours only).
+  BoardTheme theme = Cosmetics.blueprint;
 
   final Map<String, AnimationController> screwOut = {};
   final Map<String, AnimationController> shake = {};

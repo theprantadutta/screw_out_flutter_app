@@ -40,10 +40,7 @@ void main(List<String> args) {
   const generator = LevelGenerator();
   var failed = false;
   for (var chapter = from; chapter <= to; chapter++) {
-    final info = chapter <= kChapters.length
-        ? kChapters[chapter - 1]
-        : ChapterInfo(chapter, 'Drawing Set ${chapter.toString().padLeft(2, '0')}',
-            'MASTER-LEVEL SHEETS', null);
+    final info = chapterInfo(chapter);
     final levels = <Level>[];
     for (var k = 0; k < kLevelsPerChapter; k++) {
       final id = (chapter - 1) * kLevelsPerChapter + k + 1;

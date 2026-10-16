@@ -7,27 +7,46 @@ import 'generator.dart';
 /// shipped levels. Sheets 1, 12 and 24 are the hand-validated design samples.
 
 final class ChapterInfo {
-  const ChapterInfo(this.number, this.name, this.goal, this.newMechanic);
+  const ChapterInfo(this.number, this.name, this.goal, this.newMechanic, this.pitch);
   final int number;
   final String name;
 
-  /// Mono caption, uppercase in the string.
+  /// Campaign card caption ("Tap, remove, release").
   final String goal;
 
-  /// Short tag for the map preview ("NEW: CIRCLES"); null when none.
+  /// Short tag for the map preview ("CIRCLES"); null when none.
   final String? newMechanic;
+
+  /// One line shown on the previous chapter's completion screen.
+  final String pitch;
 }
 
 const kLevelsPerChapter = 20;
 const kBundledChapters = 5;
 
 const kChapters = <ChapterInfo>[
-  ChapterInfo(1, 'Workshop Basics', 'LEARN TAPPING & RELEASE', null),
-  ChapterInfo(2, 'Layer by Layer', 'OVERLAP & REVEAL ORDER', 'CIRCLES'),
-  ChapterInfo(3, 'Make Room', 'MANAGE A LIMITED TRAY', 'TIGHT TRAYS'),
-  ChapterInfo(4, 'Interlocking', 'DEPENDENCIES & ORDER', 'SHARED SUPPORTS'),
-  ChapterInfo(5, 'Master Builder', 'COMBINE EVERYTHING', 'DEEP STACKS'),
+  ChapterInfo(1, 'Workshop Basics', 'Tap, remove, release', null, 'Tap a screw. Drop a plate. That is the whole rule.'),
+  ChapterInfo(2, 'Layer by Layer', 'Overlap & reveal order', 'CIRCLES', 'Plates hide plates. Work from the top down.'),
+  ChapterInfo(3, 'Make Room', 'Plan around a tight tray', 'TIGHT TRAYS', 'Tighter trays. Plan which screws to pull first.'),
+  ChapterInfo(4, 'Interlocking', 'Shared supports', 'SHARED SUPPORTS', 'One plate pins several. Find the key piece.'),
+  ChapterInfo(5, 'Master Builder', 'Everything, fairly', 'DEEP STACKS', 'Deep stacks, every idea at once. Take your time.'),
 ];
+
+/// Info for any chapter, including downloaded ones past the bundled five.
+ChapterInfo chapterInfo(int chapter, {String? name, String? goal}) =>
+    chapter >= 1 && chapter <= kChapters.length
+    ? kChapters[chapter - 1]
+    : ChapterInfo(chapter, name ?? 'Drawing Set ${chapter.toString().padLeft(2, '0')}', goal ?? 'Master-level sheets', null, 'More sheets, same fair rules.');
+
+/// Label for a mechanic tag, used for "NEW: …" on the map preview.
+const kMechanicLabels = {
+  'overlap': 'OVERLAP',
+  'tray': 'TRAY',
+  'multi_layer': 'LAYERS',
+  'circle_panel': 'CIRCLES',
+  'trap': 'TRAPS',
+  'dependency': 'SUPPORTS',
+};
 
 /// Sheets taken verbatim from the design bundle.
 const kHandmadeSheets = {1, 12, 24};

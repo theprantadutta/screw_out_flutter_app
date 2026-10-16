@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Auto Backup exclusions (API <= 30). Entitlements and the sync binding must
+     re-hydrate from the server on a fresh install, never from an OS backup
+     (a lapsed Pro could otherwise come back from a stale blob). -->
+<full-backup-content>
+    <exclude domain="root" path="app_flutter/screw_out.db" />
+    <exclude domain="root" path="app_flutter/screw_out.db-wal" />
+    <exclude domain="root" path="app_flutter/screw_out.db-shm" />
+    <exclude domain="root" path="app_flutter/screw_out.db-journal" />
+    <exclude domain="sharedpref" path="FlutterSharedPreferences.xml" />
+</full-backup-content>

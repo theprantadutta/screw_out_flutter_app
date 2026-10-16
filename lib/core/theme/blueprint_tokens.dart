@@ -161,3 +161,37 @@ abstract final class BpMotion {
   static const fadeOut = Cubic(.8, 0, 1, 1);
   static const centerLines = Cubic(.2, .8, .2, 1);
 }
+
+/// Cosmetic board theme palettes (screen 14). Each: swatch background,
+/// four plate fills (PL-01 … PL-04), screw fill, screw line.
+abstract final class BpThemePalette {
+  static const blueprintBg = Color(0xFF1E4B7E);
+  static const blueprintPlates = [Color(0xFF2A5B93), Color(0xFF2E6299), Color(0xFF336AA3), Color(0xFF3A73AD)];
+  static const blueprintScrew = Color(0xFF1E4B7E);
+  static const blueprintLine = Color(0xFFFFFFFF);
+
+  static const walnutBg = Color(0xFFF2F0EB);
+  static const walnutPlates = [Color(0xFFB98660), Color(0xFFC49470), Color(0xFFD9B28A), Color(0xFFE8C89A)];
+  static const walnutScrew = Color(0xFFC9A04A);
+  static const walnutLine = Color(0xFF5A4320);
+
+  static const oceanBg = Color(0xFFDDEEEE);
+  static const oceanPlates = [Color(0xFF2D7A72), Color(0xFF358A82), Color(0xFF3F9E95), Color(0xFF4CB2AA)];
+  static const oceanScrew = Color(0xFFBFC6CC);
+  static const oceanLine = Color(0xFF34404A);
+
+  static const copperBg = Color(0xFF2A211D);
+  static const copperPlates = [Color(0xFF9C5A33), Color(0xFFB36A3E), Color(0xFFCC8556), Color(0xFFE09C6C)];
+  static const copperScrew = Color(0xFFF3DCC4);
+  static const copperLine = Color(0xFF3B241A);
+
+  static const midnightBg = Color(0xFF15161B);
+  static const midnightPlates = [Color(0xFF4A566C), Color(0xFF56627A), Color(0xFFD9645A), Color(0xFFE36E62)];
+  static const midnightScrew = Color(0xFFC9CDD3);
+  static const midnightLine = Color(0xFF2E3138);
+
+  static const pastelBg = Color(0xFFFCF1EA);
+  static const pastelPlates = [Color(0xFFCABDF2), Color(0xFFBCD8F0), Color(0xFFF2C6D6), Color(0xFFA9DFC9)];
+  static const pastelScrew = Color(0xFFFFFFFF);
+  static const pastelLine = Color(0xFF3D3550);
+}
