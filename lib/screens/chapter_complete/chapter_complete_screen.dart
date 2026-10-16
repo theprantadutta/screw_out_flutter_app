@@ -98,7 +98,12 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
                   final ms = _ticks.value * _ticks.duration!.inMilliseconds;
                   return BpTickStrip(
                     height: 14,
-                    states: [for (var i = 0; i < total; i++) ms >= i * 30 ? BpTick.done : BpTick.empty],
+                    states: [
+                      for (var i = 0; i < total; i++)
+                        ms >= i * 30 && progress.isCleared((chapter - 1) * kLevelsPerChapter + i + 1)
+                            ? BpTick.done
+                            : BpTick.empty,
+                    ],
                   );
                 },
               ),

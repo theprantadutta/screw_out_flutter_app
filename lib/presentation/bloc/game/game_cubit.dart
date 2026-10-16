@@ -37,7 +37,8 @@ class GameCubit extends Cubit<GameSessionState> {
     _rescued = meta['rescued'] == true;
     _elapsedBefore = Duration(milliseconds: (meta['elapsedMs'] as num?)?.toInt() ?? 0);
     _stopwatch.start();
-    _emitBoard();
+    // A resumed game already has moves: its objective chip stays collapsed.
+    _emitBoard(objectiveVisible: _engine.state.moves == 0);
     _host.track('level_started', {'level_id': level.id, 'resumed': resume != null});
   }
 

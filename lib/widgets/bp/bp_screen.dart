@@ -34,7 +34,15 @@ class BpBackButton extends StatelessWidget {
   );
 }
 
+/// Works with and without a GoRouter above (tests use plain MaterialApp).
+bool _canPop(BuildContext context) =>
+    GoRouter.maybeOf(context)?.canPop() ?? Navigator.of(context).canPop();
+
 void bpBack(BuildContext context) {
+  if (GoRouter.maybeOf(context) == null) {
+    Navigator.of(context).maybePop();
+    return;
+  }
   if (context.canPop()) {
     context.pop();
   } else {
@@ -67,7 +75,17 @@ class BpScreenScaffold extends StatelessWidget {
   final Widget? bottom;
 
   @override
-  Widget build(BuildContext context) => BpGridBackground(
+  Widget build(BuildContext context) => PopScope(
+    // A screen opened with go() has nothing beneath it: system back goes
+    // home instead of closing the app (same as the on-screen back button).
+    canPop: _canPop(context),
+    onPopInvokedWithResult: (didPop, _) {
+      if (!didPop) (onBack ?? () => bpBack(context))();
+    },
+    child: _body(context),
+  );
+
+  Widget _body(BuildContext context) => BpGridBackground(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

@@ -112,7 +112,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String rescueSlotCoins(int coins) {
-    return 'EXTRA SLOT · $coins ¢';
+    return 'EXTRA SLOT · $coins ¢';
   }
 
   @override
@@ -144,7 +144,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String useCoinsMeta(int balance) {
-    return 'BALANCE $balance ¢';
+    return 'BALANCE $balance ¢';
   }
 
   @override
@@ -419,7 +419,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String priceCoins(int coins) {
-    return '$coins ¢';
+    return '$coins ¢';
   }
 
   @override
@@ -523,7 +523,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String proPerks(int coins) {
-    return 'NO ADS · UNLIMITED HINTS · ALL THEMES · FREE RESCUES · $coins ¢ MONTHLY';
+    return 'NO ADS · UNLIMITED HINTS · ALL THEMES · FREE RESCUES · $coins ¢ MONTHLY';
   }
 
   @override
@@ -621,7 +621,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String buyFor(int coins) {
-    return 'BUY · $coins ¢';
+    return 'BUY · $coins ¢';
   }
 
   @override
@@ -629,7 +629,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String coinPackAmount(int coins) {
-    return '+$coins ¢';
+    return '+$coins ¢';
   }
 
   @override

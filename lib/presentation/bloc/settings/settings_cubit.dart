@@ -93,6 +93,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> setLocale(String? code) =>
       _update(code == null ? state.copyWith(clearLocale: true) : state.copyWith(localeCode: code));
   Future<void> markTutorialDone() => _update(state.copyWith(tutorialDone: true));
+  Future<void> setTutorialDone(bool v) => _update(state.copyWith(tutorialDone: v));
 }
 
 /// In-memory store for tests and previews.

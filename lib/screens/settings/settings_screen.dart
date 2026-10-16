@@ -474,11 +474,14 @@ class _VersionFooter extends StatelessWidget {
       future: PackageInfo.fromPlatform(),
       builder: (context, snap) {
         final info = snap.data;
-        return Text(
+        final text = Text(
           info == null ? ' ' : l.versionFooter(info.version, info.buildNumber),
           textAlign: TextAlign.center,
           style: BpType.caption.copyWith(color: BpColor.lineMuted),
         );
+        // Debug builds: long-press opens the QA panel.
+        if (!kDebugMode) return text;
+        return GestureDetector(onLongPress: () => context.push(AppRoutes.debug), child: text);
       },
     );
   }

@@ -10,6 +10,7 @@ import '../screens/chapter_map/chapter_map_screen.dart';
 import '../screens/daily/daily_screen.dart';
 import '../screens/gameplay/gameplay_route.dart';
 import '../screens/home/home_screen.dart';
+import '../screens/debug/debug_screen.dart';
 import '../screens/licenses/licenses_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/splash/splash_screen.dart';
@@ -101,6 +102,11 @@ GoRouter createAppRouter({
       path: AppRoutes.settings,
       name: 'settings',
       pageBuilder: (context, state) => _slide(state, const SettingsScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.debug,
+      name: 'debug',
+      pageBuilder: (context, state) => _slide(state, const DebugScreen()),
     ),
     GoRoute(
       path: AppRoutes.licenses,

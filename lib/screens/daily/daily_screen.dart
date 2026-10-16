@@ -239,7 +239,7 @@ class _FramedState extends State<_Framed> with SingleTickerProviderStateMixin {
                 children: [
                   Expanded(flex: 14, child: cell(l.dailyTitle, level.title)),
                   Expanded(flex: 10, child: cell(l.dailyPlates, l.platesScrews(level.panels.length, level.screws.length))),
-                  Expanded(flex: 10, child: cell(l.dailyReward, '+${Rewards.daily} ¢', color: BpColor.action, right: false)),
+                  Expanded(flex: 10, child: cell(l.dailyReward, '+${Rewards.daily}\u00a0¢', color: BpColor.action, right: false)),
                 ],
               ),
             ),

@@ -173,10 +173,30 @@ class _GameplayScreenState extends State<GameplayScreen>
           listener: (context, s) => _visuals.reconcile(s.board),
         ),
       ],
-      child: BlocBuilder<GameCubit, GameSessionState>(
-        builder: (context, s) => BpGridBackground(
-          child: LayoutBuilder(
-            builder: (context, constraints) => _layout(context, l, s, settings, constraints),
+      child: PopScope(
+        // System back never drops the player out of a level by accident:
+        // play → Pause; open sheet → close it; result card → leave.
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (didPop) return;
+          switch (_cubit.state.overlay) {
+            case GameOverlay.none:
+              _cubit.pause();
+            case GameOverlay.won:
+              widget.callbacks.onExit();
+            case GameOverlay.paused || GameOverlay.outOfHints || GameOverlay.stuck:
+              if (_confirmRestart) {
+                setState(() => _confirmRestart = false);
+              } else {
+                _cubit.dismissOverlay();
+              }
+          }
+        },
+        child: BlocBuilder<GameCubit, GameSessionState>(
+          builder: (context, s) => BpGridBackground(
+            child: LayoutBuilder(
+              builder: (context, constraints) => _layout(context, l, s, settings, constraints),
+            ),
           ),
         ),
       ),

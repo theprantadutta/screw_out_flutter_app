@@ -325,6 +325,37 @@ class ProgressService {
   Future<void> clearGame(int levelId) =>
       (_db.delete(_db.savedGames)..where((s) => s.levelId.equals(levelId))).go();
 
+  /// QA only: marks sheets 1…[upTo] cleared (not mastered), without
+  /// rewards or sync. Debug builds only (see DebugScreen).
+  Future<void> debugMarkCleared(int upTo) => _db.transaction(() async {
+    final now = DateTime.now().toUtc();
+    for (var id = 1; id <= upTo; id++) {
+      await _db.into(_db.levelClears).insert(
+        LevelClearsCompanion.insert(
+          levelId: Value(id),
+          bestMoves: 10,
+          bestTimeMs: 30000,
+          mastered: Value(id.isOdd),
+          firstClearedAt: now,
+          lastClearedAt: now,
+        ),
+        mode: InsertMode.insertOrIgnore,
+      );
+    }
+  });
+
+  /// QA only: wipes clears, coins, dailies, saved games and owned themes.
+  Future<void> debugReset() => _db.transaction(() async {
+    await _db.delete(_db.levelClears).go();
+    await _db.delete(_db.dailyCompletions).go();
+    await _db.delete(_db.savedGames).go();
+    await (_db.delete(_db.unlockedItems)..where((i) => i.itemId.equals(Cosmetics.defaultTheme).not())).go();
+    await _db.customUpdate(
+      "UPDATE player_profile SET coins = 0, equipped_theme = 'blueprint' WHERE id = 1",
+      updates: {_db.playerProfile},
+    );
+  });
+
   static String _dateString(int key) =>
       '${key ~/ 10000}-${((key ~/ 100) % 100).toString().padLeft(2, '0')}-${(key % 100).toString().padLeft(2, '0')}';
 }

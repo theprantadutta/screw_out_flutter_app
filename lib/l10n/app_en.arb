@@ -69,7 +69,7 @@
   "undoLastMove": "Undo last move",
   "hint": "HINT",
   "rescueSlot": "EXTRA SLOT",
-  "rescueSlotCoins": "EXTRA SLOT · {coins} ¢",
+  "rescueSlotCoins": "EXTRA SLOT · {coins} ¢",
   "@rescueSlotCoins": {
     "placeholders": {
       "coins": {
@@ -92,7 +92,7 @@
       }
     }
   },
-  "useCoinsMeta": "BALANCE {balance} ¢",
+  "useCoinsMeta": "BALANCE {balance} ¢",
   "@useCoinsMeta": {
     "placeholders": {
       "balance": {
@@ -318,7 +318,7 @@
   "themesCaption": "COSMETIC · NEVER CHANGES RULES",
   "equipped": "EQUIPPED",
   "owned": "OWNED",
-  "priceCoins": "{coins} ¢",
+  "priceCoins": "{coins} ¢",
   "@priceCoins": {
     "placeholders": {
       "coins": {
@@ -366,7 +366,7 @@
   "removeAds": "Remove ads",
   "restore": "RESTORE",
   "proTitle": "Screw Out Pro",
-  "proPerks": "NO ADS · UNLIMITED HINTS · ALL THEMES · FREE RESCUES · {coins} ¢ MONTHLY",
+  "proPerks": "NO ADS · UNLIMITED HINTS · ALL THEMES · FREE RESCUES · {coins} ¢ MONTHLY",
   "@proPerks": {
     "placeholders": {
       "coins": {
@@ -420,7 +420,7 @@
   "moreSheetsCaption": "New drawing sets arrive here",
   "languageEnglish": "English",
   "equip": "EQUIP",
-  "buyFor": "BUY · {coins} ¢",
+  "buyFor": "BUY · {coins} ¢",
   "@buyFor": {
     "placeholders": {
       "coins": {
@@ -429,7 +429,7 @@
     }
   },
   "close": "CLOSE",
-  "coinPackAmount": "+{coins} ¢",
+  "coinPackAmount": "+{coins} ¢",
   "@coinPackAmount": {
     "placeholders": {
       "coins": {

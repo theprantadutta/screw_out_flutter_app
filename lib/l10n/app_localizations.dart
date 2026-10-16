@@ -265,7 +265,7 @@ abstract class AppLocalizations {
   /// No description provided for @rescueSlotCoins.
   ///
   /// In en, this message translates to:
-  /// **'EXTRA SLOT · {coins} ¢'**
+  /// **'EXTRA SLOT · {coins} ¢'**
   String rescueSlotCoins(int coins);
 
   /// No description provided for @rescueSlotAd.
@@ -319,7 +319,7 @@ abstract class AppLocalizations {
   /// No description provided for @useCoinsMeta.
   ///
   /// In en, this message translates to:
-  /// **'BALANCE {balance} ¢'**
+  /// **'BALANCE {balance} ¢'**
   String useCoinsMeta(int balance);
 
   /// No description provided for @keepThinking.
@@ -715,7 +715,7 @@ abstract class AppLocalizations {
   /// No description provided for @priceCoins.
   ///
   /// In en, this message translates to:
-  /// **'{coins} ¢'**
+  /// **'{coins} ¢'**
   String priceCoins(int coins);
 
   /// No description provided for @proIncluded.
@@ -907,7 +907,7 @@ abstract class AppLocalizations {
   /// No description provided for @proPerks.
   ///
   /// In en, this message translates to:
-  /// **'NO ADS · UNLIMITED HINTS · ALL THEMES · FREE RESCUES · {coins} ¢ MONTHLY'**
+  /// **'NO ADS · UNLIMITED HINTS · ALL THEMES · FREE RESCUES · {coins} ¢ MONTHLY'**
   String proPerks(int coins);
 
   /// No description provided for @proMonthly.
@@ -1087,7 +1087,7 @@ abstract class AppLocalizations {
   /// No description provided for @buyFor.
   ///
   /// In en, this message translates to:
-  /// **'BUY · {coins} ¢'**
+  /// **'BUY · {coins} ¢'**
   String buyFor(int coins);
 
   /// No description provided for @close.
@@ -1099,7 +1099,7 @@ abstract class AppLocalizations {
   /// No description provided for @coinPackAmount.
   ///
   /// In en, this message translates to:
-  /// **'+{coins} ¢'**
+  /// **'+{coins} ¢'**
   String coinPackAmount(int coins);
 
   /// No description provided for @deleteConfirm.
