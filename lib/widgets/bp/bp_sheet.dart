@@ -56,7 +56,8 @@ class BpSheetHost extends StatefulWidget {
   State<BpSheetHost> createState() => _BpSheetHostState();
 }
 
-class _BpSheetHostState extends State<BpSheetHost> with SingleTickerProviderStateMixin {
+class _BpSheetHostState extends State<BpSheetHost>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(
     vsync: this,
     duration: BpMotion.sheet,
@@ -79,7 +80,9 @@ class _BpSheetHostState extends State<BpSheetHost> with SingleTickerProviderStat
   void didUpdateWidget(BpSheetHost old) {
     super.didUpdateWidget(old);
     _c.duration = widget.reducedMotion ? BpMotion.reduced : BpMotion.sheet;
-    _c.reverseDuration = widget.reducedMotion ? BpMotion.reduced : BpMotion.sheetOut;
+    _c.reverseDuration = widget.reducedMotion
+        ? BpMotion.reduced
+        : BpMotion.sheetOut;
     if (widget.sheet != null) {
       _shown = widget.sheet;
       _above = widget.above;
@@ -113,17 +116,26 @@ class _BpSheetHostState extends State<BpSheetHost> with SingleTickerProviderStat
         final scrimT = reduced
             ? _c.value
             : (forward
-                  ? (_c.value * BpMotion.sheet.inMilliseconds / BpMotion.scrim.inMilliseconds).clamp(0.0, 1.0)
+                  ? (_c.value *
+                            BpMotion.sheet.inMilliseconds /
+                            BpMotion.scrim.inMilliseconds)
+                        .clamp(0.0, 1.0)
                   : _c.value);
         final slide = reduced
             ? 0.0
-            : 1 - (forward ? BpMotion.sheetCurve : BpMotion.standardIn).transform(_c.value);
+            : 1 -
+                  (forward ? BpMotion.sheetCurve : BpMotion.standardIn)
+                      .transform(_c.value);
         return Stack(
           children: [
             Positioned.fill(
               child: GestureDetector(
                 onTap: widget.onScrimTap,
-                child: ColoredBox(color: BpColor.scrim.withValues(alpha: BpColor.scrim.a * scrimT)),
+                child: ColoredBox(
+                  color: BpColor.scrim.withValues(
+                    alpha: BpColor.scrim.a * scrimT,
+                  ),
+                ),
               ),
             ),
             Positioned(
@@ -134,10 +146,15 @@ class _BpSheetHostState extends State<BpSheetHost> with SingleTickerProviderStat
                 translation: Offset(0, slide * 1.15),
                 child: Opacity(
                   opacity: reduced ? _c.value : 1,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [?_above, _shown!],
+                  // Sheets may be hosted outside a screen's Material (e.g. in a
+                  // Stack above it); give text its defaults here.
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [?_above, _shown!],
+                    ),
                   ),
                 ),
               ),
