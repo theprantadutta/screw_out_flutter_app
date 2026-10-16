@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
 import '../app_log.dart';
 import '../ports.dart';
+import 'ad_banner.dart';
 import 'ad_config.dart';
 import 'ad_gate.dart';
 
@@ -82,6 +83,8 @@ class AdService implements AdsPort {
         if (!_noAds) {
           _loadInterstitial();
           _loadAppOpen();
+          // Preload so Home reserves the right space from its first frame.
+          unawaited(_banner?.prepare());
         }
       }
     } on Object catch (e) {
@@ -160,6 +163,7 @@ class AdService implements AdsPort {
 
   void _onPremiumChanged() {
     if (_noAds) {
+      _banner?.disable();
       _interstitial?.dispose();
       _interstitial = null;
       _appOpen?.dispose();
@@ -423,74 +427,20 @@ class AdService implements AdsPort {
 
   // ---------------------------------------------------------------- banner
 
+  late final SharedBanner? _banner = AdConfig.bannerUnitId == null ? null : SharedBanner(AdConfig.bannerUnitId!);
+
   @override
-  Widget? menuBanner() =>
-      (adsEnabled && !_noAds && AdConfig.bannerUnitId != null) ? _MenuBanner(analytics: _analytics) : null;
+  Widget? menuBanner() {
+    final banner = _banner;
+    if (!adsEnabled || _noAds || banner == null) return null;
+    unawaited(banner.prepare());
+    return BannerSlot(banner: banner);
+  }
 
   void dispose() {
     _premiumSub?.cancel();
     _rewarded?.dispose();
     _interstitial?.dispose();
     _appOpen?.dispose();
-  }
-}
-
-/// Anchored adaptive banner for menu screens. Collapses to nothing until it
-/// fills, so it never pushes buttons around mid-tap.
-class _MenuBanner extends StatefulWidget {
-  const _MenuBanner({required this.analytics});
-
-  final AnalyticsPort analytics;
-
-  @override
-  State<_MenuBanner> createState() => _MenuBannerState();
-}
-
-class _MenuBannerState extends State<_MenuBanner> {
-  BannerAd? _ad;
-  bool _loaded = false;
-  bool _started = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_started) return;
-    _started = true;
-    unawaited(_load());
-  }
-
-  Future<void> _load() async {
-    final width = MediaQuery.sizeOf(context).width.truncate();
-    final size = await AdSize.getLargeAnchoredAdaptiveBannerAdSize(width);
-    if (!mounted || size == null) return;
-    final unit = AdConfig.bannerUnitId;
-    if (unit == null) return;
-    final ad = BannerAd(
-      adUnitId: unit,
-      size: size,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          if (mounted) setState(() => _loaded = true);
-          widget.analytics.track('ad_impression', {'format': 'banner'});
-        },
-        onAdFailedToLoad: (ad, _) => ad.dispose(),
-      ),
-    );
-    _ad = ad;
-    await ad.load();
-  }
-
-  @override
-  void dispose() {
-    _ad?.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final ad = _ad;
-    if (!_loaded || ad == null) return const SizedBox.shrink();
-    return SizedBox(width: ad.size.width.toDouble(), height: ad.size.height.toDouble(), child: AdWidget(ad: ad));
   }
 }

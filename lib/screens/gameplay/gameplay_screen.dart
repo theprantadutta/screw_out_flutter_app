@@ -19,6 +19,7 @@ import '../../presentation/bloc/settings/settings_cubit.dart';
 import '../../services/cosmetics.dart';
 import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
+import '../../widgets/bp/bp_screen.dart';
 import 'widgets/game_sheets.dart';
 import 'widgets/result_overlay.dart';
 
@@ -472,9 +473,9 @@ class _GameplayScreenState extends State<GameplayScreen>
                   isPro: s.isPro,
                   cost: GameEconomy.rescueCoinCost,
                   adAvailable: widget.adAvailable,
-                  onCoins: () => _cubit.rescue(),
-                  onAd: () => _cubit.rescue(viaAd: true),
-                  onPro: () => _cubit.rescue(),
+                  onCoins: () => _rescue(l, viaAd: false),
+                  onAd: () => _rescue(l, viaAd: true),
+                  onPro: () => _rescue(l, viaAd: false),
                 )
               : null,
         );
@@ -483,8 +484,8 @@ class _GameplayScreenState extends State<GameplayScreen>
           balance: widget.coins,
           cost: GameEconomy.hintCoinCost,
           adAvailable: widget.adAvailable,
-          onWatch: _cubit.watchAdForHint,
-          onCoins: _cubit.buyHintWithCoins,
+          onWatch: () => _hintFromAd(l),
+          onCoins: () => _hintFromCoins(l),
           onKeepThinking: _cubit.dismissOverlay,
         );
       case GameOverlay.won:
@@ -506,6 +507,51 @@ class _GameplayScreenState extends State<GameplayScreen>
         );
       case GameOverlay.none:
         return const SizedBox.shrink();
+    }
+  }
+
+  // ------------------------------------------------- purchase feedback
+
+  Future<void> _hintFromCoins(AppLocalizations l) async {
+    if (widget.coins < GameEconomy.hintCoinCost) {
+      showBpToast(context, l.notEnoughCoins, kind: BpToastKind.error);
+      return;
+    }
+    final ok = await _cubit.buyHintWithCoins();
+    if (!mounted) return;
+    ok
+        ? showBpToast(context, l.hintBoughtToast(GameEconomy.hintCoinCost), kind: BpToastKind.success)
+        : showBpToast(context, l.notEnoughCoins, kind: BpToastKind.error);
+  }
+
+  Future<void> _hintFromAd(AppLocalizations l) async {
+    final ok = await _cubit.watchAdForHint();
+    if (!mounted) return;
+    ok
+        ? showBpToast(context, l.hintEarnedToast, kind: BpToastKind.success)
+        : showBpToast(context, widget.adAvailable ? l.adNotCompleted : l.adUnavailable, kind: BpToastKind.error);
+  }
+
+  Future<void> _rescue(AppLocalizations l, {required bool viaAd}) async {
+    final pro = _cubit.state.isPro;
+    if (!pro && !viaAd && widget.coins < GameEconomy.rescueCoinCost) {
+      showBpToast(context, l.notEnoughCoins, kind: BpToastKind.error);
+      return;
+    }
+    final ok = await _cubit.rescue(viaAd: viaAd);
+    if (!mounted) return;
+    if (ok) {
+      showBpToast(
+        context,
+        pro || viaAd ? l.rescueToast : l.rescuePaidToast(GameEconomy.rescueCoinCost),
+        kind: BpToastKind.success,
+      );
+    } else {
+      showBpToast(
+        context,
+        viaAd ? (widget.adAvailable ? l.adNotCompleted : l.adUnavailable) : l.notEnoughCoins,
+        kind: BpToastKind.error,
+      );
     }
   }
 

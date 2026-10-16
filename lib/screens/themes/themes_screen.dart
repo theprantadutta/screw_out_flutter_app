@@ -234,6 +234,7 @@ class _PreviewSheet extends StatelessWidget {
                           ? null
                           : () async {
                               await progress.equipTheme(theme.id);
+                              if (context.mounted) showBpToast(context, l.themeEquippedToast(theme.name), kind: BpToastKind.success);
                               onClose();
                             },
                       child: Text(equipped ? l.equipped : l.equip, style: BpType.monoButtonBold.copyWith(color: BpColor.ink)),
@@ -244,17 +245,17 @@ class _PreviewSheet extends StatelessWidget {
                           ? null
                           : () async {
                               if (coins < price) {
-                                showBpToast(context, l.notEnoughCoins);
+                                showBpToast(context, l.notEnoughCoins, kind: BpToastKind.error);
                                 return;
                               }
                               final ok = await progress.buyTheme(theme.id);
                               if (!context.mounted) return;
                               if (ok) {
                                 await progress.equipTheme(theme.id);
-                                if (context.mounted) showBpToast(context, l.themePurchased);
+                                if (context.mounted) showBpToast(context, l.themePurchased, kind: BpToastKind.success);
                                 onClose();
                               } else {
-                                showBpToast(context, l.notEnoughCoins);
+                                showBpToast(context, l.notEnoughCoins, kind: BpToastKind.error);
                               }
                             },
                       child: Text(price == null ? '—' : l.buyFor(price), style: BpType.monoButtonBold.copyWith(color: BpColor.ink)),

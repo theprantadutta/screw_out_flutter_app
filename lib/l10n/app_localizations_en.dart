@@ -657,6 +657,52 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String signedInToast(String name) {
+    return 'Signed in as $name · progress is backed up';
+  }
+
+  @override
+  String get signedInToastPlain => 'Signed in · progress is backed up';
+
+  @override
+  String get signedOutToast => 'Signed out. Progress on this device stays.';
+
+  @override
+  String get accountDeletedToast => 'Account deleted.';
+
+  @override
+  String get restoreNothing => 'Nothing to restore on this account.';
+
+  @override
+  String hintBoughtToast(int coins) {
+    return '−$coins ¢ · +1 hint';
+  }
+
+  @override
+  String get hintEarnedToast => '+1 hint — thanks for watching';
+
+  @override
+  String get rescueToast => '+1 tray slot for this sheet';
+
+  @override
+  String rescuePaidToast(int coins) {
+    return '−$coins ¢ · +1 tray slot';
+  }
+
+  @override
+  String get adNotCompleted => 'Video didn\'t finish — no reward this time.';
+
+  @override
+  String themeEquippedToast(String name) {
+    return '$name equipped';
+  }
+
+  @override
+  String chapterDownloadedToast(String chapter) {
+    return 'Chapter $chapter is ready';
+  }
+
+  @override
   String get signInFailed => 'Sign-in didn\'t complete.';
 
   @override

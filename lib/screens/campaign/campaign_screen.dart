@@ -109,7 +109,11 @@ class _CampaignScreenState extends State<CampaignScreen> {
                     final ok = await widget.packs!.downloadChapter(nextChapter);
                     if (!mounted) return;
                     setState(() => _downloading = false);
-                    if (!ok) showBpToast(this.context, l.somethingWentWrong);
+                    showBpToast(
+                      this.context,
+                      ok ? l.chapterDownloadedToast(pad2(nextChapter)) : l.somethingWentWrong,
+                      kind: ok ? BpToastKind.success : BpToastKind.error,
+                    );
                   },
           ),
           const SizedBox(height: 32),

@@ -210,7 +210,10 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
                 Center(
                   child: TextButtonLike(
                     label: l.equipTheme(theme.name.toUpperCase()),
-                    onTap: () => context.read<ProgressCubit>().equipTheme(theme.id),
+                    onTap: () async {
+                      await context.read<ProgressCubit>().equipTheme(theme.id);
+                      if (context.mounted) showBpToast(context, l.themeEquippedToast(theme.name), kind: BpToastKind.success);
+                    },
                   ),
                 ),
             ],

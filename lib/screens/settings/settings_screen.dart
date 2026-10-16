@@ -244,7 +244,14 @@ class _AccountBlockState extends State<_AccountBlock> {
 
     Future<void> signIn(Future<bool> Function() f) async {
       final ok = await f();
-      if (!ok && context.mounted) showBpToast(context, l.signInFailed);
+      if (!context.mounted) return;
+      if (ok) {
+        final s = cubit.state;
+        final who = s.displayName ?? s.email ?? s.username ?? '';
+        showBpToast(context, who.isEmpty ? l.signedInToastPlain : l.signedInToast(who), kind: BpToastKind.success);
+      } else {
+        showBpToast(context, l.signInFailed, kind: BpToastKind.error);
+      }
     }
 
     if (auth.isGuest) {
@@ -285,7 +292,13 @@ class _AccountBlockState extends State<_AccountBlock> {
         Row(
           children: [
             Expanded(
-              child: BpOutlineButton(onPressed: cubit.signOut, child: Text(l.signOut, style: BpType.monoSmallButton)),
+              child: BpOutlineButton(
+                onPressed: () async {
+                  await cubit.signOut();
+                  if (context.mounted) showBpToast(context, l.signedOutToast);
+                },
+                child: Text(l.signOut, style: BpType.monoSmallButton),
+              ),
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -299,7 +312,12 @@ class _AccountBlockState extends State<_AccountBlock> {
                   }
                   setState(() => _confirmDelete = false);
                   final ok = await cubit.deleteAccount();
-                  if (!ok && context.mounted) showBpToast(context, l.somethingWentWrong);
+                  if (!context.mounted) return;
+                  showBpToast(
+                    context,
+                    ok ? l.accountDeletedToast : l.somethingWentWrong,
+                    kind: ok ? BpToastKind.success : BpToastKind.error,
+                  );
                 },
                 child: Text(_confirmDelete ? l.deleteConfirm : l.deleteAccount, style: BpType.monoSmallButton),
               ),
@@ -323,14 +341,14 @@ class _PurchasesBlock extends StatelessWidget {
     Future<void> buy(String id) async {
       final outcome = await store.buy(id);
       if (!context.mounted) return;
-      final msg = switch (outcome) {
-        PurchaseOutcome.granted => l.purchaseThanks,
-        PurchaseOutcome.pending => l.purchasePending,
-        PurchaseOutcome.failed => l.purchaseFailed,
-        PurchaseOutcome.needsSignIn => l.signInToPurchase,
-        PurchaseOutcome.cancelled => null,
+      final (msg, kind) = switch (outcome) {
+        PurchaseOutcome.granted => (l.purchaseThanks, BpToastKind.success),
+        PurchaseOutcome.pending => (l.purchasePending, BpToastKind.info),
+        PurchaseOutcome.failed => (l.purchaseFailed, BpToastKind.error),
+        PurchaseOutcome.needsSignIn => (l.signInToPurchase, BpToastKind.info),
+        PurchaseOutcome.cancelled => (null, BpToastKind.info),
       };
-      if (msg != null) showBpToast(context, msg);
+      if (msg != null) showBpToast(context, msg, kind: kind);
     }
 
     final mono = BpType.monoSmallButton;
@@ -415,7 +433,14 @@ class _PurchasesBlock extends StatelessWidget {
                 height: 50,
                 onPressed: () async {
                   final o = await store.restore();
-                  if (context.mounted) showBpToast(context, o == PurchaseOutcome.granted ? l.restored : l.purchaseFailed);
+                  if (!context.mounted) return;
+                  final (msg, kind) = switch (o) {
+                    PurchaseOutcome.granted => (l.restored, BpToastKind.success),
+                    PurchaseOutcome.needsSignIn => (l.signInToPurchase, BpToastKind.info),
+                    PurchaseOutcome.cancelled => (null, BpToastKind.info),
+                    _ => (l.restoreNothing, BpToastKind.info),
+                  };
+                  if (msg != null) showBpToast(context, msg, kind: kind);
                 },
                 child: Text(l.restore, style: mono),
               ),

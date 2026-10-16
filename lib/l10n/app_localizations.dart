@@ -1138,6 +1138,78 @@ abstract class AppLocalizations {
   /// **'{plates} · {screws}'**
   String platesScrews(int plates, int screws);
 
+  /// No description provided for @signedInToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as {name} · progress is backed up'**
+  String signedInToast(String name);
+
+  /// No description provided for @signedInToastPlain.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in · progress is backed up'**
+  String get signedInToastPlain;
+
+  /// No description provided for @signedOutToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed out. Progress on this device stays.'**
+  String get signedOutToast;
+
+  /// No description provided for @accountDeletedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted.'**
+  String get accountDeletedToast;
+
+  /// No description provided for @restoreNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to restore on this account.'**
+  String get restoreNothing;
+
+  /// No description provided for @hintBoughtToast.
+  ///
+  /// In en, this message translates to:
+  /// **'−{coins} ¢ · +1 hint'**
+  String hintBoughtToast(int coins);
+
+  /// No description provided for @hintEarnedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'+1 hint — thanks for watching'**
+  String get hintEarnedToast;
+
+  /// No description provided for @rescueToast.
+  ///
+  /// In en, this message translates to:
+  /// **'+1 tray slot for this sheet'**
+  String get rescueToast;
+
+  /// No description provided for @rescuePaidToast.
+  ///
+  /// In en, this message translates to:
+  /// **'−{coins} ¢ · +1 tray slot'**
+  String rescuePaidToast(int coins);
+
+  /// No description provided for @adNotCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Video didn\'t finish — no reward this time.'**
+  String get adNotCompleted;
+
+  /// No description provided for @themeEquippedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} equipped'**
+  String themeEquippedToast(String name);
+
+  /// No description provided for @chapterDownloadedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter {chapter} is ready'**
+  String chapterDownloadedToast(String chapter);
+
   /// No description provided for @signInFailed.
   ///
   /// In en, this message translates to:

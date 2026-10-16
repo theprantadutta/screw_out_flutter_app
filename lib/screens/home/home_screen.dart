@@ -182,7 +182,7 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(height: banner == null ? bpBottom(context) : 12),
             if (banner != null) ...[
-              Center(child: banner),
+              banner,
               SizedBox(height: MediaQuery.paddingOf(context).bottom),
             ],
           ],

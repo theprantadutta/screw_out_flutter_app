@@ -140,19 +140,38 @@ class BpCaption extends StatelessWidget {
   );
 }
 
-/// One-line toast in Blueprint style (card, white outline, mono text).
-void showBpToast(BuildContext context, String message) {
+enum BpToastKind { info, success, error }
+
+OverlayEntry? _activeToast;
+
+/// Toast in Blueprint style: card, white outline, mono text, with a tone
+/// marker (success = mint ✓, error = coral ✕). Pinned below the header so it
+/// never covers the board, tray or action buttons. One at a time — a new
+/// toast replaces the current one. Announced to screen readers.
+void showBpToast(BuildContext context, String message, {BpToastKind kind = BpToastKind.info}) {
   final overlay = Overlay.maybeOf(context, rootOverlay: true);
   if (overlay == null) return;
+  _activeToast?.remove();
   late OverlayEntry entry;
-  entry = OverlayEntry(builder: (context) => _Toast(message: message, onDone: () => entry.remove()));
+  entry = OverlayEntry(
+    builder: (context) => _Toast(
+      message: message,
+      kind: kind,
+      onDone: () {
+        if (identical(_activeToast, entry)) _activeToast = null;
+        if (entry.mounted) entry.remove();
+      },
+    ),
+  );
+  _activeToast = entry;
   overlay.insert(entry);
 }
 
 class _Toast extends StatefulWidget {
-  const _Toast({required this.message, required this.onDone});
+  const _Toast({required this.message, required this.kind, required this.onDone});
 
   final String message;
+  final BpToastKind kind;
   final VoidCallback onDone;
 
   @override
@@ -166,7 +185,8 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _t = Timer(const Duration(milliseconds: 2200), () async {
+    final ms = widget.kind == BpToastKind.error ? 3200 : 2400;
+    _t = Timer(Duration(milliseconds: ms), () async {
       if (!mounted) return;
       await _c.reverse();
       widget.onDone();
@@ -181,25 +201,59 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) => Positioned(
-    left: BpSpace.screen,
-    right: BpSpace.screen,
-    bottom: bpBottom(context, 40) + 80,
-    child: IgnorePointer(
-      child: FadeTransition(
-        opacity: _c,
-        child: Material(
-          type: MaterialType.transparency,
-          child: BpOutlined(
-            color: BpColor.line,
-            fill: BpColor.card,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Text(widget.message, textAlign: TextAlign.center, style: BpType.monoBody.copyWith(color: BpColor.line)),
+  Widget build(BuildContext context) {
+    final (color, icon) = switch (widget.kind) {
+      BpToastKind.success => (BpColor.success, Symbols.check_sharp),
+      BpToastKind.error => (BpColor.blocked, Symbols.close_sharp),
+      BpToastKind.info => (BpColor.line, Symbols.info_sharp),
+    };
+    final reduced = MediaQuery.disableAnimationsOf(context);
+    return Positioned(
+      left: BpSpace.screen,
+      right: BpSpace.screen,
+      top: bpHeaderTop(context) + 56,
+      child: IgnorePointer(
+        child: Semantics(
+          liveRegion: true,
+          child: AnimatedBuilder(
+            animation: _c,
+            builder: (context, child) {
+              final t = BpMotion.standardOut.transform(_c.value);
+              return Opacity(
+                opacity: _c.value,
+                child: Transform.translate(offset: Offset(0, reduced ? 0 : -8 * (1 - t)), child: child),
+              );
+            },
+            child: Material(
+              type: MaterialType.transparency,
+              child: CustomPaint(
+                foregroundPainter: BpBorderPainter(color: color == BpColor.line ? BpColor.lineDefault : color),
+                child: Container(
+                  color: BpColor.card,
+                  padding: const EdgeInsets.fromLTRB(12, 11, 14, 11),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 22,
+                        height: 22,
+                        color: color,
+                        alignment: Alignment.center,
+                        child: Icon(icon, size: 16, color: BpColor.ink, weight: 600),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(widget.message, style: BpType.monoBody.copyWith(color: BpColor.line, height: 1.4)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 /// Row of tick boxes (campaign progress / chapter complete).
