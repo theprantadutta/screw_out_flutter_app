@@ -1,13 +1,19 @@
 /// Pure interstitial / app-open decisions (snake-classic's GameOverAdGate,
 /// adapted). Unit-tested; AdService only feeds it facts.
 abstract final class AdGate {
-  /// Never before this many clears in an install (first sheets teach).
-  static const minClearsBeforeInterstitial = 5;
+  /// Never before this many clears in an install, and never on the first
+  /// [firstAdSheet] − 1 sheets (they teach the game).
+  static const minClearsBeforeInterstitial = 15;
+  static const firstAdSheet = 16;
 
-  /// Show at most every Nth level completion.
-  static const everyNCompletions = 3;
-  static const minGapMs = 120 * 1000;
-  static const minFullScreenGapMs = 60 * 1000;
+  /// Show at most every Nth level completion…
+  static const everyNCompletions = 6;
+
+  /// …and never more often than this, whatever the pace of play.
+  static const minGapMs = 6 * 60 * 1000;
+
+  /// Gap between any two full-screen ads (interstitial or app-open).
+  static const minFullScreenGapMs = 3 * 60 * 1000;
 
   /// Interstitial after a level-complete card is dismissed?
   static bool interstitial({
@@ -23,7 +29,7 @@ abstract final class AdGate {
   }) {
     if (noAds || !adsEnabled || !loaded) return false;
     if (isDaily) return false;
-    if (levelId < 6 || clearsThisInstall < minClearsBeforeInterstitial) return false;
+    if (levelId < firstAdSheet || clearsThisInstall < minClearsBeforeInterstitial) return false;
     if (completionsSinceLastAd + 1 < everyNCompletions) return false;
     if (msSinceLastInterstitial < minGapMs) return false;
     if (msSinceAnyFullScreenAd < minFullScreenGapMs) return false;

@@ -105,7 +105,7 @@ void main() {
       bool daily = false,
       int level = 20,
       int clears = 20,
-      int since = 2,
+      int since = 5,
       int msLast = 1 << 30,
       int msAny = 1 << 30,
     }) => AdGate.interstitial(
@@ -125,11 +125,19 @@ void main() {
       expect(inter(noAds: true), isFalse);
       expect(inter(loaded: false), isFalse);
       expect(inter(daily: true), isFalse);
-      expect(inter(level: 5), isFalse);
-      expect(inter(clears: 3), isFalse);
-      expect(inter(since: 0), isFalse);
-      expect(inter(msLast: 60 * 1000), isFalse);
-      expect(inter(msAny: 30 * 1000), isFalse);
+      // Never on the first 15 sheets / before 15 clears.
+      expect(inter(level: 15), isFalse);
+      expect(inter(level: 16), isTrue);
+      expect(inter(clears: 14), isFalse);
+      // At most every 6th completion.
+      expect(inter(since: 4), isFalse);
+      expect(inter(since: 5), isTrue);
+      // At least 6 minutes between interstitials…
+      expect(inter(msLast: 5 * 60 * 1000), isFalse);
+      expect(inter(msLast: 6 * 60 * 1000), isTrue);
+      // …and 3 minutes after any full-screen ad (incl. app-open).
+      expect(inter(msAny: 2 * 60 * 1000), isFalse);
+      expect(inter(msAny: 3 * 60 * 1000), isTrue);
     });
 
     test('app open', () {
