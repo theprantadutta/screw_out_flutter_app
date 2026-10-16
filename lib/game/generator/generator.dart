@@ -208,9 +208,21 @@ final class LevelGenerator {
           all.addAll(mirrored);
         }
       }
+      // A plate centred on a symmetric board gets mirrored screw pairs.
+      final onAxis = mirror && (p.x + p.w / 2 - kBoardUnits / 2).abs() < 1;
       for (final a in anchors) {
         if (chosen.isNotEmpty && twinScrews != null) break;
         if (chosen.length >= want) break;
+        if (onAxis && (a.$1 - kBoardUnits / 2).abs() >= 1) {
+          if (a.$1 > kBoardUnits / 2) continue; // pick from the left half
+          final m = (kBoardUnits - a.$1, a.$2);
+          if (chosen.length + 2 > want + 1) continue;
+          if (_screwOk(a, p, placed, all) && _screwOk(m, p, placed, [...all, a])) {
+            chosen.addAll([a, m]);
+            all.addAll([a, m]);
+          }
+          continue;
+        }
         if (_screwOk(a, p, placed, all)) {
           chosen.add(a);
           all.add(a);
@@ -391,6 +403,9 @@ final class LevelGenerator {
     final (x, y) = a;
     final ownPanel = own.toPanel();
     if (ownPanel.visualSignedDistance(x, y) > -(kHoleRadius + 2)) return false;
+    for (final o in placed) {
+      if (o.depth <= own.depth && screwCoversTag(o.toPanel(), x, y)) return false;
+    }
     for (final e in existing) {
       final dx = e.$1 - x;
       final dy = e.$2 - y;

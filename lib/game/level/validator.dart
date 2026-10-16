@@ -18,6 +18,26 @@ const double kMinClearance = 2;
 /// Minimum centre distance between two screws (heads are 26 units wide).
 const double kMinScrewSpacing = 30;
 
+/// The PL tag drawn at the top-centre of every plate (level units):
+/// ±[kTagHalfWidth] around the centre line, [kTagTop]…[kTagBottom] below the
+/// plate's top edge.
+const double kTagHalfWidth = 16;
+const double kTagTop = 6;
+const double kTagBottom = 18;
+
+/// True when a screw head at ([x], [y]) would hide [p]'s PL tag.
+bool screwCoversTag(Panel p, double x, double y) {
+  final l = p.cx - kTagHalfWidth;
+  final r = p.cx + kTagHalfWidth;
+  final t = p.y + kTagTop;
+  final b = p.y + kTagBottom;
+  final nx = x.clamp(l, r);
+  final ny = y.clamp(t, b);
+  final dx = x - nx;
+  final dy = y - ny;
+  return dx * dx + dy * dy < kScrewOverlapRadius * kScrewOverlapRadius;
+}
+
 const int kMinTray = 2;
 const int kMaxTray = 6;
 
@@ -79,6 +99,13 @@ List<ValidationIssue> validateLevel(Level level) {
     final own = level.panelById(s.panelId);
     if (own.visualSignedDistance(s.x, s.y) > -kHoleRadius) {
       fail('screw_off_plate', '${s.id} hole is not fully on ${own.label}');
+    }
+    // Screws render above every plate at their depth or below, so they
+    // must not sit on any of those plates' PL tags.
+    for (final p in level.panels) {
+      if (p.depth <= own.depth && screwCoversTag(p, s.x, s.y)) {
+        fail('tag_covered', '${s.id} hides the ${p.label} tag');
+      }
     }
     for (final p in level.panels) {
       if (p.depth == own.depth && p.id != own.id) {

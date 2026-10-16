@@ -15,6 +15,7 @@ import 'presentation/bloc/settings/settings_cubit.dart';
 import 'services/level_repository.dart';
 import 'services/ports.dart';
 import 'services/progress_service.dart';
+import 'widgets/bp/bp_tablet_scale.dart';
 
 /// Root widget. Provider contract for every screen:
 ///
@@ -67,7 +68,7 @@ class ScrewOutApp extends StatelessWidget {
             final scale = mq.textScaler.scale(1).clamp(0.9, 1.3);
             return MediaQuery(
               data: mq.copyWith(textScaler: TextScaler.linear(scale)),
-              child: child!,
+              child: BpTabletScale(child: child!),
             );
           },
         ),
