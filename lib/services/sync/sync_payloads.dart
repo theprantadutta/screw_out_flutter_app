@@ -131,7 +131,9 @@ class SyncPayloads {
     ).getSingle();
     return {
       'balance': (profile?.coins ?? 0).clamp(0, 10000000),
-      'updated_at': WireIds.iso(profile?.updatedAt ?? DateTime.now()),
+      // Coins' own clock (an old epoch when they never moved here, so an
+      // untouched device can never overwrite the account's balance).
+      'updated_at': WireIds.iso(profile?.coinsUpdatedAt ?? DateTime.utc(2000)),
       'total_earned': sums.read<int>('earned'),
       'total_spent': sums.read<int>('spent'),
     };
@@ -219,8 +221,12 @@ class CoinGrants {
           CoinTransactionsCompanion.insert(id: key, amount: amount, reason: source, createdAt: created),
         );
         await _db.customUpdate(
-          'UPDATE player_profile SET coins = MAX(0, coins + ?), updated_at = ? WHERE id = 1',
-          variables: [Variable.withInt(amount), Variable.withDateTime(DateTime.now().toUtc())],
+          'UPDATE player_profile SET coins = MAX(0, coins + ?), updated_at = ?, coins_updated_at = ? WHERE id = 1',
+          variables: [
+            Variable.withInt(amount),
+            Variable.withDateTime(DateTime.now().toUtc()),
+            Variable.withDateTime(DateTime.now().toUtc()),
+          ],
           updates: {_db.playerProfile},
         );
         await _db.enqueueSyncOutbox(

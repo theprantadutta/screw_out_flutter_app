@@ -143,14 +143,30 @@ class BpCaption extends StatelessWidget {
 enum BpToastKind { info, success, error }
 
 OverlayEntry? _activeToast;
+final List<(OverlayState, String, BpToastKind)> _queuedToasts = [];
 
 /// Toast in Blueprint style: card, white outline, mono text, with a tone
 /// marker (success = mint ✓, error = coral ✕). Pinned below the header so it
 /// never covers the board, tray or action buttons. One at a time — a new
-/// toast replaces the current one. Announced to screen readers.
-void showBpToast(BuildContext context, String message, {BpToastKind kind = BpToastKind.info}) {
+/// toast replaces the current one, unless [queue] is set: account and sync
+/// notices wait their turn so none is lost. Announced to screen readers.
+void showBpToast(BuildContext context, String message, {BpToastKind kind = BpToastKind.info, bool queue = false}) {
   final overlay = Overlay.maybeOf(context, rootOverlay: true);
   if (overlay == null) return;
+  showBpToastOn(overlay, message, kind: kind, queue: queue);
+}
+
+/// [showBpToast] for callers outside any screen (app-wide notices), which
+/// hold the root navigator's overlay rather than a context below it.
+void showBpToastOn(OverlayState overlay, String message, {BpToastKind kind = BpToastKind.info, bool queue = false}) {
+  if (queue && _activeToast != null) {
+    _queuedToasts.add((overlay, message, kind));
+    return;
+  }
+  _insertToast(overlay, message, kind);
+}
+
+void _insertToast(OverlayState overlay, String message, BpToastKind kind) {
   _activeToast?.remove();
   late OverlayEntry entry;
   entry = OverlayEntry(
@@ -158,8 +174,16 @@ void showBpToast(BuildContext context, String message, {BpToastKind kind = BpToa
       message: message,
       kind: kind,
       onDone: () {
-        if (identical(_activeToast, entry)) _activeToast = null;
         if (entry.mounted) entry.remove();
+        if (!identical(_activeToast, entry)) return;
+        _activeToast = null;
+        while (_queuedToasts.isNotEmpty) {
+          final (o, m, k) = _queuedToasts.removeAt(0);
+          if (o.mounted) {
+            _insertToast(o, m, k);
+            break;
+          }
+        }
       },
     ),
   );
@@ -185,7 +209,9 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    final ms = widget.kind == BpToastKind.error ? 3200 : 2400;
+    // Long notices stay up long enough to read (~50 ms a character).
+    final base = widget.kind == BpToastKind.error ? 3200 : 2400;
+    final ms = math.max(base, math.min(6000, widget.message.length * 50));
     _t = Timer(Duration(milliseconds: ms), () async {
       if (!mounted) return;
       await _c.reverse();

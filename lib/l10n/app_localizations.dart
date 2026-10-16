@@ -1258,23 +1258,77 @@ abstract class AppLocalizations {
   /// **'TODAY\'S BOARD'**
   String get todaysBoard;
 
-  /// No description provided for @signedInToast.
-  ///
-  /// In en, this message translates to:
-  /// **'Signed in as {name} · progress is backed up'**
-  String signedInToast(String name);
-
-  /// No description provided for @signedInToastPlain.
-  ///
-  /// In en, this message translates to:
-  /// **'Signed in · progress is backed up'**
-  String get signedInToastPlain;
-
   /// No description provided for @signedOutToast.
   ///
   /// In en, this message translates to:
-  /// **'Signed out. Progress on this device stays.'**
+  /// **'Signed out · this device was cleared. Sign in again to get your progress back.'**
   String get signedOutToast;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get welcomeBack;
+
+  /// No description provided for @welcomeBackName.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back, {name}'**
+  String welcomeBackName(String name);
+
+  /// No description provided for @syncRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} · {sheets, plural, =1{1 sheet} other{{sheets} sheets}} and {coins} coins restored'**
+  String syncRestored(String who, int sheets, int coins);
+
+  /// No description provided for @syncRestoredEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} · you\'re signed in and progress is backed up'**
+  String syncRestoredEmpty(String who);
+
+  /// No description provided for @syncCombined.
+  ///
+  /// In en, this message translates to:
+  /// **'{who} · this device\'s progress was added to your account: {sheets, plural, =1{1 sheet} other{{sheets} sheets}}, {coins} coins'**
+  String syncCombined(String who, int sheets, int coins);
+
+  /// No description provided for @syncSavedNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as {name} · your progress is now saved to your account'**
+  String syncSavedNew(String name);
+
+  /// No description provided for @syncSavedNewPlain.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in · your progress is now saved to your account'**
+  String get syncSavedNewPlain;
+
+  /// No description provided for @syncFromOtherDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced from your other device · {sheets, plural, =0{progress updated} =1{1 new sheet} other{{sheets} new sheets}}'**
+  String syncFromOtherDevice(int sheets);
+
+  /// No description provided for @syncRestoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your saved progress yet · it will sync automatically when the connection is back'**
+  String get syncRestoreFailed;
+
+  /// No description provided for @signedInOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in · your progress will sync when you\'re back online'**
+  String get signedInOffline;
+
+  /// No description provided for @proActivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro is active · no ads, every theme and unlimited hints'**
+  String get proActivated;
 
   /// No description provided for @accountDeletedToast.
   ///

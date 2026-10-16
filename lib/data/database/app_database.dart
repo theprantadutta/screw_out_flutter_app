@@ -37,6 +37,11 @@ class PlayerProfile extends Table {
   TextColumn get equippedTheme => text().withDefault(const Constant('blueprint'))();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 
+  /// When the coin balance last changed on this device (earn, spend, grant,
+  /// merge). The balance syncs last-write-wins on THIS, never on
+  /// [updatedAt], which also moves when a theme is equipped.
+  DateTimeColumn get coinsUpdatedAt => dateTime().nullable()();
+
   @override
   Set<Column<Object>> get primaryKey => {id};
 }
@@ -203,12 +208,21 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
+    },
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.addColumn(playerProfile, playerProfile.coinsUpdatedAt);
+        // Best local evidence of when the coins last moved: the ledger.
+        await customStatement(
+          'UPDATE player_profile SET coins_updated_at = (SELECT MAX(created_at) FROM coin_transactions)',
+        );
+      }
     },
     beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');

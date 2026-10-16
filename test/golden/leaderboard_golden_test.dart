@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:screw_out/presentation/bloc/auth/auth_cubit.dart';
 import 'package:screw_out/screens/leaderboard/leaderboard_screen.dart';
 import 'package:screw_out/services/leaderboard_service.dart';
+import 'package:screw_out/services/sync/sync_report.dart';
 
 import '../helpers/harness.dart';
 import '../helpers/screen_harness.dart';
@@ -26,6 +27,8 @@ class _SignedIn implements AuthPort {
   Future<void> signOut() async {}
   @override
   Future<bool> deleteAccount() async => true;
+  @override
+  SyncReport? takeSignInReport() => null;
 }
 
 void main() {

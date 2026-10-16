@@ -242,8 +242,8 @@ class ProgressService {
       CoinTransactionsCompanion.insert(id: id, amount: amount, reason: reason, levelId: Value(levelId), createdAt: now),
     );
     await _db.customUpdate(
-      'UPDATE player_profile SET coins = coins + ?, updated_at = ? WHERE id = 1',
-      variables: [Variable.withInt(amount), Variable.withDateTime(now)],
+      'UPDATE player_profile SET coins = coins + ?, updated_at = ?, coins_updated_at = ? WHERE id = 1',
+      variables: [Variable.withInt(amount), Variable.withDateTime(now), Variable.withDateTime(now)],
       updates: {_db.playerProfile},
     );
     await _db.enqueueSyncOutbox(

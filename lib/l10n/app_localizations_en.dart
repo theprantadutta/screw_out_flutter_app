@@ -742,15 +742,76 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todaysBoard => 'TODAY\'S BOARD';
 
   @override
-  String signedInToast(String name) {
-    return 'Signed in as $name · progress is backed up';
+  String get signedOutToast =>
+      'Signed out · this device was cleared. Sign in again to get your progress back.';
+
+  @override
+  String get welcomeBack => 'Welcome back';
+
+  @override
+  String welcomeBackName(String name) {
+    return 'Welcome back, $name';
   }
 
   @override
-  String get signedInToastPlain => 'Signed in · progress is backed up';
+  String syncRestored(String who, int sheets, int coins) {
+    String _temp0 = intl.Intl.pluralLogic(
+      sheets,
+      locale: localeName,
+      other: '$sheets sheets',
+      one: '1 sheet',
+    );
+    return '$who · $_temp0 and $coins coins restored';
+  }
 
   @override
-  String get signedOutToast => 'Signed out. Progress on this device stays.';
+  String syncRestoredEmpty(String who) {
+    return '$who · you\'re signed in and progress is backed up';
+  }
+
+  @override
+  String syncCombined(String who, int sheets, int coins) {
+    String _temp0 = intl.Intl.pluralLogic(
+      sheets,
+      locale: localeName,
+      other: '$sheets sheets',
+      one: '1 sheet',
+    );
+    return '$who · this device\'s progress was added to your account: $_temp0, $coins coins';
+  }
+
+  @override
+  String syncSavedNew(String name) {
+    return 'Signed in as $name · your progress is now saved to your account';
+  }
+
+  @override
+  String get syncSavedNewPlain =>
+      'Signed in · your progress is now saved to your account';
+
+  @override
+  String syncFromOtherDevice(int sheets) {
+    String _temp0 = intl.Intl.pluralLogic(
+      sheets,
+      locale: localeName,
+      other: '$sheets new sheets',
+      one: '1 new sheet',
+      zero: 'progress updated',
+    );
+    return 'Synced from your other device · $_temp0';
+  }
+
+  @override
+  String get syncRestoreFailed =>
+      'Couldn\'t load your saved progress yet · it will sync automatically when the connection is back';
+
+  @override
+  String get signedInOffline =>
+      'Signed in · your progress will sync when you\'re back online';
+
+  @override
+  String get proActivated =>
+      'Pro is active · no ads, every theme and unlimited hints';
 
   @override
   String get accountDeletedToast => 'Account deleted.';

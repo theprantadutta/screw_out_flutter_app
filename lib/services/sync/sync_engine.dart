@@ -10,6 +10,7 @@ import '../../data/database/app_database.dart';
 import '../app_log.dart';
 import 'pull_merger.dart';
 import 'sync_payloads.dart';
+import 'sync_report.dart';
 
 /// The only thing that pushes local changes to the API (ported from
 /// snake-classic). Drains the Drift [SyncQueue] grouped by data type:
@@ -51,7 +52,10 @@ class SyncEngine {
     _linkSub = _connectivity.snapshots.map((s) => s.shouldAttemptNetworkWork).distinct().listen((ok) {
       if (ok) schedule(immediate: true);
     });
-    _periodicTimer = Timer.periodic(_periodic, (_) => schedule());
+    _periodicTimer = Timer.periodic(_periodic, (_) {
+      schedule();
+      unawaited(refresh());
+    });
   }
 
   void schedule({bool immediate = false}) {
@@ -150,32 +154,108 @@ class SyncEngine {
 
   // --------------------------------------------------------- first sign-in
 
-  /// Called right after a successful `/auth/firebase`. For a returning
-  /// account (or a different account than last synced on this device) the
-  /// cloud snapshot is pulled and merged — local progress is never lost.
-  /// A brand-new account just pushes what the guest built.
-  Future<void> onSignedIn({required String userId, required bool isNewUser}) async {
+  /// Called after every successful `/auth/firebase`.
+  ///
+  /// * First time this device meets an account that has cloud data: pull and
+  ///   merge (additive — local progress is never lost) → [SyncReportKind.restored].
+  /// * A brand-new account: push everything the guest built → [SyncReportKind.savedNew].
+  /// * Already linked: a routine [refresh] in the background → null.
+  ///
+  /// A failed first pull leaves the device unlinked, so the next session or
+  /// resume retries it ([SyncReportKind.restoreFailed] is returned once).
+  Future<SyncReport?> onSignedIn({required String userId, required bool isNewUser}) async {
     final prefs = await SharedPreferences.getInstance();
     final last = prefs.getString(_lastSyncedUserKey);
+    SyncReport? report;
     if (!isNewUser && last != userId) {
       final pulled = await _api.pull();
       if (pulled.isSuccess && pulled.value != null) {
-        await PullMerger(_db).apply(pulled.value!);
+        final stats = await PullMerger(_db).apply(pulled.value!);
         await prefs.setString(_lastSyncedUserKey, userId);
+        _lastPullAt = DateTime.now();
+        report = await _report(SyncReportKind.restored, stats);
       } else {
-        AppLog.warn('First sign-in pull failed (${pulled.failure}); will retry next sign-in');
+        AppLog.warn('First sign-in pull failed (${pulled.failure}); retried on the next session');
+        report = _restoreFailedShown ? null : await _report(SyncReportKind.restoreFailed, const MergeStats());
+        _restoreFailedShown = true;
       }
-    } else {
-      if (isNewUser) await _enqueueEverything();
+    } else if (isNewUser) {
+      await _enqueueEverything();
       await prefs.setString(_lastSyncedUserKey, userId);
+      report = await _report(SyncReportKind.savedNew, const MergeStats());
+    } else {
+      unawaited(refresh(force: true));
     }
+    if (report?.kind != SyncReportKind.restoreFailed) _restoreFailedShown = false;
     schedule(immediate: true);
+    return report;
+  }
+
+  Future<SyncReport> _report(SyncReportKind kind, MergeStats stats) async {
+    final clears = (await _db.select(_db.levelClears).get()).length;
+    final profile = await (_db.select(_db.playerProfile)..where((p) => p.id.equals(1))).getSingleOrNull();
+    final r = SyncReport(kind, stats: stats, totalClears: clears, coins: profile?.coins ?? 0);
+    AppLog.info('Sync: $r');
+    return r;
   }
 
   /// Forget the account binding (sign-out / deletion).
   Future<void> forgetAccount() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_lastSyncedUserKey);
+    _lastPullAt = null;
+  }
+
+  // -------------------------------------------------------------- refresh
+
+  final _reports = StreamController<SyncReport>.broadcast();
+  DateTime? _lastPullAt;
+  Future<void>? _refreshing;
+  bool _restoreFailedShown = false;
+  static const _pullEvery = Duration(seconds: 45);
+
+  /// Notices for the player that no screen asked for (another device's
+  /// progress arriving, a delayed restore). The app turns them into toasts.
+  Stream<SyncReport> get reports => _reports.stream;
+
+  /// Publishes a report on [reports].
+  void announce(SyncReport report) {
+    if (!_reports.isClosed) _reports.add(report);
+  }
+
+  /// Keeps a linked device in step with the account's other devices: push
+  /// what this device has, then pull and merge (newest coin balance wins).
+  /// Runs on session start, resume and every few minutes; throttled.
+  Future<void> refresh({bool force = false}) => _refreshing ??= _refresh(force).whenComplete(() => _refreshing = null);
+
+  Future<void> _refresh(bool force) async {
+    if (!_api.isAuthenticated || !_connectivity.shouldAttemptNetworkWork) return;
+    final last = _lastPullAt;
+    if (!force && last != null && DateTime.now().difference(last) < _pullEvery) return;
+    final prefs = await SharedPreferences.getInstance();
+    final linked = prefs.getString(_lastSyncedUserKey);
+    final me = _api.currentUserId;
+    if (me == null) return;
+    if (linked != me) {
+      // The first pull never landed (offline at sign-in): do it now.
+      final report = await onSignedIn(userId: me, isNewUser: false);
+      if (report != null && report.kind != SyncReportKind.restoreFailed) announce(report);
+      return;
+    }
+    try {
+      await syncNow(); // the server sees this device's changes first
+      final pulled = await _api.pull();
+      final snapshot = pulled.value;
+      if (!pulled.isSuccess || snapshot == null) return;
+      _lastPullAt = DateTime.now();
+      final stats = await PullMerger(_db).apply(snapshot, coins: CoinMerge.newestWins);
+      if (stats.clearsAdded > 0 || stats.dailyAdded > 0 || stats.themesAdded > 0) {
+        announce(await _report(SyncReportKind.fromOtherDevice, stats));
+      }
+      schedule();
+    } on Object catch (e, s) {
+      AppLog.error('Sync refresh failed', e, s);
+    }
   }
 
   /// A new account receives the whole local state.

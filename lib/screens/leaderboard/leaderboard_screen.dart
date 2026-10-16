@@ -9,6 +9,7 @@ import '../../services/leaderboard_service.dart';
 import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
+import '../../widgets/sync_notices.dart';
 
 /// Leaderboards: SHEETS · DAILY · STREAK. Kept deliberately simple — one
 /// list, your row highlighted, your standing pinned at the bottom.
@@ -355,12 +356,7 @@ class _MeBar extends StatelessWidget {
               height: 48,
               onPressed: () async {
                 final ok = await auth.signInWithGoogle();
-                if (!context.mounted) return;
-                showBpToast(
-                  context,
-                  ok ? l.signedInToastPlain : l.signInFailed,
-                  kind: ok ? BpToastKind.success : BpToastKind.error,
-                );
+                if (context.mounted) showSignInResult(context, auth, ok);
               },
               child: Text(l.signInGoogle),
             ),

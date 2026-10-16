@@ -17,6 +17,7 @@ import '../../services/ports.dart';
 import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
+import '../../widgets/sync_notices.dart';
 
 /// Hosted by privacy-project (Projects/screw_out); bundled copies live in
 /// assets/legal/.
@@ -244,14 +245,7 @@ class _AccountBlockState extends State<_AccountBlock> {
 
     Future<void> signIn(Future<bool> Function() f) async {
       final ok = await f();
-      if (!context.mounted) return;
-      if (ok) {
-        final s = cubit.state;
-        final who = s.displayName ?? s.email ?? s.username ?? '';
-        showBpToast(context, who.isEmpty ? l.signedInToastPlain : l.signedInToast(who), kind: BpToastKind.success);
-      } else {
-        showBpToast(context, l.signInFailed, kind: BpToastKind.error);
-      }
+      if (context.mounted) showSignInResult(context, cubit, ok);
     }
 
     if (auth.isGuest) {

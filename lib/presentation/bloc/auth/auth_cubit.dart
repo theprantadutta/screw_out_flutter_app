@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../services/sync/sync_report.dart';
+
 /// Account backend (Firebase Auth → API JWT). Implemented by the user
 /// service; the UI only sees [AuthCubit].
 abstract interface class AuthPort {
@@ -11,6 +13,10 @@ abstract interface class AuthPort {
   Future<bool> signInWithApple();
   Future<void> signOut();
   Future<bool> deleteAccount();
+
+  /// What the sign-in just completed pulled or saved (null when the API
+  /// could not be reached). Read once by the screen that started it.
+  SyncReport? takeSignInReport();
 }
 
 enum AuthProviderKind { guest, google, apple }
@@ -77,6 +83,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> signOut() => _port.signOut();
   Future<bool> deleteAccount() => _port.deleteAccount();
+  SyncReport? takeSignInReport() => _port.takeSignInReport();
 }
 
 /// Guest-only stub for tests/previews.
@@ -95,4 +102,6 @@ final class GuestAuth implements AuthPort {
   Future<void> signOut() async {}
   @override
   Future<bool> deleteAccount() async => false;
+  @override
+  SyncReport? takeSignInReport() => null;
 }

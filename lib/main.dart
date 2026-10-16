@@ -18,6 +18,7 @@ import 'core/theme/blueprint_tokens.dart';
 import 'data/database/app_database.dart';
 import 'firebase_options.dart';
 import 'game/generator/daily.dart';
+import 'l10n/app_localizations.dart';
 import 'presentation/bloc/display/display_cubit.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
 import 'presentation/bloc/premium/premium_cubit.dart';
@@ -38,6 +39,8 @@ import 'services/purchases/purchase_service.dart';
 import 'services/sync/sync_engine.dart';
 import 'services/user_service.dart';
 import 'widgets/bp/bp_buttons.dart';
+import 'widgets/bp/bp_screen.dart';
+import 'widgets/sync_notices.dart';
 
 Future<void> main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
@@ -164,6 +167,7 @@ void _wireRouter(GoRouter router, Future<void> ready) {
     ready.then((_) {
       notifications.markAppReady();
       _PrimerTrigger(router, notifications).attach();
+      _AccountNotices().attach();
       getIt<SettingsCubit>().stream.listen((_) => unawaited(_scheduleReminder()));
       getIt<ProgressCubit>().stream
           .map((p) => p.dailyDone.length)
@@ -210,6 +214,46 @@ class _PrimerTrigger {
   }
 }
 
+/// App-wide account notices nobody tapped for: another device's progress
+/// arriving, a delayed restore, Pro switching on. Queued so a sign-in
+/// toast and the Pro toast both get read.
+class _AccountNotices {
+  bool? _wasPro;
+
+  void attach() {
+    getIt<SyncEngine>().reports.listen((report) {
+      final target = _target();
+      if (target == null) return;
+      final auth = getIt<AuthCubit>().state;
+      final (msg, kind) = syncNotice(target.$2, report, name: auth.displayName ?? auth.username ?? '');
+      showBpToastOn(target.$1, msg, kind: kind, queue: true);
+    });
+    final premium = getIt<PremiumCubit>();
+    _wasPro = premium.state.isPro;
+    premium.stream.listen((s) {
+      final was = _wasPro;
+      _wasPro = s.isPro;
+      // Only a real switch-on (sign-in, grant, purchase restore) — never the
+      // cached state loading at launch.
+      if (was != false || !s.isPro) return;
+      final target = _target();
+      if (target == null) return;
+      showBpToastOn(target.$1, target.$2.proActivated, kind: BpToastKind.success, queue: true);
+    });
+  }
+
+  /// The root navigator's overlay (the navigator's own context sits above
+  /// it, so a context lookup would find nothing) and the app's strings.
+  (OverlayState, AppLocalizations)? _target() {
+    final nav = rootNavigatorKey.currentState;
+    final context = rootNavigatorKey.currentContext;
+    final overlay = nav?.overlay;
+    if (overlay == null || context == null || !context.mounted) return null;
+    final l = Localizations.of<AppLocalizations>(context, AppLocalizations);
+    return l == null ? null : (overlay, l);
+  }
+}
+
 /// Resume / pause wiring (snake-classic's lifecycle observer).
 class _AppLifecycle with WidgetsBindingObserver {
   _AppLifecycle({required this.firebase});
@@ -235,7 +279,10 @@ class _AppLifecycle with WidgetsBindingObserver {
     // Android drops the window's preferred display mode in the background.
     unawaited(getIt<DisplayCubit>().apply());
     getIt<TelemetryRecorder>().onForeground();
-    if (firebase) unawaited(getIt<UserService>().ensureBackendSession());
+    // Pull what the account's other devices did while this one was away.
+    if (firebase) {
+      unawaited(getIt<UserService>().ensureBackendSession().then((_) => getIt<SyncEngine>().refresh()));
+    }
     getIt<SyncEngine>().schedule(immediate: true);
     unawaited(getIt<PurchaseService>().onResume());
     unawaited(getIt<AdService>().onResumed());

@@ -13,6 +13,7 @@ import '../data/database/app_database.dart';
 import '../presentation/bloc/auth/auth_cubit.dart';
 import 'app_log.dart';
 import 'sync/sync_engine.dart';
+import 'sync/sync_report.dart';
 
 /// Accounts (ported from snake-classic's UnifiedUserService, trimmed to
 /// Screw Out's needs). Play-first: everyone starts as an offline guest.
@@ -55,6 +56,8 @@ class UserService implements AuthPort {
   DateTime? _lastRefreshAt;
   bool _googleReady = false;
   bool _firebaseAvailable = true;
+  bool _interactive = false;
+  SyncReport? _signInReport;
 
   /// Run after every successful API session (purchase reconcile,
   /// entitlement refresh, push registration…). Wired by DI.
@@ -187,7 +190,16 @@ class UserService implements AuthPort {
         _emit(next);
         await _cacheProfile(user.uid, data);
       }
-      await _sync.onSignedIn(userId: data['user_id'] as String, isNewUser: data['is_new_user'] == true);
+      final report = await _sync.onSignedIn(userId: data['user_id'] as String, isNewUser: data['is_new_user'] == true);
+      if (report != null) {
+        // A sign-in the player just tapped reports through Settings (one
+        // combined toast); anything else becomes an app-wide notice.
+        if (_interactive) {
+          _signInReport = report;
+        } else {
+          _sync.announce(report);
+        }
+      }
       for (final hook in onSession) {
         unawaited(hook().catchError((Object e) => AppLog.warn('session hook failed: $e')));
       }
@@ -306,9 +318,23 @@ class UserService implements AuthPort {
     }
   }
 
+  @override
+  SyncReport? takeSignInReport() {
+    final r = _signInReport;
+    _signInReport = null;
+    return r;
+  }
+
   Future<bool> _finishSignIn() async {
     _lastRefreshAt = null;
-    final ok = await ensureBackendSession(force: true);
+    _signInReport = null;
+    _interactive = true;
+    final bool ok;
+    try {
+      ok = await ensureBackendSession(force: true);
+    } finally {
+      _interactive = false;
+    }
     if (!ok) {
       // Firebase succeeded but the API did not (offline): still a signed-in
       // player locally; the session is minted on the next resume.

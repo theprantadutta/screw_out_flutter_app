@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -150,6 +151,82 @@ void main() {
       expect(themes.map((t) => t.itemId), contains('walnut'));
       final daily = await db.select(db.dailyCompletions).get();
       expect(daily.single.dateKey, 20261015);
+    });
+
+    test('reports what arrived and what this device added', () async {
+      await ProgressService(db).recordClear(_result()); // local-only sheet 7
+      final stats = await PullMerger(db).apply({
+        'progress': {
+          'levels': [
+            {'level_id': 1, 'best_moves': 3, 'best_time_ms': 4000, 'mastered': true},
+            {'level_id': 2, 'best_moves': 5, 'best_time_ms': 5000, 'mastered': false},
+          ],
+        },
+        'coins': {'balance': 0},
+      });
+      expect(stats.cloudClears, 2);
+      expect(stats.clearsAdded, 2);
+      expect(stats.localClearsUploaded, 1);
+
+      // Pulling the same snapshot again changes nothing.
+      final again = await PullMerger(db).apply({
+        'progress': {
+          'levels': [
+            {'level_id': 1, 'best_moves': 3, 'best_time_ms': 4000, 'mastered': true},
+            {'level_id': 2, 'best_moves': 5, 'best_time_ms': 5000, 'mastered': false},
+          ],
+        },
+        'coins': {'balance': 0},
+      });
+      expect(again.clearsAdded, 0);
+      expect(again.clearsImproved, 0);
+    });
+
+    test('routine pull: a newer balance from another device wins', () async {
+      await ProgressService(db).recordClear(_result()); // ledger row "now"
+      await db.delete(db.syncQueue).go(); // as if already pushed
+      final later = DateTime.now().toUtc().add(const Duration(minutes: 5)).toIso8601String();
+      final stats = await PullMerger(db).apply({
+        'coins': {'balance': 4321, 'updated_at': later},
+      }, coins: CoinMerge.newestWins);
+      expect((await db.select(db.playerProfile).getSingle()).coins, 4321);
+      expect(stats.coinsAfter, 4321);
+      // Adopted, not bounced back to the server.
+      final queued = await (db.select(db.syncQueue)..where((q) => q.dataType.equals(SyncDataType.coinBalance))).get();
+      expect(queued, isEmpty);
+    });
+
+    test('equipping a theme never makes stale coins look newer', () async {
+      final progress = ProgressService(db);
+      await progress.recordClear(_result());
+      await db.delete(db.syncQueue).go();
+      final hourAgo = DateTime.now().toUtc().subtract(const Duration(hours: 1));
+      await db.update(db.playerProfile).write(PlayerProfileCompanion(coinsUpdatedAt: Value(hourAgo)));
+      await progress.equipTheme('blueprint'); // bumps the profile's updated_at to now
+
+      // The balance push carries the coins' own clock.
+      final payload = await SyncPayloads(db).coinBalance();
+      expect(DateTime.parse(payload['updated_at'] as String).isBefore(DateTime.now().toUtc().subtract(const Duration(minutes: 30))), isTrue);
+
+      // Another device's balance from 10 minutes ago still wins.
+      final tenAgo = DateTime.now().toUtc().subtract(const Duration(minutes: 10)).toIso8601String();
+      await PullMerger(db).apply({
+        'coins': {'balance': 1025, 'updated_at': tenAgo},
+      }, coins: CoinMerge.newestWins);
+      expect((await db.select(db.playerProfile).getSingle()).coins, 1025);
+    });
+
+    test('routine pull: this device spent/earned since → it keeps its coins', () async {
+      await ProgressService(db).recordClear(_result());
+      await db.delete(db.syncQueue).go();
+      final mine = (await db.select(db.playerProfile).getSingle()).coins;
+      final earlier = DateTime.now().toUtc().subtract(const Duration(hours: 1)).toIso8601String();
+      await PullMerger(db).apply({
+        'coins': {'balance': 5, 'updated_at': earlier},
+      }, coins: CoinMerge.newestWins);
+      expect((await db.select(db.playerProfile).getSingle()).coins, mine);
+      final queued = await (db.select(db.syncQueue)..where((q) => q.dataType.equals(SyncDataType.coinBalance))).get();
+      expect(queued, hasLength(1), reason: 'the newer local balance is pushed');
     });
   });
 

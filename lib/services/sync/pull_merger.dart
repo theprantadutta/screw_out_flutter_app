@@ -4,52 +4,81 @@ import 'package:drift/drift.dart';
 
 import '../../data/database/app_database.dart';
 import 'sync_payloads.dart';
+import 'sync_report.dart';
 import 'wire_ids.dart';
+
+/// How the coin balance is reconciled on a pull.
+enum CoinMerge {
+  /// First sign-in on this device: server balance + this device's ledger
+  /// rows the server has not seen. A guest's earnings join the account.
+  additive,
+
+  /// Routine pull of an already-linked device: the newer balance wins (the
+  /// server's when another device changed it), plus anything unpushed.
+  newestWins,
+}
 
 /// Applies a `GET /sync/pull` snapshot to Drift without ever losing local
 /// progress (API_CONTRACT §3 merge rules, applied client-side):
 ///
 /// * clears: union; best moves/time MIN; mastered sticky; first clear earliest.
-/// * coins: server balance + local ledger rows the server has not seen yet
-///   (still pending in the outbox), then pending grants are credited.
+/// * coins: see [CoinMerge]; then pending server grants are credited.
 /// * unlocked items, daily completions: union.
 /// * settings, equipped theme: last-write-wins on `updated_at`.
 ///
 /// Everything the merge adds locally that the server lacks is re-enqueued so
-/// the next drain makes the server whole.
+/// the next drain makes the server whole. Safe to run repeatedly.
 class PullMerger {
   PullMerger(this._db);
 
   final AppDatabase _db;
 
-  Future<void> apply(Map<String, dynamic> snapshot) async {
+  var _cloudClears = 0, _clearsAdded = 0, _clearsImproved = 0, _localUp = 0, _dailyAdded = 0, _themesAdded = 0;
+
+  Future<MergeStats> apply(Map<String, dynamic> snapshot, {CoinMerge coins = CoinMerge.additive}) async {
+    final before = await _balance();
     await _db.transaction(() async {
       await _settings(snapshot['settings']);
       await _progress(snapshot['progress']);
       await _unlocked(snapshot['unlocked_items']);
       await _equipped(snapshot['equipped']);
       await _daily(snapshot['daily']);
-      await _coins(snapshot['coins']);
+      await _coins(snapshot['coins'], coins);
     });
-    final coins = snapshot['coins'];
-    await CoinGrants(_db).credit(coins is Map ? coins['pending_grants'] as List? : null);
+    final c = snapshot['coins'];
+    await CoinGrants(_db).credit(c is Map ? c['pending_grants'] as List? : null);
+    return MergeStats(
+      cloudClears: _cloudClears,
+      clearsAdded: _clearsAdded,
+      clearsImproved: _clearsImproved,
+      localClearsUploaded: _localUp,
+      dailyAdded: _dailyAdded,
+      themesAdded: _themesAdded,
+      coinsBefore: before,
+      coinsAfter: await _balance(),
+    );
   }
+
+  Future<int> _balance() async =>
+      (await (_db.select(_db.playerProfile)..where((p) => p.id.equals(1))).getSingleOrNull())?.coins ?? 0;
 
   DateTime? _time(Object? v) => v is String ? DateTime.tryParse(v)?.toUtc() : null;
 
   Future<void> _settings(Object? s) async {
-    if (s is! Map) return;
-    final remoteAt = _time(s['updated_at']);
     final local = await (_db.select(_db.gameSettings)..where((t) => t.id.equals(1))).getSingleOrNull();
-    if (remoteAt == null || (local != null && local.initialized && !remoteAt.isAfter(local.updatedAt))) {
-      await _db.enqueueSyncOutbox(dataType: SyncDataType.settings, entityKey: 'settings');
+    final remoteAt = s is Map ? _time(s['updated_at']) : null;
+    if (s is! Map || remoteAt == null || (local != null && local.initialized && !remoteAt.isAfter(local.updatedAt))) {
+      // Only push when this device is actually newer (equal = in step).
+      if (local != null && local.initialized && (remoteAt == null || local.updatedAt.isAfter(remoteAt))) {
+        await _db.enqueueSyncOutbox(dataType: SyncDataType.settings, entityKey: 'settings');
+      }
       return;
     }
     await _db.into(_db.gameSettings).insertOnConflictUpdate(
       GameSettingsCompanion(
         id: const Value(1),
         sound: Value(s['sound_enabled'] as bool? ?? true),
-        music: Value(s['music_enabled'] as bool? ?? false),
+        music: Value(s['music_enabled'] as bool? ?? true),
         haptics: Value(s['haptics_enabled'] as bool? ?? true),
         reducedMotion: Value(s['reduced_motion'] as bool? ?? false),
         localeCode: Value(s['locale_code'] as String?),
@@ -77,6 +106,7 @@ class PullMerger {
         final first = _time(l['first_cleared_at']) ?? DateTime.now().toUtc();
         final mine = local[id];
         if (mine == null) {
+          _clearsAdded++;
           await _db.into(_db.levelClears).insert(
             LevelClearsCompanion.insert(
               levelId: Value(id),
@@ -90,20 +120,30 @@ class PullMerger {
           continue;
         }
         int best(int a, int? b) => (b == null || b <= 0) ? a : (a <= 0 ? b : (a < b ? a : b));
-        final merged = LevelClearsCompanion(
-          bestMoves: Value(best(mine.bestMoves, moves)),
-          bestTimeMs: Value(best(mine.bestTimeMs, time)),
-          mastered: Value(mine.mastered || mastered),
-          firstClearedAt: Value(first.isBefore(mine.firstClearedAt) ? first : mine.firstClearedAt),
-        );
-        await (_db.update(_db.levelClears)..where((c) => c.levelId.equals(id))).write(merged);
+        final bestMoves = best(mine.bestMoves, moves);
+        final bestTime = best(mine.bestTimeMs, time);
+        final anyMastered = mine.mastered || mastered;
+        final firstAt = first.isBefore(mine.firstClearedAt) ? first : mine.firstClearedAt;
+        if (bestMoves != mine.bestMoves || anyMastered != mine.mastered) _clearsImproved++;
+        if (bestMoves != mine.bestMoves || bestTime != mine.bestTimeMs || anyMastered != mine.mastered || firstAt != mine.firstClearedAt) {
+          await (_db.update(_db.levelClears)..where((c) => c.levelId.equals(id))).write(
+            LevelClearsCompanion(
+              bestMoves: Value(bestMoves),
+              bestTimeMs: Value(bestTime),
+              mastered: Value(anyMastered),
+              firstClearedAt: Value(firstAt),
+            ),
+          );
+        }
         final improvedLocally = (moves == null || mine.bestMoves < moves) || (mine.mastered && !mastered);
         if (improvedLocally) {
           await _db.enqueueSyncOutbox(dataType: SyncDataType.progress, entityKey: '$id');
         }
       }
     }
+    _cloudClears = remoteIds.length;
     for (final id in local.keys.where((id) => !remoteIds.contains(id))) {
+      _localUp++;
       await _db.enqueueSyncOutbox(dataType: SyncDataType.progress, entityKey: '$id');
     }
   }
@@ -120,7 +160,10 @@ class PullMerger {
         final rawId = i['item_id'];
         if (type is! String || rawId is! String) continue;
         final id = type == 'theme' ? WireIds.themeFromServer(rawId) : rawId;
-        remote.add('$type:$id');
+        final key = '$type:$id';
+        remote.add(key);
+        if (local.containsKey(key)) continue;
+        if (type == 'theme') _themesAdded++;
         await _db.into(_db.unlockedItems).insert(
           UnlockedItemsCompanion.insert(
             itemType: type,
@@ -156,15 +199,15 @@ class PullMerger {
   Future<void> _equipped(Object? e) async {
     final profile = await (_db.select(_db.playerProfile)..where((p) => p.id.equals(1))).getSingleOrNull();
     final remoteAt = e is Map ? _time(e['updated_at']) : null;
+    final remoteTheme = e is Map && e['theme_id'] is String ? WireIds.themeFromServer(e['theme_id'] as String) : null;
     if (e is! Map || remoteAt == null || (profile != null && !remoteAt.isAfter(profile.updatedAt))) {
-      if (profile != null && profile.equippedTheme != 'blueprint') {
+      if (profile != null && profile.equippedTheme != (remoteTheme ?? 'blueprint')) {
         await _db.enqueueSyncOutbox(dataType: SyncDataType.equipped, entityKey: 'theme');
       }
       return;
     }
-    final theme = e['theme_id'] is String ? WireIds.themeFromServer(e['theme_id'] as String) : 'blueprint';
     await (_db.update(_db.playerProfile)..where((p) => p.id.equals(1))).write(
-      PlayerProfileCompanion(equippedTheme: Value(theme)),
+      PlayerProfileCompanion(equippedTheme: Value(remoteTheme ?? 'blueprint')),
     );
   }
 
@@ -179,6 +222,7 @@ class PullMerger {
         if (key == null || moves is! int) continue;
         remote.add(key);
         if (local.containsKey(key)) continue;
+        _dailyAdded++;
         await _db.into(_db.dailyCompletions).insert(
           DailyCompletionsCompanion.insert(
             dateKey: Value(key),
@@ -204,12 +248,12 @@ class PullMerger {
     }
   }
 
-  /// Server balance + local ledger rows not yet pushed.
-  Future<void> _coins(Object? c) async {
+  Future<void> _coins(Object? c, CoinMerge mode) async {
     if (c is! Map || c['balance'] is! int) {
       await _db.enqueueSyncOutbox(dataType: SyncDataType.coinBalance, entityKey: 'balance');
       return;
     }
+    final server = c['balance'] as int;
     final pending = await (_db.select(_db.syncQueue)
           ..where((q) => q.dataType.equals(SyncDataType.coinTransaction) & q.status.equals(0)))
         .get();
@@ -218,9 +262,36 @@ class PullMerger {
       final p = row.payload == null ? null : jsonDecode(row.payload!);
       if (p is Map && p['amount'] is int) unpushed += p['amount'] as int;
     }
-    final merged = ((c['balance'] as int) + unpushed).clamp(0, 10000000);
+    final now = DateTime.now().toUtc();
+
+    if (mode == CoinMerge.newestWins) {
+      final profile = await (_db.select(_db.playerProfile)..where((p) => p.id.equals(1))).getSingleOrNull();
+      final remoteAt = _time(c['updated_at']);
+      final lastLocal = profile?.coinsUpdatedAt; // the coins' own clock
+      final serverNewer = remoteAt != null && (lastLocal == null || remoteAt.isAfter(lastLocal));
+      if (!serverNewer) {
+        // This device changed its coins since: keep them and push.
+        if (profile != null && profile.coins != server) {
+          await _db.enqueueSyncOutbox(dataType: SyncDataType.coinBalance, entityKey: 'balance');
+        }
+        return;
+      }
+      // Another device moved the balance on: adopt it, plus anything this
+      // device has not pushed yet. Taking the server's clock means it is
+      // not bounced back; anything unpushed makes this device newer.
+      final adopted = (server + unpushed).clamp(0, 10000000);
+      if (profile != null && profile.coins == adopted && unpushed == 0) return; // already in step
+      await (_db.update(_db.playerProfile)..where((p) => p.id.equals(1))).write(
+        PlayerProfileCompanion(coins: Value(adopted), coinsUpdatedAt: Value(unpushed == 0 ? remoteAt : now)),
+      );
+      if (unpushed != 0) await _db.enqueueSyncOutbox(dataType: SyncDataType.coinBalance, entityKey: 'balance');
+      return;
+    }
+
+    final merged = (server + unpushed).clamp(0, 10000000);
     await (_db.update(_db.playerProfile)..where((p) => p.id.equals(1))).write(
-      PlayerProfileCompanion(coins: Value(merged), updatedAt: Value(DateTime.now().toUtc())),
+      // First link: the combined balance is the newest truth — push it.
+      PlayerProfileCompanion(coins: Value(merged), coinsUpdatedAt: Value(now)),
     );
     await _db.enqueueSyncOutbox(dataType: SyncDataType.coinBalance, entityKey: 'balance');
   }
