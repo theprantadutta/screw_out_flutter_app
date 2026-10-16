@@ -22,6 +22,22 @@ import '../helpers/harness.dart';
   return (rate, channels, bits, frames);
 }
 
+/// Reads an Ogg Vorbis stream: (sample rate, channels, frames) — frames from
+/// the last page's granule position.
+(int, int, int) _ogg(String path) {
+  final bytes = File(path).readAsBytesSync();
+  final b = ByteData.sublistView(bytes);
+  expect(String.fromCharCodes(bytes.sublist(0, 4)), 'OggS', reason: path);
+  expect(String.fromCharCodes(bytes.sublist(29, 35)), 'vorbis', reason: path);
+  final channels = bytes[39];
+  final rate = b.getUint32(40, Endian.little);
+  var last = bytes.length - 4;
+  while (last > 0 && String.fromCharCodes(bytes.sublist(last, last + 4)) != 'OggS') {
+    last--;
+  }
+  return (rate, channels, b.getUint64(last + 6, Endian.little));
+}
+
 void main() {
   test('every cue has a valid, short, mono 16-bit WAV', () {
     for (final s in Sfx.values) {
@@ -31,11 +47,11 @@ void main() {
     }
   });
 
-  test('the music loop exists and is a whole number of bars (seamless loop)', () {
-    final (rate, channels, _, frames) = _wav('assets/audio/music_workshop.wav');
-    expect(channels, 1);
-    const bar = 4 * 60 / 90; // 90 BPM, 4/4
-    expect((frames / rate / bar - 16).abs(), lessThan(0.001));
+  test('the music loop is stereo Ogg Vorbis, exactly 32 bars (seamless loop)', () {
+    final (rate, channels, frames) = _ogg('assets/audio/music_workshop.ogg');
+    expect((rate, channels), (44100, 2));
+    const bar = 4 * 60 / 124; // 124 BPM, 4/4
+    expect((frames / rate / bar - 32).abs(), lessThan(0.001));
   });
 
   group('new best ("high score")', () {

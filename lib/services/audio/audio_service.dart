@@ -215,8 +215,8 @@ class AudioService implements SoundPort {
   Future<void> _startMusic() async {
     try {
       final generation = _generation;
-      // Streamed from disk: a 43 s loop doesn't need to sit in RAM.
-      final source = _musicSource ?? await _soloud.loadAsset('assets/audio/music_workshop.wav', mode: LoadMode.disk);
+      // Streamed from disk: a 62 s stereo loop doesn't need to sit in RAM.
+      final source = _musicSource ?? await _soloud.loadAsset('assets/audio/music_workshop.ogg', mode: LoadMode.disk);
       if (generation != _generation || !_initialized) return;
       _musicSource = source;
       if (_liveMusic != null || !_settings.state.music) return;

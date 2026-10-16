@@ -1,18 +1,20 @@
-// Synthesises every Screw Out sound effect and the music loop.
+// Synthesises every Screw Out sound effect and the music track.
 //
-//   dart run tool/generate_audio.dart          → assets/audio/*.wav
+//   dart run tool/generate_audio.dart      → assets/audio/sfx_*.wav
+//                                            build/audio/music_workshop.wav
+//   python tool/encode_music.py            → assets/audio/music_workshop.ogg
 //
-// Pure Dart, deterministic (seeded noise): re-running produces identical
-// files, and every sound is ours (no licensing). The whole palette is built
-// around one motif — D5 F#5 A5 B5 (a rising "screw out" arpeggio) in
-// D-major pentatonic — so the game's sound is recognisable: it opens the
-// sheet, resolves a clear, lifts for a new best and crowns a chapter.
+// Pure Dart, deterministic (seeded noise), every sound ours. The style is
+// upbeat & playful: C major, 124 BPM, modelled marimba and glockenspiel,
+// bouncy octave bass, offbeat chord stabs, claps and shakers. Everything
+// hangs off one hook — G4 C5 E5 G5, the chorus' opening — which also opens
+// the level, crowns a clear and lifts a new best, so the game's sound is
+// recognisable.
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-const sr = 44100; // SFX sample rate
-const musicSr = 32000; // music: smaller asset, still clean (lo-fi by design)
+const sr = 44100;
 
 void main() {
   final out = Directory('assets/audio')..createSync(recursive: true);
@@ -38,84 +40,164 @@ void main() {
     'sfx_purchase': purchase,
   };
   for (final e in sfx.entries) {
-    // 30 Hz high-pass removes DC / sub-rumble before levelling.
-    final samples = master(highpass(e.value(), 30), peakDb: e.key == 'sfx_thunk' ? -12 : -6);
-    writeWav('${out.path}/${e.key}.wav', samples, sr);
-    stdout.writeln('${e.key.padRight(18)} ${(samples.length / sr * 1000).round()} ms');
+    final x = master(highpass(e.value(), 35), peakDb: e.key == 'sfx_thunk' ? -10 : -6);
+    writeWav('${out.path}/${e.key}.wav', [x], sr);
+    stdout.writeln('${e.key.padRight(18)} ${(x.length / sr * 1000).round()} ms');
   }
-  final music = master(musicLoop(), peakDb: -9);
-  writeWav('${out.path}/music_workshop.wav', music, musicSr);
-  stdout.writeln('music_workshop     ${(music.length / musicSr).toStringAsFixed(1)} s');
+  final build = Directory('build/audio')..createSync(recursive: true);
+  final (l, r) = Song().render();
+  writeWav('${build.path}/music_workshop.wav', [l, r], sr);
+  stdout.writeln('music_workshop     ${(l.length / sr).toStringAsFixed(2)} s stereo (encode with tool/encode_music.py)');
 }
 
-// =================================================================== notes
+// ================================================================= notes
 
-double hz(int midi) => 440.0 * math.pow(2, (midi - 69) / 12);
+double hz(num midi) => 440.0 * math.pow(2, (midi - 69) / 12);
 
-// D-major pentatonic + friends, as MIDI numbers.
-const a3 = 57, d4 = 62, e4 = 64, fs4 = 66, g4 = 67, a4 = 69, b4 = 71, cs5 = 73;
-const d5 = 74, e5 = 76, fs5 = 78, g5 = 79, a5 = 81, b5 = 83, d6 = 86, e6 = 88, fs6 = 90, a6 = 93;
+const c4 = 60, d4 = 62, e4 = 64, f4 = 65, g4 = 67, a4 = 69, b4 = 71;
+const c5 = 72, d5 = 74, e5 = 76, f5 = 77, g5 = 79, a5 = 81, b5 = 83;
+const c6 = 84, d6 = 86, e6 = 88, g6 = 91, c7 = 96;
 
 // ============================================================ primitives
 
-final _rng = math.Random(1904);
+final _rng = math.Random(2410);
 double noise() => _rng.nextDouble() * 2 - 1;
 
-Float64List buf(double seconds, [int rate = sr]) => Float64List((seconds * rate).ceil());
+Float64List buf(double seconds) => Float64List((seconds * sr).ceil() + 1);
 
-/// Adds [src] into [dst] at [atSeconds] with [gain].
-void mix(Float64List dst, Float64List src, double atSeconds, {double gain = 1, int rate = sr}) {
-  final start = (atSeconds * rate).round();
+void mix(Float64List dst, Float64List src, double at, {double gain = 1}) {
+  final start = (at * sr).round();
   for (var i = 0; i < src.length; i++) {
     final j = start + i;
     if (j >= 0 && j < dst.length) dst[j] += src[i] * gain;
   }
 }
 
-/// Exponential decay envelope with a short linear attack.
-double env(double t, {double attack = 0.002, double decay = 0.3}) {
-  if (t < attack) return t / attack;
-  return math.exp(-(t - attack) / decay);
-}
+double expEnv(double t, double attack, double decay) =>
+    t < attack ? t / attack : math.exp(-(t - attack) / decay);
 
-/// FM bell / mallet: inharmonic modulator ratio gives the metal.
-Float64List bell(double f, double dur, {double ratio = 3.5, double index = 4, double decay = 0.45, int rate = sr}) {
-  final o = buf(dur, rate);
-  for (var i = 0; i < o.length; i++) {
-    final t = i / rate;
-    final e = env(t, attack: 0.001, decay: decay);
-    final idx = index * math.exp(-t / (decay * 0.35));
-    final mod = math.sin(2 * math.pi * f * ratio * t) * idx;
-    o[i] = math.sin(2 * math.pi * f * t + mod) * e;
+/// Modal percussion: sum of decaying partials (ratio, amplitude, decay).
+Float64List modal(double f, double dur, List<(double, double, double)> partials, {double attack = 0.0015}) {
+  final o = buf(dur);
+  for (final (ratio, amp, decay) in partials) {
+    if (f * ratio > sr / 2.2) continue;
+    final w = 2 * math.pi * f * ratio / sr;
+    for (var i = 0; i < o.length; i++) {
+      o[i] += math.sin(w * i) * amp * expEnv(i / sr, attack, decay);
+    }
+  }
+  final f2 = (0.004 * sr).round();
+  for (var i = 0; i < f2 && i < o.length; i++) {
+    o[o.length - 1 - i] *= i / f2;
   }
   return o;
 }
 
-/// Soft electric keys (FM 1:1, gentle index, slow tremolo).
-Float64List keys(double f, double dur, {double decay = 1.2, int rate = musicSr}) {
-  final o = buf(dur, rate);
+/// Marimba: wooden bar modes (1 : 3.93 : 9.2) + a soft mallet knock.
+Float64List marimba(double f, {double dur = 0.9, double vel = 1}) {
+  final body = math.max(0.22, math.min(0.8, 160 / f));
+  final o = modal(f, dur, [(1, 1, body), (3.93, 0.3 * vel, body * 0.16), (9.2, 0.1 * vel, body * 0.05)]);
+  mix(o, lowpass(noiseBurst(0.02, decay: 0.004), 2500), 0, gain: 0.1 * vel);
+  return o;
+}
+
+/// Glockenspiel: bright metal bar (1 : 2.76 : 5.40 : 8.93).
+Float64List glock(double f, {double dur = 1.2}) =>
+    modal(f, dur, [(1, 1, 0.55), (2.76, 0.4, 0.18), (5.4, 0.2, 0.07), (8.93, 0.1, 0.03)], attack: 0.0008);
+
+/// Woodblock / temple block "tok".
+Float64List woodblock(double f, {double dur = 0.12}) {
+  final o = modal(f, dur, [(1, 1, 0.035), (2.57, 0.5, 0.018), (4.1, 0.25, 0.01)], attack: 0.0005);
+  mix(o, highpass(noiseBurst(0.01, decay: 0.002), 2000), 0, gain: 0.25);
+  return o;
+}
+
+/// PolyBLEP residual for band-limited saw/square.
+double _blep(double t, double dt) {
+  if (t < dt) {
+    final x = t / dt;
+    return x + x - x * x - 1;
+  }
+  if (t > 1 - dt) {
+    final x = (t - 1) / dt;
+    return x * x + x + x + 1;
+  }
+  return 0;
+}
+
+Float64List saw(double f, double dur, {double detune = 0}) {
+  final o = buf(dur);
+  final dt = f * (1 + detune) / sr;
+  var ph = _rng.nextDouble();
   for (var i = 0; i < o.length; i++) {
-    final t = i / rate;
-    final e = env(t, attack: 0.006, decay: decay);
-    final idx = 1.2 * math.exp(-t / 0.35) + 0.25;
-    final trem = 1 - 0.12 * (0.5 + 0.5 * math.sin(2 * math.pi * 4.5 * t));
-    o[i] = (math.sin(2 * math.pi * f * t + idx * math.sin(2 * math.pi * f * t)) +
-            0.18 * math.sin(2 * math.pi * f * 2.001 * t)) *
-        e *
-        trem;
+    o[i] = 2 * ph - 1 - _blep(ph, dt);
+    ph += dt;
+    if (ph >= 1) ph -= 1;
   }
   return o;
 }
 
-/// Karplus–Strong plucked string.
-Float64List pluck(double f, double dur, {double damping = 0.996, double bright = 0.5, int rate = sr}) {
-  final o = buf(dur, rate);
-  final n = (rate / f).round().clamp(2, 100000);
+Float64List square(double f, double dur, {double width = 0.5}) {
+  final o = buf(dur);
+  final dt = f / sr;
+  var ph = 0.0;
+  for (var i = 0; i < o.length; i++) {
+    var v = ph < width ? 1.0 : -1.0;
+    v += _blep(ph, dt);
+    var p2 = ph - width;
+    if (p2 < 0) p2 += 1;
+    v -= _blep(p2, dt);
+    o[i] = v;
+    ph += dt;
+    if (ph >= 1) ph -= 1;
+  }
+  return o;
+}
+
+Float64List shape(Float64List x, double Function(double t) env) {
+  for (var i = 0; i < x.length; i++) {
+    x[i] *= env(i / sr);
+  }
+  return x;
+}
+
+/// Bouncy synth bass: saw + sine sub through a lowpass that snaps shut.
+Float64List bass(double f, double dur) {
+  final raw = saw(f, dur);
+  for (var i = 0; i < raw.length; i++) {
+    raw[i] += math.sin(2 * math.pi * f * i / sr) * 0.8;
+  }
+  final o = Float64List(raw.length);
+  var y = 0.0;
+  for (var i = 0; i < raw.length; i++) {
+    final t = i / sr;
+    final fc = 180 + 1400 * math.exp(-t / 0.06);
+    final a = 1 - math.exp(-2 * math.pi * fc / sr);
+    y += a * (raw[i] - y);
+    o[i] = y * expEnv(t, 0.003, dur * 0.55) * (t > dur - 0.02 ? math.max(0, (dur - t) / 0.02) : 1);
+  }
+  return o;
+}
+
+/// Offbeat chord stab: two detuned saws + a thin square, short and bright.
+Float64List stab(List<int> notes, {double dur = 0.16}) {
+  final o = buf(dur + 0.05);
+  for (final n in notes) {
+    mix(o, saw(hz(n), dur + 0.05), 0, gain: 0.35);
+    mix(o, saw(hz(n), dur + 0.05, detune: 0.006), 0, gain: 0.35);
+    mix(o, square(hz(n + 12), dur + 0.05, width: 0.3), 0, gain: 0.12);
+  }
+  return lowpass(shape(o, (t) => expEnv(t, 0.004, dur * 0.45) * (t > dur ? math.max(0, 1 - (t - dur) / 0.05) : 1)), 2800);
+}
+
+/// Karplus–Strong pizzicato pluck.
+Float64List pluck(double f, {double dur = 0.6, double damping = 0.994, double bright = 0.55}) {
+  final o = buf(dur);
+  final n = (sr / f).round().clamp(2, 100000);
   final line = Float64List(n);
   for (var i = 0; i < n; i++) {
     line[i] = noise();
   }
-  // Pre-filter the burst: darker excitation = warmer pluck.
   for (var i = 1; i < n; i++) {
     line[i] = line[i] * bright + line[i - 1] * (1 - bright);
   }
@@ -124,49 +206,69 @@ Float64List pluck(double f, double dur, {double damping = 0.996, double bright =
     final next = (p + 1) % n;
     final v = line[p];
     line[p] = damping * 0.5 * (line[p] + line[next]);
-    o[i] = v;
+    final t = i / sr;
+    o[i] = v * (t > dur - 0.03 ? math.max(0, (dur - t) / 0.03) : 1);
     p = next;
   }
   return o;
 }
 
-/// Pitched sine with exponential glide [f0] → [f1].
-Float64List sweep(double f0, double f1, double dur, {double decay = 0.1, double attack = 0.001, int rate = sr}) {
-  final o = buf(dur, rate);
-  var phase = 0.0;
+/// Sine with exponential glide + optional vibrato (slide whistle, boings).
+Float64List glide(double f0, double f1, double dur, {double vib = 0, double vibRate = 6, double attack = 0.01, double decay = 10}) {
+  final o = buf(dur);
+  var ph = 0.0;
   for (var i = 0; i < o.length; i++) {
-    final t = i / rate;
-    final f = f0 * math.pow(f1 / f0, t / dur);
-    phase += 2 * math.pi * f / rate;
-    o[i] = math.sin(phase) * env(t, attack: attack, decay: decay);
+    final t = i / sr;
+    final f = f0 * math.pow(f1 / f0, math.min(1, t / dur)) * (1 + vib * math.sin(2 * math.pi * vibRate * t));
+    ph += 2 * math.pi * f / sr;
+    final release = t > dur - 0.03 ? math.max(0, (dur - t) / 0.03) : 1.0;
+    o[i] = math.sin(ph) * expEnv(t, attack, decay) * release;
   }
   return o;
 }
 
-/// Noise burst, band-limited by [bandpass].
-Float64List noiseBurst(double dur, {double decay = 0.03, double center = 3000, double q = 1.5, int rate = sr}) {
-  final o = buf(dur, rate);
+Float64List noiseBurst(double dur, {double decay = 0.03}) {
+  final o = buf(dur);
   for (var i = 0; i < o.length; i++) {
-    o[i] = noise() * env(i / rate, attack: 0.0005, decay: decay);
-  }
-  return bandpass(o, center, q, rate);
-}
-
-/// Inharmonic metal partials (clink / ping).
-Float64List metal(double base, double dur, {List<double> ratios = const [1, 1.58, 2.31, 3.17], double decay = 0.12, int rate = sr}) {
-  final o = buf(dur, rate);
-  for (var i = 0; i < o.length; i++) {
-    final t = i / rate;
-    var v = 0.0;
-    for (var k = 0; k < ratios.length; k++) {
-      v += math.sin(2 * math.pi * base * ratios[k] * t) * math.exp(-t / (decay / (1 + k * 0.6))) / (k + 1);
-    }
-    o[i] = v * env(t, attack: 0.0008, decay: 10);
+    o[i] = noise() * expEnv(i / sr, 0.0005, decay);
   }
   return o;
 }
 
-// ------------------------------------------------------------- filters
+// ---------------------------------------------------------------- drums
+
+Float64List kick() {
+  final o = glide(160, 48, 0.32, attack: 0.001, decay: 0.12);
+  mix(o, lowpass(noiseBurst(0.01, decay: 0.002), 3000), 0, gain: 0.3);
+  return o;
+}
+
+Float64List clap() {
+  final o = buf(0.3);
+  for (final t in [0.0, 0.011, 0.021]) {
+    mix(o, noiseBurst(0.02, decay: 0.006), t, gain: 0.8);
+  }
+  mix(o, noiseBurst(0.25, decay: 0.07), 0.03, gain: 0.5);
+  return bandpass(o, 1300, 0.9);
+}
+
+Float64List hat({bool open = false}) =>
+    highpass(noiseBurst(open ? 0.25 : 0.05, decay: open ? 0.09 : 0.012), 7500, 0.8);
+
+Float64List shaker() {
+  final o = buf(0.08);
+  for (var i = 0; i < o.length; i++) {
+    final t = i / sr;
+    o[i] = noise() * (t < 0.015 ? t / 0.015 : math.exp(-(t - 0.015) / 0.02));
+  }
+  return bandpass(o, 6500, 1.2);
+}
+
+Float64List tom(double f) => glide(f, f * 0.6, 0.3, attack: 0.001, decay: 0.12);
+
+Float64List snap() => bandpass(noiseBurst(0.12, decay: 0.012), 2200, 2);
+
+// ---------------------------------------------------------------- filters
 
 Float64List _biquad(Float64List x, double b0, double b1, double b2, double a1, double a2) {
   final y = Float64List(x.length);
@@ -182,37 +284,40 @@ Float64List _biquad(Float64List x, double b0, double b1, double b2, double a1, d
   return y;
 }
 
-Float64List lowpass(Float64List x, double fc, [double q = 0.707, int rate = sr]) {
-  final w = 2 * math.pi * fc / rate, alpha = math.sin(w) / (2 * q), c = math.cos(w), a0 = 1 + alpha;
-  return _biquad(x, (1 - c) / 2 / a0, (1 - c) / a0, (1 - c) / 2 / a0, -2 * c / a0, (1 - alpha) / a0);
+Float64List lowpass(Float64List x, double fc, [double q = 0.707]) {
+  final w = 2 * math.pi * fc / sr, al = math.sin(w) / (2 * q), c = math.cos(w), a0 = 1 + al;
+  return _biquad(x, (1 - c) / 2 / a0, (1 - c) / a0, (1 - c) / 2 / a0, -2 * c / a0, (1 - al) / a0);
 }
 
-Float64List highpass(Float64List x, double fc, [double q = 0.707, int rate = sr]) {
-  final w = 2 * math.pi * fc / rate, alpha = math.sin(w) / (2 * q), c = math.cos(w), a0 = 1 + alpha;
-  return _biquad(x, (1 + c) / 2 / a0, -(1 + c) / a0, (1 + c) / 2 / a0, -2 * c / a0, (1 - alpha) / a0);
+Float64List highpass(Float64List x, double fc, [double q = 0.707]) {
+  final w = 2 * math.pi * fc / sr, al = math.sin(w) / (2 * q), c = math.cos(w), a0 = 1 + al;
+  return _biquad(x, (1 + c) / 2 / a0, -(1 + c) / a0, (1 + c) / 2 / a0, -2 * c / a0, (1 - al) / a0);
 }
 
-Float64List bandpass(Float64List x, double fc, [double q = 1, int rate = sr]) {
-  final w = 2 * math.pi * fc / rate, alpha = math.sin(w) / (2 * q), c = math.cos(w), a0 = 1 + alpha;
-  return _biquad(x, alpha / a0, 0, -alpha / a0, -2 * c / a0, (1 - alpha) / a0);
+Float64List bandpass(Float64List x, double fc, [double q = 1]) {
+  final w = 2 * math.pi * fc / sr, al = math.sin(w) / (2 * q), c = math.cos(w), a0 = 1 + al;
+  return _biquad(x, al / a0, 0, -al / a0, -2 * c / a0, (1 - al) / a0);
 }
 
-/// Small Schroeder room: 4 combs + 2 allpasses. [wet] 0…1.
-Float64List reverb(Float64List x, {double wet = 0.2, double size = 1, int rate = sr}) {
-  final combDelays = [1557, 1617, 1491, 1422].map((d) => (d * size * rate / 44100).round()).toList();
+/// Schroeder room; [seed] shifts the delays so L and R decorrelate.
+Float64List reverb(Float64List x, {double wet = 0.2, double size = 1, int seed = 0}) {
+  const base = [1557, 1617, 1491, 1422, 1277, 1356];
   final y = Float64List(x.length);
-  for (final d in combDelays) {
+  for (var k = 0; k < 4; k++) {
+    final d = ((base[(k + seed) % base.length] + seed * 23) * size).round();
     final line = Float64List(d);
     var p = 0;
+    var lp = 0.0;
     for (var i = 0; i < x.length; i++) {
       final out = line[p];
-      line[p] = x[i] + out * 0.78;
+      lp = out * 0.7 + lp * 0.3; // damped feedback
+      line[p] = x[i] + lp * 0.8;
       y[i] += out * 0.25;
       p = (p + 1) % d;
     }
   }
   var z = y;
-  for (final d in [225, 556].map((d) => (d * rate / 44100).round())) {
+  for (final d in [225 + seed * 7, 556 + seed * 11]) {
     final line = Float64List(d);
     final o = Float64List(z.length);
     var p = 0;
@@ -225,49 +330,41 @@ Float64List reverb(Float64List x, {double wet = 0.2, double size = 1, int rate =
     }
     z = o;
   }
-  final out = Float64List(x.length);
-  for (var i = 0; i < x.length; i++) {
-    out[i] = x[i] * (1 - wet) + z[i] * wet;
-  }
-  return out;
+  return Float64List.fromList([for (var i = 0; i < x.length; i++) x[i] * (1 - wet) + z[i] * wet]);
 }
 
-/// Pads with silence so reverb tails have room.
-Float64List pad(Float64List x, double seconds, [int rate = sr]) {
-  final o = Float64List(x.length + (seconds * rate).round());
+Float64List pad(Float64List x, double seconds) {
+  final o = Float64List(x.length + (seconds * sr).round());
   o.setAll(0, x);
   return o;
 }
 
-/// Trims trailing near-silence and fades the last 8 ms.
-Float64List trim(Float64List x, [int rate = sr]) {
+Float64List trim(Float64List x) {
   var end = x.length;
-  while (end > 1 && x[end - 1].abs() < 1e-4) {
+  while (end > 1 && x[end - 1].abs() < 2e-4) {
     end--;
   }
-  final o = Float64List.sublistView(x, 0, end);
-  final f = (0.008 * rate).round();
+  final o = Float64List.fromList(Float64List.sublistView(x, 0, end));
+  final f = (0.01 * sr).round();
   for (var i = 0; i < f && i < o.length; i++) {
     o[o.length - 1 - i] *= i / f;
   }
-  return Float64List.fromList(o);
+  return o;
 }
 
-/// Normalises to [peakDb] dBFS with a gentle soft clip (SFX ≤ −6 dBFS).
 Float64List master(Float64List x, {double peakDb = -6}) {
   var peak = 1e-9;
   for (final v in x) {
     peak = math.max(peak, v.abs());
   }
-  final target = math.pow(10, peakDb / 20).toDouble();
-  final g = target / peak;
-  return Float64List.fromList([for (final v in x) _soft(v * g / target) * target]);
+  final g = math.pow(10, peakDb / 20) / peak;
+  return Float64List.fromList([for (final v in x) v * g]);
 }
 
-double _soft(double v) => v.abs() < 0.9 ? v : v.sign * (0.9 + 0.1 * (1 - math.exp(-(v.abs() - 0.9) * 10)));
-
-void writeWav(String path, Float64List samples, int rate) {
-  final data = ByteData(44 + samples.length * 2);
+void writeWav(String path, List<Float64List> ch, int rate) {
+  final n = ch.first.length;
+  final c = ch.length;
+  final data = ByteData(44 + n * 2 * c);
   void str(int o, String s) {
     for (var i = 0; i < s.length; i++) {
       data.setUint8(o + i, s.codeUnitAt(i));
@@ -275,349 +372,505 @@ void writeWav(String path, Float64List samples, int rate) {
   }
 
   str(0, 'RIFF');
-  data.setUint32(4, 36 + samples.length * 2, Endian.little);
+  data.setUint32(4, 36 + n * 2 * c, Endian.little);
   str(8, 'WAVE');
   str(12, 'fmt ');
   data
     ..setUint32(16, 16, Endian.little)
-    ..setUint16(20, 1, Endian.little) // PCM
-    ..setUint16(22, 1, Endian.little) // mono
+    ..setUint16(20, 1, Endian.little)
+    ..setUint16(22, c, Endian.little)
     ..setUint32(24, rate, Endian.little)
-    ..setUint32(28, rate * 2, Endian.little)
-    ..setUint16(32, 2, Endian.little)
+    ..setUint32(28, rate * 2 * c, Endian.little)
+    ..setUint16(32, 2 * c, Endian.little)
     ..setUint16(34, 16, Endian.little);
   str(36, 'data');
-  data.setUint32(40, samples.length * 2, Endian.little);
-  for (var i = 0; i < samples.length; i++) {
-    data.setInt16(44 + i * 2, (samples[i].clamp(-1.0, 1.0) * 32767).round(), Endian.little);
+  data.setUint32(40, n * 2 * c, Endian.little);
+  for (var i = 0; i < n; i++) {
+    for (var k = 0; k < c; k++) {
+      data.setInt16(44 + (i * c + k) * 2, (ch[k][i].clamp(-1.0, 1.0) * 32767).round(), Endian.little);
+    }
   }
   File(path).writeAsBytesSync(data.buffer.asUint8List());
 }
 
-// ======================================================= sound effects
+// ======================================================== sound effects
+// Same instruments and key as the music: the effects belong to the song.
 
-/// UI tap: a tiny dry click.
-Float64List tick() {
-  final o = buf(0.05);
-  mix(o, sweep(2400, 1800, 0.05, decay: 0.008), 0, gain: 0.7);
-  mix(o, noiseBurst(0.03, decay: 0.004, center: 4500, q: 2), 0, gain: 0.5);
-  return trim(o);
-}
+/// UI tap: a crisp little woodblock "tok".
+Float64List tick() => trim(woodblock(1500, dur: 0.07));
 
-/// Toggle: two-step click (latch).
+/// Toggle: two-tone tok (latch).
 Float64List toggle() {
-  final o = buf(0.09);
-  mix(o, tick(), 0, gain: 0.8);
-  mix(o, sweep(1600, 1400, 0.04, decay: 0.008), 0.045, gain: 0.5);
+  final o = buf(0.15);
+  mix(o, woodblock(1200, dur: 0.07), 0);
+  mix(o, woodblock(1600, dur: 0.07), 0.055, gain: 0.8);
   return trim(o);
 }
 
-/// Unscrew: an accelerating ratchet + a rising metallic squeak.
+/// Unscrew: a quick ratchet "zip" that springs up into a cartoon twirl.
 Float64List unscrew() {
-  final o = buf(0.32);
+  final o = buf(0.42);
   var t = 0.0;
-  for (var k = 0; k < 5; k++) {
-    mix(o, noiseBurst(0.02, decay: 0.004, center: 3200 + k * 250, q: 3), t, gain: 0.55);
-    mix(o, metal(1900 + k * 120, 0.04, decay: 0.012), t, gain: 0.25);
-    t += 0.045 - k * 0.006;
+  for (var k = 0; k < 6; k++) {
+    mix(o, woodblock(2200 + k * 180, dur: 0.03), t, gain: 0.45);
+    t += 0.03 - k * 0.003;
   }
-  mix(o, sweep(700, 1150, 0.16, decay: 0.07, attack: 0.02), 0.13, gain: 0.32);
-  return trim(reverb(o, wet: 0.08));
+  mix(o, glide(500, 1400, 0.2, vib: 0.03, vibRate: 22, attack: 0.02, decay: 0.12), 0.12, gain: 0.35);
+  mix(o, glock(hz(g6), dur: 0.25), 0.3, gain: 0.12);
+  return trim(reverb(pad(o, 0.1), wet: 0.08));
 }
 
-/// Clink: a screw seating into a tray slot.
+/// Clink: the screw lands in its slot — a bright glock "ding".
 Float64List clink() {
-  final o = buf(0.3);
-  mix(o, metal(2100, 0.3, decay: 0.1), 0, gain: 0.6);
-  mix(o, metal(2900, 0.2, decay: 0.05), 0.035, gain: 0.3);
-  mix(o, noiseBurst(0.015, decay: 0.003, center: 6000, q: 2), 0, gain: 0.3);
-  return trim(reverb(pad(o, 0.15), wet: 0.12));
+  final o = buf(0.6);
+  mix(o, glock(hz(e6), dur: 0.6), 0, gain: 0.6);
+  mix(o, modal(2600, 0.2, [(1, 1, 0.05), (1.73, 0.6, 0.03), (2.41, 0.3, 0.02)]), 0, gain: 0.3);
+  return trim(reverb(pad(o, 0.2), wet: 0.12));
 }
 
-/// Plate release: a soft lift, then a wooden slide away.
+/// Plate release: a cartoon swoosh down, ending in a soft wooden plop.
 Float64List panelSlide() {
-  final o = buf(0.55);
-  // Slide: band-passed noise whose centre falls as the plate drops.
-  final slide = buf(0.45);
-  for (var i = 0; i < slide.length; i++) {
-    final t = i / sr;
-    slide[i] = noise() * math.sin(math.pi * math.min(1, t / 0.45)) * 0.9;
+  final o = buf(0.75);
+  final swoosh = buf(0.35);
+  for (var i = 0; i < swoosh.length; i++) {
+    swoosh[i] = noise() * math.sin(math.pi * i / swoosh.length);
   }
-  var shaped = Float64List(slide.length);
-  const block = 512;
-  for (var s = 0; s < slide.length; s += block) {
-    final t = s / sr;
-    final seg = Float64List.sublistView(slide, s, math.min(slide.length, s + block));
-    final f = bandpass(Float64List.fromList(seg), 1400 - 900 * (t / 0.45), 2.5);
-    shaped.setAll(s, f);
+  // Sweep the band down with the fall (block-wise filter).
+  final shaped = Float64List(swoosh.length);
+  const block = 256;
+  for (var s = 0; s < swoosh.length; s += block) {
+    final seg = Float64List.fromList(Float64List.sublistView(swoosh, s, math.min(swoosh.length, s + block)));
+    shaped.setAll(s, bandpass(seg, 2600 - 2000 * (s / swoosh.length), 1.8));
   }
-  shaped = lowpass(shaped, 3500);
-  mix(o, shaped, 0.04, gain: 0.5);
-  mix(o, sweep(220, 140, 0.12, decay: 0.05), 0, gain: 0.35); // lift knock
-  mix(o, pluck(hz(a3), 0.35, damping: 0.99, bright: 0.3), 0, gain: 0.25); // woody body
-  return trim(reverb(o, wet: 0.15));
+  mix(o, shaped, 0, gain: 0.5);
+  mix(o, glide(900, 300, 0.3, attack: 0.005, decay: 0.2), 0, gain: 0.15);
+  mix(o, marimba(hz(c4), dur: 0.4), 0.3, gain: 0.55); // plop
+  return trim(reverb(o, wet: 0.12));
 }
 
-/// Tray slots freed: a light double pop.
+/// Tray slots freed: two bubbly "bloops".
 Float64List slotFree() {
-  final o = buf(0.18);
-  mix(o, sweep(1100, 1500, 0.06, decay: 0.02), 0, gain: 0.5);
-  mix(o, sweep(1400, 1900, 0.06, decay: 0.02), 0.055, gain: 0.4);
+  final o = buf(0.25);
+  mix(o, glide(600, 1100, 0.08, attack: 0.003, decay: 0.05), 0, gain: 0.55);
+  mix(o, glide(800, 1500, 0.08, attack: 0.003, decay: 0.05), 0.07, gain: 0.45);
   return trim(o);
 }
 
-/// Blocked tap: a muted low thunk (mixed −12 dB).
+/// Blocked tap: a soft comic "bonk".
 Float64List thunk() {
-  final o = buf(0.16);
-  mix(o, sweep(140, 70, 0.14, decay: 0.035), 0, gain: 0.9);
-  mix(o, lowpass(noiseBurst(0.05, decay: 0.01, center: 800, q: 0.8), 900), 0, gain: 0.4);
+  final o = buf(0.2);
+  mix(o, woodblock(420, dur: 0.15), 0, gain: 0.9);
+  mix(o, glide(260, 180, 0.12, attack: 0.002, decay: 0.05), 0, gain: 0.5);
   return trim(o);
 }
 
-/// Undo: the ratchet run backwards (descending).
+/// Undo: the zip played backwards (descending).
 Float64List undo() {
-  final o = buf(0.24);
-  var t = 0.0;
+  final o = buf(0.3);
+  mix(o, glide(1300, 500, 0.16, vib: 0.03, vibRate: 22, attack: 0.01, decay: 0.1), 0, gain: 0.3);
+  var t = 0.12;
   for (var k = 0; k < 4; k++) {
-    mix(o, noiseBurst(0.02, decay: 0.004, center: 3600 - k * 300, q: 3), t, gain: 0.5);
-    t += 0.03 + k * 0.008;
+    mix(o, woodblock(2400 - k * 250, dur: 0.03), t, gain: 0.4);
+    t += 0.025;
   }
-  mix(o, sweep(1000, 650, 0.12, decay: 0.05, attack: 0.01), 0.06, gain: 0.28);
   return trim(o);
 }
 
-/// Hint: a quiet two-bell chime (D6 + A6).
+/// Hint: a three-note twinkle (G5 C6 E6).
 Float64List hint() {
-  final o = buf(0.9);
-  mix(o, bell(hz(d6), 0.9, decay: 0.35, index: 2), 0, gain: 0.35);
-  mix(o, bell(hz(a6), 0.8, decay: 0.3, index: 1.5), 0.09, gain: 0.25);
+  final o = buf(1.2);
+  for (final (i, n) in [g5, c6, e6].indexed) {
+    mix(o, glock(hz(n), dur: 0.8), i * 0.08, gain: 0.35);
+  }
   return trim(reverb(pad(o, 0.3), wet: 0.3));
 }
 
-/// Last free slot: two soft amber ticks (subtle, no alarm).
+/// One slot left: two soft marimba notes (a gentle heads-up).
 Float64List trayWarn() {
-  final o = buf(0.2);
-  mix(o, bell(hz(e6), 0.12, decay: 0.04, index: 1), 0, gain: 0.35);
-  mix(o, bell(hz(e6), 0.12, decay: 0.04, index: 1), 0.09, gain: 0.25);
+  final o = buf(0.45);
+  mix(o, marimba(hz(e5), dur: 0.3, vel: 0.6), 0, gain: 0.5);
+  mix(o, marimba(hz(e5), dur: 0.3, vel: 0.6), 0.12, gain: 0.4);
   return trim(o);
 }
 
-/// Start of a sheet: pickup A4 → D5 plucks under a soft rising whoosh.
-Float64List levelStart() {
-  final o = buf(0.8);
-  final whoosh = buf(0.3);
-  for (var i = 0; i < whoosh.length; i++) {
-    final t = i / sr;
-    whoosh[i] = noise() * math.sin(math.pi * t / 0.3);
-  }
-  mix(o, lowpass(highpass(whoosh, 900), 4000), 0, gain: 0.15);
-  mix(o, pluck(hz(a4), 0.5, bright: 0.6), 0.08, gain: 0.5);
-  mix(o, pluck(hz(d5), 0.6, bright: 0.6), 0.2, gain: 0.55);
-  mix(o, bell(hz(d6), 0.5, decay: 0.2, index: 1.5), 0.2, gain: 0.18);
-  return trim(reverb(pad(o, 0.3), wet: 0.2));
-}
-
-/// The motif on bells: D5 F#5 A5 then a landing note.
-Float64List _motif(List<int> notes, {double step = 0.075, double decay = 0.5, double gain = 0.5}) {
-  final o = buf(step * notes.length + 1.2);
-  for (var k = 0; k < notes.length; k++) {
-    final last = k == notes.length - 1;
-    mix(o, bell(hz(notes[k]), last ? 1.1 : 0.6, decay: last ? decay * 1.6 : decay, index: 2.5), k * step, gain: gain);
-    mix(o, pluck(hz(notes[k] - 12), 0.5, bright: 0.5), k * step, gain: gain * 0.35);
+/// The hook: G4 C5 E5 G5 on marimba with a glock double.
+Float64List _hook({List<int> notes = const [g4, c5, e5, g5], double step = 0.085, double gain = 1}) {
+  final o = buf(step * notes.length + 1.4);
+  for (final (i, n) in notes.indexed) {
+    final last = i == notes.length - 1;
+    mix(o, marimba(hz(n), dur: last ? 1.2 : 0.6), i * step, gain: 0.55 * gain);
+    mix(o, glock(hz(n + 12), dur: last ? 1.0 : 0.4), i * step, gain: 0.18 * gain);
   }
   return o;
 }
 
-/// Sheet cleared: the motif, resolved (< 700 ms of body).
-Float64List success() {
-  final o = _motif(const [d5, fs5, a5, d6]);
-  return trim(reverb(pad(o, 0.4), wet: 0.25));
-}
-
-/// New best / mastery ◆ ("high score"): motif up an octave + sparkle.
-Float64List best() {
-  final o = buf(2.2);
-  mix(o, _motif(const [d5, fs5, a5, b5, d6], step: 0.07), 0, gain: 0.9);
-  for (var k = 0; k < 6; k++) {
-    mix(o, bell(hz([d6, fs6, a6, d6 + 12, a6, fs6 + 12][k]), 0.4, decay: 0.12, index: 1), 0.36 + k * 0.05, gain: 0.12);
+/// Level start: "ready… go!" — a quick pickup into the hook's first note.
+Float64List levelStart() {
+  final o = buf(1.0);
+  mix(o, _hook(notes: const [e4, g4, c5], step: 0.07), 0, gain: 0.9);
+  final swoosh = buf(0.25);
+  for (var i = 0; i < swoosh.length; i++) {
+    swoosh[i] = noise() * math.sin(math.pi * i / swoosh.length);
   }
-  return trim(reverb(pad(o, 0.4), wet: 0.3));
-}
-
-/// Tray full ("game over", kept gentle): a soft descending sigh A4 → E4.
-Float64List stuck() {
-  final o = buf(1.1);
-  mix(o, bell(hz(a4), 0.7, decay: 0.3, index: 1.5), 0, gain: 0.4);
-  mix(o, bell(hz(e4), 0.9, decay: 0.45, index: 1.2), 0.18, gain: 0.45);
-  mix(o, sweep(150, 90, 0.25, decay: 0.08), 0.18, gain: 0.25);
-  return trim(reverb(pad(o, 0.3), wet: 0.25));
-}
-
-/// Coins counted: a bright two-note B6 → E7 ping.
-Float64List coin() {
-  final o = buf(0.5);
-  mix(o, bell(hz(b5 + 12), 0.25, decay: 0.07, index: 3, ratio: 2), 0, gain: 0.35);
-  mix(o, bell(hz(e6 + 12), 0.45, decay: 0.18, index: 3, ratio: 2), 0.06, gain: 0.4);
+  mix(o, highpass(swoosh, 3000), 0, gain: 0.08);
+  mix(o, clap(), 0.14, gain: 0.25);
   return trim(reverb(pad(o, 0.2), wet: 0.15));
 }
 
-/// Extra tray slot: a rising power-up glide that lands on a clink.
+/// Sheet cleared: "ta-da!" — the hook resolving onto a bright C chord.
+Float64List success() {
+  final o = buf(2.0);
+  mix(o, _hook(), 0);
+  mix(o, stab([c5, e5, g5, c6], dur: 0.5), 0.34, gain: 0.35);
+  mix(o, kick(), 0.34, gain: 0.4);
+  mix(o, hat(open: true), 0.34, gain: 0.2);
+  return trim(reverb(pad(o, 0.3), wet: 0.22));
+}
+
+/// New best ("high score"): the hook climbing an octave, a big chord and a
+/// sparkle run on top.
+Float64List best() {
+  final o = buf(2.8);
+  mix(o, _hook(notes: const [g4, c5, e5, g5, c6, e6], step: 0.07), 0);
+  const hit = 0.42;
+  mix(o, stab([c5, e5, g5, c6], dur: 0.7), hit, gain: 0.4);
+  mix(o, kick(), hit, gain: 0.5);
+  mix(o, clap(), hit, gain: 0.3);
+  for (final (i, n) in [c6, e6, g6, c7, g6, c7].indexed) {
+    mix(o, glock(hz(n), dur: 0.5), hit + 0.08 + i * 0.05, gain: 0.14);
+  }
+  mix(o, highpass(noiseBurst(1.2, decay: 0.4), 7000), hit, gain: 0.15);
+  return trim(reverb(pad(o, 0.4), wet: 0.28));
+}
+
+/// Tray full — the comic "wah-wah-waaah": a soft muted horn sliding down.
+Float64List stuck() {
+  final o = buf(1.7);
+  final notes = [(g4, 0.22), (f4 + 1, 0.22), (f4, 0.22), (e4, 0.75)];
+  var t = 0.0;
+  for (final (n, len) in notes) {
+    final last = n == e4;
+    final tone = saw(hz(n), len + 0.05);
+    mix(tone, saw(hz(n), len + 0.05, detune: 0.004), 0);
+    // "Wah": a mute opening and closing over each note.
+    final w = Float64List(tone.length);
+    var y = 0.0;
+    for (var i = 0; i < tone.length; i++) {
+      final tt = i / sr;
+      final open = math.sin(math.pi * math.min(1, tt / len));
+      final vib = last ? 1 + 0.02 * math.sin(2 * math.pi * 6 * tt) : 1.0;
+      final fc = (300 + 1100 * open) * vib;
+      final a = 1 - math.exp(-2 * math.pi * fc / sr);
+      y += a * (tone[i] - y);
+      w[i] = y * expEnv(tt, 0.02, last ? 0.6 : 0.3) * (tt > len ? math.max(0, 1 - (tt - len) / 0.05) : 1);
+    }
+    mix(o, w, t, gain: 0.35);
+    t += len;
+  }
+  return trim(reverb(pad(o, 0.3), wet: 0.2));
+}
+
+/// Coins: the classic bright two-note "bling".
+Float64List coin() {
+  final o = buf(0.6);
+  mix(o, lowpass(shape(square(hz(b5), 0.08), (t) => t > 0.07 ? math.max(0, 1 - (t - 0.07) / 0.01) : 1), 6000), 0, gain: 0.18);
+  mix(o, lowpass(shape(square(hz(e6), 0.45), (t) => expEnv(t, 0.002, 0.15)), 6000), 0.075, gain: 0.18);
+  mix(o, glock(hz(e6 + 12), dur: 0.4), 0.075, gain: 0.15);
+  return trim(o);
+}
+
+/// Extra tray slot: a power-up arpeggio up to a clink.
 Float64List rescue() {
-  final o = buf(0.8);
-  mix(o, sweep(300, 1200, 0.3, decay: 0.2, attack: 0.03), 0, gain: 0.3);
-  mix(o, clink(), 0.28, gain: 0.8);
-  mix(o, bell(hz(a5), 0.4, decay: 0.2, index: 2), 0.28, gain: 0.2);
+  final o = buf(1.0);
+  for (final (i, n) in [c5, e5, g5, c6, e6].indexed) {
+    mix(o, lowpass(shape(square(hz(n), 0.1, width: 0.25), (t) => expEnv(t, 0.002, 0.05)), 5000), i * 0.045, gain: 0.14);
+    mix(o, glock(hz(n + 12), dur: 0.3), i * 0.045, gain: 0.1);
+  }
+  mix(o, clink(), 0.24, gain: 0.7);
   return trim(reverb(o, wet: 0.15));
 }
 
-/// Daily sheet done: motif variant ending on the sixth + a coin.
+/// Daily sheet done: the hook's first bar on glock, then a coin bling.
 Float64List dailyDone() {
-  final o = buf(1.8);
-  mix(o, _motif(const [a4, d5, fs5, b5], step: 0.08), 0, gain: 0.9);
-  mix(o, coin(), 0.42, gain: 0.7);
-  return trim(reverb(pad(o, 0.3), wet: 0.28));
+  final o = buf(2.0);
+  for (final (i, n) in [g5, c6, e6, g6].indexed) {
+    mix(o, glock(hz(n), dur: i == 3 ? 1.2 : 0.5), i * 0.09, gain: 0.4);
+    mix(o, marimba(hz(n - 12), dur: 0.5), i * 0.09, gain: 0.35);
+  }
+  mix(o, coin(), 0.45, gain: 0.8);
+  return trim(reverb(pad(o, 0.3), wet: 0.25));
 }
 
-/// Purchase: a sparkle run over a warm chord.
+/// Purchase: "cha-ching" — a register click, a bell and a sparkle.
 Float64List purchase() {
-  final o = buf(1.3);
-  for (final n in [d5, fs5, a5]) {
-    mix(o, keys(hz(n), 1.0, decay: 0.5, rate: sr), 0, gain: 0.18);
+  final o = buf(1.4);
+  mix(o, woodblock(900, dur: 0.06), 0, gain: 0.5);
+  mix(o, woodblock(1300, dur: 0.06), 0.06, gain: 0.5);
+  mix(o, glock(hz(c6), dur: 1.0), 0.1, gain: 0.4);
+  mix(o, glock(hz(g6), dur: 0.9), 0.14, gain: 0.3);
+  mix(o, stab([c5, e5, g5], dur: 0.4), 0.1, gain: 0.25);
+  for (final (k, n) in [c6, e6, g6, c7, e6 + 12].indexed) {
+    mix(o, glock(hz(n), dur: 0.3), 0.2 + k * 0.04, gain: 0.1);
   }
-  for (var k = 0; k < 5; k++) {
-    mix(o, bell(hz([a5, d6, e6, fs6, a6][k]), 0.4, decay: 0.12, index: 1.5), 0.05 + k * 0.045, gain: 0.16);
-  }
-  return trim(reverb(pad(o, 0.3), wet: 0.3));
+  return trim(reverb(pad(o, 0.3), wet: 0.25));
 }
 
-/// Chapter complete: a short fanfare — motif harmonised, kick, cymbal-ish air.
+/// Chapter complete: the chorus hook as a full little fanfare with drums.
 Float64List chapterFanfare() {
-  final o = buf(3.2);
-  const step = 0.16;
-  final melody = [d5, fs5, a5, b5, a5, d6];
-  for (var k = 0; k < melody.length; k++) {
-    final last = k == melody.length - 1;
-    mix(o, bell(hz(melody[k]), last ? 1.8 : 0.5, decay: last ? 0.9 : 0.3, index: 2.5), k * step, gain: 0.45);
+  final o = buf(3.6);
+  const beat = 60 / 124.0;
+  const melody = [(0.0, g4, .5), (.5, c5, .5), (1.0, e5, .5), (1.5, g5, 1.0), (2.5, e5, .5), (3.0, g5, .5), (3.5, c6, 2.0)];
+  for (final (b, n, len) in melody) {
+    mix(o, marimba(hz(n), dur: len * beat + 0.6), b * beat, gain: 0.5);
+    mix(o, glock(hz(n + 12), dur: len * beat + 0.4), b * beat, gain: 0.15);
   }
-  // Chords under it.
-  for (final (t, chord) in [(0.0, [d4, fs4, a4]), (step * 3, [g4, b4, d5]), (step * 5, [d4, a4, d5, fs5])]) {
-    for (final n in chord) {
-      mix(o, keys(hz(n), 1.6, decay: 0.7, rate: sr), t, gain: 0.16);
-    }
+  for (final (b, notes) in const [(0.0, [c4, e4, g4]), (1.5, [c4, f4, a4]), (3.5, [c4, e4, g4, c5])]) {
+    mix(o, stab([for (final n in notes) n + 12], dur: b == 3.5 ? 0.9 : 0.3), b * beat, gain: 0.3);
   }
-  mix(o, sweep(110, 45, 0.3, decay: 0.12), 0, gain: 0.6);
-  mix(o, sweep(110, 45, 0.3, decay: 0.12), step * 5, gain: 0.7);
-  final air = buf(1.4);
-  for (var i = 0; i < air.length; i++) {
-    air[i] = noise() * env(i / sr, attack: 0.002, decay: 0.4);
+  for (final b in [0.0, 1.0, 2.0, 3.0, 3.5]) {
+    mix(o, kick(), b * beat, gain: 0.45);
   }
-  mix(o, highpass(air, 6000), step * 5, gain: 0.12);
-  return trim(reverb(pad(o, 0.5), wet: 0.3));
+  for (final b in [1.0, 3.0]) {
+    mix(o, clap(), b * beat, gain: 0.3);
+  }
+  for (var k = 0; k < 4; k++) {
+    mix(o, tom(220 - k * 30.0), (2.5 + k * 0.25) * beat, gain: 0.3);
+  }
+  mix(o, highpass(noiseBurst(1.6, decay: 0.5), 7000), 3.5 * beat, gain: 0.18);
+  return trim(reverb(pad(o, 0.4), wet: 0.25));
 }
 
-// ============================================================== music
+// ================================================================= song
 
-/// "Workshop" — a lo-fi loop, 90 BPM, 16 bars (I–vi–IV–V in D), the motif
-/// as the hook. Rendered with a reverb tail folded back to the start so it
-/// loops seamlessly.
-Float64List musicLoop() {
-  const bpm = 90.0;
-  const beat = 60 / bpm;
-  const bars = 16;
-  final loopLen = bars * 4 * beat;
-  final total = buf(loopLen + 3, musicSr);
+/// "Workshop" — upbeat & playful. 124 BPM, C major, 32 bars:
+/// Chorus · Verse · Chorus (bigger) · Verse (break). The hook comes first.
+class Song {
+  static const bpm = 124.0;
+  static const beat = 60 / bpm;
+  static const bar = 4 * beat;
+  static const bars = 32;
 
-  // Chords per bar (8-bar progression played twice).
-  final chords = <List<int>>[
-    [50, 54, 57, 61, 64], // Dmaj9
-    [47, 50, 54, 57], // Bm7
-    [43, 47, 50, 54], // Gmaj7
-    [45, 49, 52, 54], // A6
-    [50, 54, 57, 61, 64],
-    [47, 50, 54, 57],
-    [43, 47, 50, 54],
-    [45, 49, 52, 55], // A7
-  ];
-  final roots = [38, 35, 31, 33, 38, 35, 31, 33];
+  final _len = bars * bar + 3;
+  late final lead = buf(_len), glockBus = buf(_len), stabL = buf(_len), stabR = buf(_len);
+  late final bassBus = buf(_len), kickBus = buf(_len), clapBus = buf(_len), hatBus = buf(_len);
+  late final shakerBus = buf(_len), arp = buf(_len), fx = buf(_len);
+  final List<double> _kicks = [];
 
-  final keysBus = buf(loopLen + 3, musicSr);
-  final bassBus = buf(loopLen + 3, musicSr);
-  final drums = buf(loopLen + 3, musicSr);
-  final lead = buf(loopLen + 3, musicSr);
+  (Float64List, Float64List) render() {
+    _chorus(0, big: false);
+    _verse(8, breakdown: false);
+    _chorus(16, big: true);
+    _verse(24, breakdown: true);
 
-  double swing(double b) => (b % 1) == 0.5 ? b + 0.08 : b; // lazy 8ths
-
-  for (var bar = 0; bar < bars; bar++) {
-    final c = chords[bar % 8];
-    final t0 = bar * 4 * beat;
-    // Keys: syncopated stabs on 1, the "and" of 2, and 4.
-    for (final b in [0.0, 1.5, 3.0]) {
-      for (final n in c) {
-        mix(keysBus, keys(hz(n), beat * (b == 3.0 ? 1.2 : 1.6), decay: 0.9), t0 + swing(b) * beat, gain: 0.11, rate: musicSr);
+    // Sidechain pump: chords and bass duck on every kick (wrapping at the
+    // loop point so the pump is continuous at the seam).
+    final n = (bars * bar * sr).round();
+    final duck = Float64List(kickBus.length)..fillRange(0, kickBus.length, 1);
+    for (final t in _kicks) {
+      final s = (t * sr).round();
+      final w = (0.22 * sr).round();
+      for (var i = 0; i < w; i++) {
+        final x = i / w;
+        final j = s + i;
+        final g = 0.5 + 0.5 * x * x;
+        if (j < duck.length) duck[j] = math.min(duck[j], g);
+        if (j + n < duck.length) duck[j + n] = math.min(duck[j + n], g);
       }
     }
-    // Bass: root on 1, fifth on the "and" of 2, octave on the "and" of 3.
-    final r = roots[bar % 8];
-    for (final (b, n, len) in [(0.0, r, 1.4), (1.5, r + 7, 0.9), (2.5, r + 12, 0.6), (3.0, r, 0.9)]) {
-      mix(bassBus, pluck(hz(n), len * beat * 1.3, damping: 0.995, bright: 0.25, rate: musicSr), t0 + swing(b) * beat, gain: 0.5, rate: musicSr);
+    for (final bus in [stabL, stabR, bassBus, arp]) {
+      for (var i = 0; i < bus.length; i++) {
+        bus[i] *= duck[i];
+      }
     }
-    // Drums: boom-bap kick / rim / swung hats; drop the kick in bar 8 & 16.
-    final fill = bar % 8 == 7;
-    for (final b in fill ? [0.0] : [0.0, 1.75, 2.5]) {
-      mix(drums, sweep(120, 45, 0.25, decay: 0.09, rate: musicSr), t0 + b * beat, gain: 0.55, rate: musicSr);
+
+    final l = buf(_len), r = buf(_len);
+    void pan(Float64List src, double p, double gain) {
+      final gl = math.cos((p + 1) * math.pi / 4) * gain, gr = math.sin((p + 1) * math.pi / 4) * gain;
+      for (var i = 0; i < src.length; i++) {
+        l[i] += src[i] * gl;
+        r[i] += src[i] * gr;
+      }
     }
-    for (final b in [1.0, 3.0]) {
-      mix(drums, noiseBurst(0.12, decay: 0.035, center: 1900, q: 0.9, rate: musicSr), t0 + b * beat, gain: 0.35, rate: musicSr);
-      mix(drums, sweep(330, 260, 0.05, decay: 0.02, rate: musicSr), t0 + b * beat, gain: 0.15, rate: musicSr);
+
+    // Lead in the middle with a stereo room around it.
+    final leadDry = lead;
+    pan(leadDry, 0, 0.6);
+    pan(reverb(lead, wet: 1, seed: 1), -0.8, 0.14);
+    pan(reverb(lead, wet: 1, seed: 2), 0.8, 0.14);
+    pan(reverb(glockBus, wet: 0.35, seed: 3), 0.35, 0.5);
+    pan(reverb(arp, wet: 0.25, seed: 8), -0.35, 0.5);
+    pan(reverb(stabL, wet: 0.15, seed: 4), -0.6, 0.5);
+    pan(reverb(stabR, wet: 0.15, seed: 5), 0.6, 0.5);
+    pan(lowpass(bassBus, 1600), 0, 0.8);
+    pan(kickBus, 0, 0.9);
+    pan(reverb(clapBus, wet: 0.2, seed: 6), 0.05, 0.55);
+    pan(hatBus, 0.35, 0.45);
+    pan(shakerBus, -0.4, 0.4);
+    pan(reverb(fx, wet: 0.3, seed: 7), 0.2, 0.55);
+
+    // Fold the tail onto the start → seamless loop.
+    final ll = Float64List(n), rr = Float64List(n);
+    for (var i = 0; i < l.length; i++) {
+      ll[i % n] += l[i];
+      rr[i % n] += r[i];
     }
-    for (var h = 0; h < 8; h++) {
-      final b = swing(h / 2);
-      mix(drums, highpass(noiseBurst(0.04, decay: 0.008, center: 9000, q: 1, rate: musicSr), 6000, 0.7, musicSr), t0 + b * beat,
-          gain: h.isEven ? 0.12 : 0.07, rate: musicSr);
-    }
+    return _glue(ll, rr);
   }
 
-  // Lead hook (bars 1–8), then a sparser answer an octave down (9–16).
-  final hook = <(double, int, double)>[
-    (0, d5, .5), (0.5, fs5, .5), (1, a5, .5), (1.5, b5, 1.25), (3, a5, 1), //
-    (4, fs5, 1.25), (5.5, e5, .5), (6, d5, 1.75),
-    (8, b4, .5), (8.5, d5, .5), (9, e5, 1.25), (10.5, d5, .5), (11, b4, 1),
-    (12, e5, 1.25), (13.5, fs5, .5), (14, e5, 2),
-    (16, d5, .5), (16.5, fs5, .5), (17, a5, .5), (17.5, b5, 1.25), (19, a5, 1),
-    (20, fs5, 1.25), (21.5, e5, .5), (22, d5, 1.75),
-    (24, b5, .5), (24.5, a5, .5), (25, fs5, 1.25), (26.5, e5, .5), (27, d5, 1),
-    (28, e5, 1), (29, cs5, 1), (30, a4, 2),
+  void _note(Float64List bus, Float64List src, double beats, {double gain = 1}) => mix(bus, src, beats * beat, gain: gain);
+
+  // Chorus: C G Am F | C G F C — the hook on marimba.
+  static const _chorusChords = [
+    [c4, e4, g4], [b4 - 12, d4, g4], [a4 - 12, c4, e4], [a4 - 12, c4, f4], //
+    [c4, e4, g4], [b4 - 12, d4, g4], [a4 - 12, c4, f4], [c4, e4, g4],
   ];
-  for (final (b, n, len) in hook) {
-    mix(lead, bell(hz(n), len * beat + 0.6, decay: 0.35 + len * 0.15, index: 2, rate: musicSr), swing(b) * beat, gain: 0.32, rate: musicSr);
-  }
-  final answer = <(double, int, double)>[
-    (32, a4, 1), (33.5, d5, .5), (34, fs5, 2),
-    (40, g4, 1), (41.5, b4, .5), (42, d5, 2),
-    (48, a4, .5), (48.5, d5, .5), (49, fs5, .5), (49.5, a5, 1.5),
-    (56, e5, 1), (57, cs5, 1), (58, a4, 2),
+  static const _chorusRoots = [36, 43, 45, 41, 36, 43, 41, 36];
+  static const _hookMelody = <(double, int, double)>[
+    (0, g4, .5), (.5, c5, .5), (1, e5, .5), (1.5, g5, 1), (2.5, e5, .5), (3, g5, 1),
+    (4, f5, .5), (4.5, e5, .5), (5, d5, .5), (5.5, b4, .5), (6, d5, 1.5),
+    (8, a4, .5), (8.5, c5, .5), (9, e5, .5), (9.5, a5, 1), (10.5, g5, .5), (11, e5, 1),
+    (12, f5, .5), (12.5, e5, .5), (13, d5, .5), (13.5, c5, .5), (14, d5, .5), (14.5, e5, 1.5),
+    (16, g4, .5), (16.5, c5, .5), (17, e5, .5), (17.5, g5, 1), (18.5, e5, .5), (19, g5, 1),
+    (20, f5, .5), (20.5, e5, .5), (21, d5, .5), (21.5, b4, .5), (22, d5, 1.5),
+    (24, a5, .5), (24.5, g5, .5), (25, f5, .5), (25.5, e5, .5), (26, f5, .5), (26.5, a5, 1), (27.5, g5, .5),
+    (28, e5, .5), (28.5, d5, .5), (29, c5, 2),
   ];
-  for (final (b, n, len) in answer) {
-    mix(lead, pluck(hz(n), len * beat + 0.4, damping: 0.997, bright: 0.55, rate: musicSr), swing(b) * beat, gain: 0.42, rate: musicSr);
+
+  void _chorus(int startBar, {required bool big}) {
+    final s = startBar * 4.0;
+    for (final (b, n, len) in _hookMelody) {
+      _note(lead, marimba(hz(n), dur: len * beat + 0.5), s + b, gain: 0.6);
+      if (big) _note(glockBus, glock(hz(n + 12), dur: len * beat + 0.4), s + b, gain: 0.2);
+    }
+    for (var k = 0; k < 8; k++) {
+      final b0 = s + k * 4;
+      final chord = _chorusChords[k];
+      // Offbeat stabs, alternating sides for a bouncy stereo picture.
+      for (final (i, off) in [0.5, 1.5, 2.5, 3.5].indexed) {
+        _note(i.isEven ? stabL : stabR, stab([for (final n in chord) n + 12]), b0 + off, gain: 0.3);
+      }
+      // Octave-bounce bass in eighths.
+      final r = _chorusRoots[k];
+      for (var e = 0; e < 8; e++) {
+        _note(bassBus, bass(hz(r + (e.isOdd ? 12 : 0)), beat * 0.45), b0 + e * 0.5, gain: 0.5);
+      }
+      // Four-on-the-floor, claps on 2 & 4, hats on the offbeats.
+      for (var q = 0; q < 4; q++) {
+        _note(kickBus, kick(), b0 + q, gain: 0.9);
+        _kicks.add((b0 + q) * beat);
+      }
+      for (final q in [1.0, 3.0]) {
+        _note(clapBus, clap(), b0 + q, gain: 0.55);
+      }
+      for (var e = 0; e < 8; e++) {
+        _note(hatBus, hat(open: e.isOdd && big), b0 + e * 0.5, gain: e.isOdd ? 0.22 : 0.12);
+      }
+      if (big) {
+        for (var x = 0; x < 16; x++) {
+          _note(shakerBus, shaker(), b0 + x * 0.25, gain: x.isOdd ? 0.12 : 0.07);
+        }
+      }
+      // Bar 8: a tom run and a slide-whistle up into the next section.
+      if (k == 7) {
+        for (var x = 0; x < 4; x++) {
+          _note(fx, tom(240 - x * 35.0), b0 + 2 + x * 0.5, gain: 0.35);
+        }
+        _note(fx, glide(hz(c5), hz(c6), beat * 1.2, vib: 0.01, attack: 0.05), b0 + 2.8, gain: 0.12);
+      }
+    }
   }
 
-  // Mix buses: warm keys, round bass, soft drums, lead in front.
-  mix(total, reverb(lowpass(keysBus, 3000, 0.707, musicSr), wet: 0.25, size: 1.1, rate: musicSr), 0, rate: musicSr);
-  mix(total, lowpass(bassBus, 900, 0.707, musicSr), 0, gain: 0.9, rate: musicSr);
-  mix(total, lowpass(drums, 7000, 0.707, musicSr), 0, gain: 0.8, rate: musicSr);
-  mix(total, reverb(lead, wet: 0.3, size: 1.2, rate: musicSr), 0, gain: 0.9, rate: musicSr);
-  // Faint tape hiss for the lo-fi texture.
-  for (var i = 0; i < total.length; i++) {
-    total[i] += noise() * 0.004;
+  // Verse: F G Em Am | Dm G C G — pizzicato call-and-response.
+  static const _verseChords = [
+    [a4 - 12, c4, f4], [b4 - 12, d4, g4], [b4 - 12, e4, g4], [a4 - 12, c4, e4], //
+    [a4 - 12, d4, f4], [b4 - 12, d4, g4], [c4, e4, g4], [b4 - 12, d4, g4],
+  ];
+  static const _verseRoots = [41, 43, 40, 45, 38, 43, 36, 43];
+  static const _verseMelody = <(double, int, double)>[
+    (0, a4, .5), (.5, c5, .5), (1, f5, 1), (2.5, e5, .5), (3, f5, .5),
+    (4, d5, .5), (4.5, b4, .5), (5, g4, 1), (7, d5, .5), (7.5, e5, .5),
+    (8, g5, .5), (8.5, e5, .5), (9, b4, 1), (10.5, e5, .5), (11, g5, .5),
+    (12, a5, 1), (13, g5, .5), (13.5, e5, .5), (14, c5, 1.5),
+    (16, f5, .5), (16.5, d5, .5), (17, a4, 1), (18.5, d5, .5), (19, f5, .5),
+    (20, g5, 1), (21, f5, .5), (21.5, d5, .5), (22, b4, 1.5),
+    (24, c5, .5), (24.5, e5, .5), (25, g5, .5), (25.5, c6, 1), (27, b5, .5), (27.5, g5, .5),
+    (28, d5, .5), (28.5, g5, .5), (29, b5, .5), (29.5, d6, 1.5),
+  ];
+
+  void _verse(int startBar, {required bool breakdown}) {
+    final s = startBar * 4.0;
+    for (final (b, n, len) in _verseMelody) {
+      _note(lead, pluck(hz(n), dur: len * beat + 0.4), s + b, gain: breakdown ? 0.55 : 0.7);
+      if (breakdown) _note(glockBus, glock(hz(n + 12), dur: len * beat + 0.3), s + b, gain: 0.16);
+    }
+    for (var k = 0; k < 8; k++) {
+      final b0 = s + k * 4;
+      final chord = _verseChords[k];
+      for (final (i, off) in [1.5, 3.5].indexed) {
+        _note(i.isEven ? stabL : stabR, stab([for (final n in chord) n + 12], dur: 0.12), b0 + off, gain: 0.24);
+      }
+      // A soft marimba arpeggio keeps the bounce under the pizz lead.
+      for (var x = 0; x < 4; x++) {
+        _note(arp, marimba(hz(chord[x % chord.length] + 12), dur: 0.35, vel: 0.5), b0 + x + 0.25, gain: 0.22);
+      }
+      final r = _verseRoots[k];
+      for (final (b, n) in [(0.0, r), (1.0, r + 12), (2.0, r + 7), (3.0, r + 12)]) {
+        _note(bassBus, bass(hz(n), beat * 0.4), b0 + b, gain: breakdown ? 0.32 : 0.45);
+      }
+      // Lighter groove; the break thins the kick out.
+      for (final q in breakdown ? [0.0, 2.0] : [0.0, 1.5, 2.0]) {
+        _note(kickBus, kick(), b0 + q, gain: 0.8);
+        _kicks.add((b0 + q) * beat);
+      }
+      for (final q in [1.0, 3.0]) {
+        _note(clapBus, breakdown ? snap() : clap(), b0 + q, gain: breakdown ? 0.4 : 0.45);
+      }
+      for (var e = 0; e < 8; e++) {
+        _note(hatBus, hat(), b0 + e * 0.5, gain: e.isOdd ? 0.16 : 0.09);
+      }
+      if (k == 7) {
+        _note(fx, glide(hz(g4), hz(g5), beat * 1.5, vib: 0.012, attack: 0.05), b0 + 2.5, gain: 0.12);
+        for (final (x, n) in [c6, d6, e6, g6, c7, e6 + 12].indexed) {
+          _note(fx, glock(hz(n), dur: 0.25), b0 + 3 + x * 0.16, gain: 0.08);
+        }
+      }
+    }
   }
 
-  // Filter first, then fold the tail past the loop point back onto the
-  // start, so the seam is sample-continuous (no filter restart click).
-  final filtered = lowpass(total, 7500, 0.707, musicSr);
-  final n = (loopLen * musicSr).round();
-  final loop = Float64List(n);
-  for (var i = 0; i < filtered.length; i++) {
-    loop[i % n] += filtered[i];
+  /// Bus compressor, run over two laps of the loop (keeping the second) so
+  /// its envelope is continuous at the seam, then a soft-knee limiter.
+  (Float64List, Float64List) _glue(Float64List l, Float64List r) {
+    final n = l.length;
+    var env = 0.0;
+    final att = math.exp(-1 / (0.005 * sr)), rel = math.exp(-1 / (0.12 * sr));
+    var peakIn = 1e-9;
+    for (var i = 0; i < n; i++) {
+      peakIn = math.max(peakIn, math.max(l[i].abs(), r[i].abs()));
+    }
+    final threshold = peakIn * 0.4;
+    const ratio = 3.0;
+    final ol = Float64List(n), or = Float64List(n);
+    for (var lap = 0; lap < 2; lap++) {
+      for (var i = 0; i < n; i++) {
+        final x = math.max(l[i].abs(), r[i].abs());
+        env = x > env ? att * env + (1 - att) * x : rel * env + (1 - rel) * x;
+        final g = env > threshold ? math.pow(env / threshold, 1 / ratio - 1).toDouble() : 1.0;
+        if (lap == 1) {
+          ol[i] = l[i] * g;
+          or[i] = r[i] * g;
+        }
+      }
+    }
+    var peak = 1e-9;
+    for (var i = 0; i < n; i++) {
+      peak = math.max(peak, math.max(ol[i].abs(), or[i].abs()));
+    }
+    final gain = math.pow(10, -1 / 20) / peak * 1.15; // drive the limiter a touch
+    double soft(double v) => v.abs() < 0.75 ? v : v.sign * (0.75 + 0.2 * (1 - math.exp(-(v.abs() - 0.75) * 5)));
+    for (var i = 0; i < n; i++) {
+      ol[i] = soft(ol[i] * gain);
+      or[i] = soft(or[i] * gain);
+    }
+    return (ol, or);
   }
-  return loop;
 }
