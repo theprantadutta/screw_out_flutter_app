@@ -12,6 +12,7 @@ import 'presentation/bloc/display/display_cubit.dart';
 import 'presentation/bloc/premium/premium_cubit.dart';
 import 'presentation/bloc/progress/progress_cubit.dart';
 import 'presentation/bloc/settings/settings_cubit.dart';
+import 'services/leaderboard_service.dart';
 import 'services/level_repository.dart';
 import 'services/ports.dart';
 import 'services/progress_service.dart';
@@ -37,6 +38,7 @@ class ScrewOutApp extends StatelessWidget {
       RepositoryProvider<AnalyticsPort>.value(value: getIt<AnalyticsPort>()),
       RepositoryProvider<PurchasesPort>.value(value: getIt<PurchasesPort>()),
       RepositoryProvider<SoundPort>.value(value: getIt<SoundPort>()),
+      RepositoryProvider<LeaderboardPort>.value(value: getIt<LeaderboardPort>()),
     ],
     child: MultiBlocProvider(
       providers: [

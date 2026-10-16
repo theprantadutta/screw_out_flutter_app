@@ -64,6 +64,14 @@ class HomeScreen extends StatelessWidget {
                     child: Image.asset('assets/brand/logomark-512.png', width: 44, height: 44),
                   ),
                   const Spacer(),
+                  BpIconButton(
+                    size: 44,
+                    iconSize: 22,
+                    icon: const Icon(Symbols.leaderboard_sharp),
+                    semanticLabel: l.leaderboardTitle,
+                    onPressed: () => context.push(AppRoutes.leaderboard),
+                  ),
+                  const SizedBox(width: 8),
                   BpCoinChip(coins: progress.coins, height: 44),
                   const SizedBox(width: 8),
                   BpIconButton(

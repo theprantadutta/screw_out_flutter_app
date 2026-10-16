@@ -13,6 +13,7 @@ abstract final class AppRoutes {
   static const settings = '/settings';
   static const licenses = '/licenses';
   static const debug = '/debug';
+  static const leaderboard = '/leaderboard';
 
   static String chapterPath(int chapter) => '/chapter/$chapter';
   static String playPath(int level) => '/play/$level';

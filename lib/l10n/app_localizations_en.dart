@@ -657,6 +657,91 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get leaderboardTitle => 'Leaderboards';
+
+  @override
+  String get leaderboardCaption => 'SIGNED-IN PLAYERS · LIVE';
+
+  @override
+  String get boardSheets => 'SHEETS';
+
+  @override
+  String get boardDaily => 'DAILY';
+
+  @override
+  String get boardStreak => 'STREAK';
+
+  @override
+  String get boardSheetsHint => 'MOST SHEETS CLEARED';
+
+  @override
+  String get boardDailyHint => 'TODAY\'S SHEET · FEWEST MOVES, THEN FASTEST';
+
+  @override
+  String get boardStreakHint => 'DAYS IN A ROW ON THE DAILY SHEET';
+
+  @override
+  String boardMastered(int count) {
+    return '$count ◆';
+  }
+
+  @override
+  String boardMovesDetail(int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'MOVES',
+      one: 'MOVE',
+    );
+    return '$_temp0 · $time';
+  }
+
+  @override
+  String boardDaysDetail(int count, int best) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'DAYS',
+      one: 'DAY',
+    );
+    return '$_temp0 · BEST $best';
+  }
+
+  @override
+  String get boardYou => 'YOU';
+
+  @override
+  String get boardYourRank => 'YOUR RANK';
+
+  @override
+  String get boardNotRanked => 'Not ranked yet';
+
+  @override
+  String boardOfPlayers(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'OF $countString';
+  }
+
+  @override
+  String get boardGuest =>
+      'Sign in to put your name on the board. Your progress comes with you.';
+
+  @override
+  String get boardEmpty => 'No one here yet — be the first.';
+
+  @override
+  String get boardOffline => 'Can\'t reach the leaderboard right now.';
+
+  @override
+  String get tryAgainCaps => 'TRY AGAIN';
+
+  @override
+  String get todaysBoard => 'TODAY\'S BOARD';
+
+  @override
   String signedInToast(String name) {
     return 'Signed in as $name · progress is backed up';
   }

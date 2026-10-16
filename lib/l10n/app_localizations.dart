@@ -1138,6 +1138,126 @@ abstract class AppLocalizations {
   /// **'{plates} · {screws}'**
   String platesScrews(int plates, int screws);
 
+  /// No description provided for @leaderboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaderboards'**
+  String get leaderboardTitle;
+
+  /// No description provided for @leaderboardCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'SIGNED-IN PLAYERS · LIVE'**
+  String get leaderboardCaption;
+
+  /// No description provided for @boardSheets.
+  ///
+  /// In en, this message translates to:
+  /// **'SHEETS'**
+  String get boardSheets;
+
+  /// No description provided for @boardDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'DAILY'**
+  String get boardDaily;
+
+  /// No description provided for @boardStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'STREAK'**
+  String get boardStreak;
+
+  /// No description provided for @boardSheetsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'MOST SHEETS CLEARED'**
+  String get boardSheetsHint;
+
+  /// No description provided for @boardDailyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY\'S SHEET · FEWEST MOVES, THEN FASTEST'**
+  String get boardDailyHint;
+
+  /// No description provided for @boardStreakHint.
+  ///
+  /// In en, this message translates to:
+  /// **'DAYS IN A ROW ON THE DAILY SHEET'**
+  String get boardStreakHint;
+
+  /// No description provided for @boardMastered.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} ◆'**
+  String boardMastered(int count);
+
+  /// No description provided for @boardMovesDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{MOVE} other{MOVES}} · {time}'**
+  String boardMovesDetail(int count, String time);
+
+  /// No description provided for @boardDaysDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{DAY} other{DAYS}} · BEST {best}'**
+  String boardDaysDetail(int count, int best);
+
+  /// No description provided for @boardYou.
+  ///
+  /// In en, this message translates to:
+  /// **'YOU'**
+  String get boardYou;
+
+  /// No description provided for @boardYourRank.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR RANK'**
+  String get boardYourRank;
+
+  /// No description provided for @boardNotRanked.
+  ///
+  /// In en, this message translates to:
+  /// **'Not ranked yet'**
+  String get boardNotRanked;
+
+  /// No description provided for @boardOfPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'OF {count}'**
+  String boardOfPlayers(int count);
+
+  /// No description provided for @boardGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to put your name on the board. Your progress comes with you.'**
+  String get boardGuest;
+
+  /// No description provided for @boardEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No one here yet — be the first.'**
+  String get boardEmpty;
+
+  /// No description provided for @boardOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t reach the leaderboard right now.'**
+  String get boardOffline;
+
+  /// No description provided for @tryAgainCaps.
+  ///
+  /// In en, this message translates to:
+  /// **'TRY AGAIN'**
+  String get tryAgainCaps;
+
+  /// No description provided for @todaysBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY\'S BOARD'**
+  String get todaysBoard;
+
   /// No description provided for @signedInToast.
   ///
   /// In en, this message translates to:

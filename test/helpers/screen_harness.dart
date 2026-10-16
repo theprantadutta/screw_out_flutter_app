@@ -13,6 +13,7 @@ import 'package:screw_out/presentation/bloc/display/display_cubit.dart';
 import 'package:screw_out/presentation/bloc/premium/premium_cubit.dart';
 import 'package:screw_out/presentation/bloc/progress/progress_cubit.dart';
 import 'package:screw_out/presentation/bloc/settings/settings_cubit.dart';
+import 'package:screw_out/services/leaderboard_service.dart';
 import 'package:screw_out/services/level_repository.dart';
 import 'package:screw_out/services/ports.dart';
 import 'package:screw_out/services/progress_service.dart';
@@ -30,6 +31,7 @@ class ScreenEnv {
   final AuthCubit auth;
   late final DisplayCubit display = DisplayCubit(DriftDisplayPreferenceStore(db), backend: const NoRefreshRate());
   AdsPort ads = const NoAds();
+  LeaderboardPort leaderboard = FakeLeaderboard();
   PurchasesPort purchases = const FakePurchases();
 
   /// Creates the env. Must run inside `tester.runAsync`.
@@ -93,6 +95,7 @@ class ScreenEnv {
       RepositoryProvider<AnalyticsPort>.value(value: const NoAnalytics()),
       RepositoryProvider<PurchasesPort>.value(value: purchases),
       RepositoryProvider<SoundPort>.value(value: const SilentSound()),
+      RepositoryProvider<LeaderboardPort>.value(value: leaderboard),
     ],
     child: MultiBlocProvider(
       providers: [
@@ -167,4 +170,38 @@ class NoRefreshRate implements RefreshRateBackend {
   Future<DisplayInfo?> read() async => null;
   @override
   Stream<DisplayInfo> get changes => const Stream.empty();
+}
+
+/// Deterministic boards for goldens; [offline] simulates no connection.
+class FakeLeaderboard implements LeaderboardPort {
+  FakeLeaderboard({this.offline = false, this.empty = false});
+
+  final bool offline;
+  final bool empty;
+
+  static const _names = [
+    'Keen_Washer_1904', 'Steady_Rivet_4821', 'Calm_Gasket_0377', 'Bright_Flange_2210', 'Quiet_Shim_5560',
+    'Swift_Bracket_9031', 'Neat_Gusset_1188', 'Brave_Spacer_7402', 'Kind_Collar_3345', 'True_Clevis_6620',
+  ];
+
+  @override
+  Future<BoardPage?> fetch(Board board, {required DateTime today, bool signedIn = false}) async {
+    if (offline) return null;
+    if (empty) return BoardPage(board: board, entries: const [], totalPlayers: 0);
+    final entries = [
+      for (var i = 0; i < _names.length; i++)
+        BoardEntry(
+          rank: i + 1,
+          username: _names[i],
+          isMe: signedIn && i == 3,
+          levelsCleared: 96 - i * 7,
+          mastered: 40 - i * 3,
+          moves: 14 + i * 2,
+          timeMs: 52000 + i * 9000,
+          currentStreak: 21 - i * 2,
+          bestStreak: 30 - i,
+        ),
+    ];
+    return BoardPage(board: board, entries: entries, totalPlayers: 1234, me: signedIn ? entries[3] : null);
+  }
 }

@@ -41,7 +41,20 @@ class DailyScreen extends StatelessWidget {
     final theme = Cosmetics.resolve(progress.equippedTheme);
 
     return BpScreenScaffold(
-      trailing: Text(l.dailySheet, style: BpType.label.copyWith(letterSpacing: 1.1, color: BpColor.textSecondary)),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(l.dailySheet, style: BpType.label.copyWith(letterSpacing: 1.1, color: BpColor.textSecondary)),
+          const SizedBox(width: 12),
+          BpIconButton(
+            size: 44,
+            iconSize: 22,
+            icon: const Icon(Symbols.leaderboard_sharp),
+            semanticLabel: l.todaysBoard,
+            onPressed: () => context.push('${AppRoutes.leaderboard}?board=daily'),
+          ),
+        ],
+      ),
       body: LayoutBuilder(
         builder: (context, c) => SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(BpSpace.screen, 14, BpSpace.screen, bpBottom(context)),

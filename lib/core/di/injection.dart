@@ -7,6 +7,7 @@ import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
+import '../../services/leaderboard_service.dart';
 import '../../services/ads/ad_service.dart';
 import '../../services/analytics/analytics.dart';
 import '../../services/analytics/telemetry.dart';
@@ -49,7 +50,8 @@ void configureDependencies({required bool firebase, AppDatabase? database}) {
     ..registerLazySingleton<SyncEngine>(
       () => SyncEngine(getIt<AppDatabase>(), getIt<ApiService>(), getIt<ConnectivityService>()),
     )
-    ..registerLazySingleton<LevelPackService>(() => LevelPackService(getIt<ApiService>(), getIt<LevelRepository>()));
+    ..registerLazySingleton<LevelPackService>(() => LevelPackService(getIt<ApiService>(), getIt<LevelRepository>()))
+    ..registerLazySingleton<LeaderboardPort>(() => LeaderboardService(getIt<ApiService>()));
 
   // Analytics: Firebase in release, console in debug, plus backend telemetry.
   getIt

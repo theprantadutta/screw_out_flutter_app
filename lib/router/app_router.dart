@@ -11,6 +11,8 @@ import '../screens/daily/daily_screen.dart';
 import '../screens/gameplay/gameplay_route.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/debug/debug_screen.dart';
+import '../screens/leaderboard/leaderboard_screen.dart';
+import '../services/leaderboard_service.dart';
 import '../screens/licenses/licenses_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/splash/splash_screen.dart';
@@ -102,6 +104,12 @@ GoRouter createAppRouter({
       path: AppRoutes.settings,
       name: 'settings',
       pageBuilder: (context, state) => _slide(state, const SettingsScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.leaderboard,
+      name: 'leaderboard',
+      pageBuilder: (context, state) =>
+          _slide(state, LeaderboardScreen(initial: Board.fromName(state.uri.queryParameters['board']))),
     ),
     GoRoute(
       path: AppRoutes.debug,
