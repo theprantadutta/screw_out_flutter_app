@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../services/ports.dart';
 import '../../core/theme/blueprint_tokens.dart';
 import '../../game/generator/curriculum.dart';
 import '../../l10n/app_localizations.dart';
@@ -40,6 +41,10 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
   @override
   void initState() {
     super.initState();
+    // The fanfare: the motif, harmonised.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<SoundPort>().play(Sfx.chapter);
+    });
     final reduced = context.read<SettingsCubit>().state.reducedMotion;
     if (reduced) {
       _ticks.value = 1;

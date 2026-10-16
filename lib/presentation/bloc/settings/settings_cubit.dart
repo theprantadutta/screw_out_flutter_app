@@ -10,7 +10,7 @@ abstract interface class SettingsStore {
 final class SettingsState extends Equatable {
   const SettingsState({
     this.sound = true,
-    this.music = false,
+    this.music = true,
     this.haptics = true,
     this.reducedMotion = false,
     this.localeCode,
@@ -20,7 +20,7 @@ final class SettingsState extends Equatable {
 
   final bool sound;
 
-  /// Off by default (MOTION_SPEC §12).
+  /// On by default (the "Workshop" loop; ducks under SFX, quieter in play).
   final bool music;
   final bool haptics;
   final bool reducedMotion;

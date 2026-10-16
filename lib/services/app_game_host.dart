@@ -127,4 +127,37 @@ class AppGameFeedback implements GameFeedback {
     _sfx(Sfx.coin);
     _haptic(HapticFeedback.lightImpact);
   }
+
+  @override
+  void levelStart() => _sfx(Sfx.levelStart);
+
+  @override
+  void trayWarn() => _sfx(Sfx.trayWarn);
+
+  @override
+  void stuck() {
+    _sfx(Sfx.stuck);
+    _haptic(HapticFeedback.lightImpact);
+  }
+
+  @override
+  void best() {
+    _sfx(Sfx.best);
+    _haptic(HapticFeedback.heavyImpact);
+  }
+
+  @override
+  void daily() {
+    _sfx(Sfx.daily);
+    _haptic(HapticFeedback.mediumImpact);
+  }
+
+  @override
+  void rescue() {
+    _sfx(Sfx.rescue);
+    _haptic(HapticFeedback.lightImpact);
+  }
+
+  @override
+  void gameplayVisible(bool visible) => _sound.setGameplay(visible);
 }

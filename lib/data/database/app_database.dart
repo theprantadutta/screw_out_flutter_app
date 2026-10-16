@@ -17,7 +17,7 @@ part 'app_database.g.dart';
 class GameSettings extends Table {
   IntColumn get id => integer().withDefault(const Constant(1))();
   BoolColumn get sound => boolean().withDefault(const Constant(true))();
-  BoolColumn get music => boolean().withDefault(const Constant(false))();
+  BoolColumn get music => boolean().withDefault(const Constant(true))();
   BoolColumn get haptics => boolean().withDefault(const Constant(true))();
   BoolColumn get reducedMotion => boolean().withDefault(const Constant(false))();
   TextColumn get localeCode => text().nullable()();

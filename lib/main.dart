@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -24,6 +25,7 @@ import 'presentation/bloc/progress/progress_cubit.dart';
 import 'presentation/bloc/settings/settings_cubit.dart';
 import 'router/app_router.dart';
 import 'screens/licenses/licenses_screen.dart';
+import 'services/audio/audio_service.dart';
 import 'services/ads/ad_service.dart';
 import 'services/analytics/analytics.dart';
 import 'services/analytics/telemetry.dart';
@@ -101,10 +103,23 @@ Future<void> _bootstrapServices({required bool firebase}) async {
     await getIt<PremiumCubit>().initialize();
     await getIt<ConnectivityService>().initialize();
 
+    // Music is on by default since the "Workshop" loop exists; installs that
+    // saved the old off-by-default once get it switched on, one time only.
+    final prefs = await SharedPreferences.getInstance();
+    if (!(prefs.getBool('music_default_on_v1') ?? false)) {
+      if (!settings.state.music) await settings.setMusic(true);
+      await prefs.setBool('music_default_on_v1', true);
+    }
+    unawaited(getIt<AudioService>().initialize());
+
     // UI tick: sound + selection haptic on every Blueprint button.
     final sound = getIt<SoundPort>();
     bpUiTick = () {
       if (settings.state.sound) sound.play(Sfx.tick);
+      if (settings.state.haptics) HapticFeedback.selectionClick();
+    };
+    bpUiToggle = () {
+      if (settings.state.sound) sound.play(Sfx.toggle);
       if (settings.state.haptics) HapticFeedback.selectionClick();
     };
 

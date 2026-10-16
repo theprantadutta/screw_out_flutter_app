@@ -66,6 +66,7 @@ dependencies:
   in_app_review: ^2.0.12
   in_app_update: ^5.0.0
   refresh_rate: ^2.0.1
+  flutter_soloud: ^5.1.6
   flutter_native_splash: ^2.4.8
   flutter_localizations:
     sdk: flutter
@@ -96,6 +97,7 @@ flutter:
   assets:
     - .env
     - assets/levels/
+    - assets/audio/
     - assets/brand/
     - assets/legal/
 

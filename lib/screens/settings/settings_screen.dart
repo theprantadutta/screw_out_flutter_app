@@ -348,6 +348,7 @@ class _PurchasesBlock extends StatelessWidget {
         PurchaseOutcome.needsSignIn => (l.signInToPurchase, BpToastKind.info),
         PurchaseOutcome.cancelled => (null, BpToastKind.info),
       };
+      if (outcome == PurchaseOutcome.granted) context.read<SoundPort>().play(Sfx.purchase);
       if (msg != null) showBpToast(context, msg, kind: kind);
     }
 

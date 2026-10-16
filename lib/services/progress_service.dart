@@ -136,6 +136,7 @@ class ProgressService {
     final before = await _coins();
     var earned = 0;
     var firstClear = false;
+    var newBest = false;
     int? chapterCompleted;
 
     if (r.isDaily) {
@@ -176,6 +177,7 @@ class ProgressService {
         );
       } else {
         if (r.mastered && !existing.mastered) earned += Rewards.masteryBonus;
+        newBest = r.moves < existing.bestMoves || (r.mastered && !existing.mastered);
         await (_db.update(_db.levelClears)..where((c) => c.levelId.equals(r.level.id))).write(
           LevelClearsCompanion(
             bestMoves: Value(r.moves < existing.bestMoves ? r.moves : existing.bestMoves),
@@ -211,6 +213,7 @@ class ProgressService {
       balanceAfter: before + earned,
       firstClear: firstClear,
       chapterCompleted: chapterCompleted,
+      newBest: newBest,
     );
   });
 

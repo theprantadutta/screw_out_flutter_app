@@ -8,6 +8,9 @@ import 'bp_grid.dart';
 /// Set once at startup by the app; null in tests.
 VoidCallback? bpUiTick;
 
+/// Called when a toggle flips (latch click). Set once at startup.
+VoidCallback? bpUiToggle;
+
 /// Primary action: drafting-yellow, hard offset ink shadow, no blur.
 /// Pressed → translate (+2, +2) and the shadow collapses (90 ms).
 class BpPrimaryButton extends StatefulWidget {
@@ -213,7 +216,7 @@ class BpToggle extends StatelessWidget {
     child: GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        HapticFeedback.selectionClick();
+        bpUiToggle != null ? bpUiToggle!() : HapticFeedback.selectionClick();
         onChanged(!value);
       },
       child: Padding(

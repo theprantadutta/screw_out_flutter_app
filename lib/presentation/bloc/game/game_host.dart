@@ -63,6 +63,7 @@ final class LevelReward {
     required this.balanceAfter,
     required this.firstClear,
     this.chapterCompleted,
+    this.newBest = false,
   });
 
   final int coins;
@@ -72,6 +73,10 @@ final class LevelReward {
 
   /// Set when this clear finished a chapter (screen 12 follows).
   final int? chapterCompleted;
+
+  /// A replay beat the sheet's best moves or earned its first ◆ — the
+  /// "high score" moment (kept rare on purpose; first clears don't count).
+  final bool newBest;
 }
 
 /// Economy constants shared by gameplay and sheets.

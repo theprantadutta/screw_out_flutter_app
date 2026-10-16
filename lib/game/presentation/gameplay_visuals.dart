@@ -218,6 +218,7 @@ class GameplayVisuals extends ChangeNotifier {
     if (r.state.emptySlots == 1 && r.releases.isEmpty && !_reduced) {
       riskSlot = r.state.firstEmptySlot;
       risk.forward(from: 0);
+      feedback.trayWarn();
     }
   }
 
@@ -355,6 +356,7 @@ class GameplayVisuals extends ChangeNotifier {
 
   /// Level entry: board scales 0.94 → 1 and fades in; objective follows.
   void enter() {
+    feedback.levelStart();
     boardIn.forward(from: 0);
     _later(BpMotion.feedback, () => objectiveIn.forward(from: 0));
   }

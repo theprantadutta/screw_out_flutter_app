@@ -7,6 +7,7 @@ import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
+import '../../services/audio/audio_service.dart';
 import '../../services/leaderboard_service.dart';
 import '../../services/ads/ad_service.dart';
 import '../../services/analytics/analytics.dart';
@@ -98,9 +99,8 @@ void configureDependencies({required bool firebase, AppDatabase? database}) {
       ),
     )
     ..registerLazySingleton<PurchasesPort>(() => getIt<PurchaseService>())
-    // TODO(audio): replace with a flutter_soloud implementation once SFX
-    // files exist (MOTION_SPEC §12 list in ports.dart `Sfx`).
-    ..registerLazySingleton<SoundPort>(() => const SilentSound())
+    ..registerLazySingleton<AudioService>(() => AudioService(getIt<SettingsCubit>()))
+    ..registerLazySingleton<SoundPort>(() => getIt<AudioService>())
     ..registerLazySingleton<NotificationService>(
       () => NotificationService(api: getIt<ApiService>(), user: getIt<UserService>()),
     );

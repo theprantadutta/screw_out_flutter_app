@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../services/ports.dart';
 import '../../core/theme/blueprint_tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
@@ -252,7 +253,9 @@ class _PreviewSheet extends StatelessWidget {
                               if (!context.mounted) return;
                               if (ok) {
                                 await progress.equipTheme(theme.id);
-                                if (context.mounted) showBpToast(context, l.themePurchased, kind: BpToastKind.success);
+                                if (!context.mounted) return;
+                                context.read<SoundPort>().play(Sfx.purchase);
+                                showBpToast(context, l.themePurchased, kind: BpToastKind.success);
                                 onClose();
                               } else {
                                 showBpToast(context, l.notEnoughCoins, kind: BpToastKind.error);

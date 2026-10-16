@@ -104,6 +104,7 @@ class _GameplayScreenState extends State<GameplayScreen>
       value: _cubit.state.objectiveVisible ? 1 : 0,
     );
     _sub = _cubit.events.listen(_visuals.handle);
+    widget.feedback.gameplayVisible(true);
     _syncOverlay(_cubit.state.overlay);
   }
 
@@ -118,6 +119,7 @@ class _GameplayScreenState extends State<GameplayScreen>
 
   @override
   void dispose() {
+    widget.feedback.gameplayVisible(false);
     WidgetsBinding.instance.removeObserver(this);
     _sub?.cancel();
     _visuals.dispose();
@@ -156,6 +158,7 @@ class _GameplayScreenState extends State<GameplayScreen>
           listenWhen: (a, b) => a.overlay != b.overlay,
           listener: (context, s) {
             if (s.overlay != GameOverlay.paused) _confirmRestart = false;
+            if (s.overlay == GameOverlay.stuck) widget.feedback.stuck();
             _syncOverlay(s.overlay);
           },
         ),
@@ -294,7 +297,7 @@ class _GameplayScreenState extends State<GameplayScreen>
                   child: CelebrationLayer(
                     seed: s.level.id,
                     reducedMotion: _visuals.reducedMotion,
-                    onStamp: widget.feedback.success,
+                    onStamp: () => _celebrate(s),
                   ),
                 ),
             ],
@@ -510,6 +513,17 @@ class _GameplayScreenState extends State<GameplayScreen>
     }
   }
 
+  /// The stamp lands: daily cue, "high score" for a new best, else success.
+  void _celebrate(GameSessionState s) {
+    if (s.result?.isDaily ?? false) {
+      widget.feedback.daily();
+    } else if (_cubit.state.reward?.newBest ?? false) {
+      widget.feedback.best();
+    } else {
+      widget.feedback.success();
+    }
+  }
+
   // ------------------------------------------------- purchase feedback
 
   Future<void> _hintFromCoins(AppLocalizations l) async {
@@ -541,6 +555,7 @@ class _GameplayScreenState extends State<GameplayScreen>
     final ok = await _cubit.rescue(viaAd: viaAd);
     if (!mounted) return;
     if (ok) {
+      widget.feedback.rescue();
       showBpToast(
         context,
         pro || viaAd ? l.rescueToast : l.rescuePaidToast(GameEconomy.rescueCoinCost),
