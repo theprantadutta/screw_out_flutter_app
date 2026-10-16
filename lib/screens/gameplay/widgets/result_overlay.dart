@@ -206,7 +206,14 @@ class _ResultCardState extends State<ResultCard> {
     if (reward == null || _start != null || _counted) return;
     if (widget.reducedMotion || reward.coins == 0) {
       _shown = reward.coins;
-      _finish();
+      // Runs from initState / didUpdateWidget, i.e. inside the parent's
+      // build: the parent reacts with setState, so report after the frame
+      // (calling it here threw "setState() called during build" and the
+      // card became a red error box on every 0-coin replay).
+      _counted = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) widget.onCoinsCounted?.call();
+      });
       return;
     }
     _start = Timer(const Duration(milliseconds: 480), () {
