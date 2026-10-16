@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../data/database/app_database.dart';
+import '../../presentation/bloc/display/display_cubit.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
@@ -67,7 +68,8 @@ void configureDependencies({required bool firebase, AppDatabase? database}) {
   getIt
     ..registerLazySingleton<SettingsCubit>(() => SettingsCubit(DriftSettingsStore(getIt<AppDatabase>())))
     ..registerLazySingleton<ProgressCubit>(() => ProgressCubit(getIt<ProgressService>()))
-    ..registerLazySingleton<PremiumCubit>(() => PremiumCubit(getIt<AppDatabase>()));
+    ..registerLazySingleton<PremiumCubit>(() => PremiumCubit(getIt<AppDatabase>()))
+    ..registerLazySingleton<DisplayCubit>(() => DisplayCubit(DriftDisplayPreferenceStore(getIt<AppDatabase>())));
 
   // Accounts.
   getIt

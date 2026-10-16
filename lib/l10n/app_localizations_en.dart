@@ -429,6 +429,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generalSection => 'GENERAL';
 
   @override
+  String get highRefreshRate => 'High refresh rate';
+
+  @override
+  String highRefreshRateOn(int hz) {
+    return 'Smoother motion · up to $hz Hz · uses more battery';
+  }
+
+  @override
+  String get highRefreshRateOff => 'Smoother motion · uses more battery';
+
+  @override
+  String get highRefreshRateUnsupported => 'This screen runs at a single rate';
+
+  @override
+  String get highRefreshRateBattery => 'Limited by battery saver right now';
+
+  @override
+  String get highRefreshRateHeat => 'Limited while the phone is warm';
+
+  @override
+  String highRefreshRateNow(int hz) {
+    return 'Now $hz Hz';
+  }
+
+  @override
   String get language => 'Language';
 
   @override
@@ -497,6 +522,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicy => 'Privacy policy';
+
+  @override
+  String get termsOfUse => 'Terms of use';
+
+  @override
+  String get refundPolicy => 'Refund policy';
 
   @override
   String get privacyChoices => 'Privacy choices';

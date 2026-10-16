@@ -11,6 +11,7 @@ import '../../core/network/api_service.dart';
 import '../../data/database/app_database.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
 import '../app_log.dart';
+import '../cosmetics.dart';
 import '../ports.dart';
 import '../progress_service.dart';
 import '../sync/sync_payloads.dart';
@@ -23,9 +24,15 @@ import 'purchase_mapping.dart';
 ///  1. listeners attached, THEN the connection opened;
 ///  2. every paid purchase is verified by the API before delivery;
 ///  3. only then finished (consumed for coin packs, acknowledged otherwise);
-///  4. transient verification failures are kept and retried on resume;
+///  4. transient verification failures are delivered locally (Pro / no-ads /
+///     themes, provisional for 3 days), queued, retried on resume, and
+///     finished so Play never refunds a real purchase;
 ///  5. delivery = apply the API's entitlements (Pro / no-ads / owned themes)
-///     and credit its pending coin grants exactly once.
+///     and credit its pending coin grants exactly once. Coin packs are only
+///     credited through those server grants, never provisionally, so a
+///     retried receipt cannot pay twice;
+///  6. rejected receipts: Android left unfinished (Play refunds them),
+///     iOS finished (StoreKit would replay them forever).
 class PurchaseService implements PurchasesPort {
   PurchaseService({
     required ApiService api,
@@ -64,8 +71,14 @@ class PurchaseService implements PurchasesPort {
   final Set<String> _delivered = {};
   final Set<String> _fulfilling = {};
 
+  /// Bare product ids currently being verified (resume watchdog).
+  final Set<String> _verifyingProducts = {};
+  Timer? _watchdog;
+  ProvisionalEntitlements _provisional = const ProvisionalEntitlements({});
+
   static const _pendingKey = 'pending_purchase_verifications';
   static const _deliveredKey = 'delivered_purchase_ids';
+  static const _provisionalKey = 'provisional_entitlements';
 
   static bool get _supported => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
@@ -75,6 +88,8 @@ class PurchaseService implements PurchasesPort {
     try {
       final prefs = await SharedPreferences.getInstance();
       _delivered.addAll(prefs.getStringList(_deliveredKey) ?? const []);
+      final rawProvisional = prefs.getString(_provisionalKey);
+      if (rawProvisional != null) _provisional = ProvisionalEntitlements.fromJson(jsonDecode(rawProvisional));
       // Listeners BEFORE the connection: StoreKit replays unfinished
       // transactions as soon as it is up.
       _purchaseSub = _iap.purchaseUpdatedListener.listen((p) => unawaited(_onPurchaseUpdated(p)));
@@ -106,7 +121,7 @@ class PurchaseService implements PurchasesPort {
   String? priceOf(String productId) {
     final p = _products[ProductIds.stripPrefix(productId)];
     if (p == null) return null;
-    return p.displayPrice;
+    return displayPriceFor(p);
   }
 
   @override
@@ -198,6 +213,8 @@ class PurchaseService implements PurchasesPort {
   Future<PurchaseOutcome> _fulfil(Purchase purchase) async {
     final identity = purchaseIdentity(purchase);
     if (identity != null && !_fulfilling.add(identity)) return PurchaseOutcome.pending;
+    final bare = ProductIds.stripPrefix(purchase.productId);
+    _verifyingProducts.add(bare);
     try {
       final consumable = ProductIds.isConsumable(purchase.productId);
       if (identity != null && _delivered.contains(identity)) {
@@ -205,32 +222,74 @@ class PurchaseService implements PurchasesPort {
         return PurchaseOutcome.granted;
       }
       final payload = backendPayloadFor(purchase);
-      if (payload == null) return PurchaseOutcome.failed;
+      if (payload == null) {
+        // No token / JWS: nothing to verify. Same as a rejection.
+        if (_isIOS) await _finish(purchase, consumable: consumable);
+        return PurchaseOutcome.failed;
+      }
       final result = await _api.verifyPurchase(payload.toVerifyBody());
-      switch (classifyVerify(result)) {
+      final outcome = classifyVerify(result);
+      final action = actionFor(outcome, isIOS: _isIOS);
+      if (outcome == VerifyOutcome.granted) {
+        await _clearProvisional(bare);
+        await _applyEntitlements(result.value?['entitlements']);
+      } else if (action.deliver) {
+        await _deliverProvisional(bare);
+      } else {
+        await _clearProvisional(bare);
+      }
+      if (action.queueRetry) await _queuePending(payload);
+      if (action.markDelivered && identity != null) await _markDelivered(identity);
+      if (action.finish) await _finish(purchase, consumable: consumable);
+      switch (outcome) {
         case VerifyOutcome.granted:
-          await _applyEntitlements(result.value?['entitlements']);
-          if (identity != null) await _markDelivered(identity);
-          await _finish(purchase, consumable: consumable);
           _analytics.track(
-            ProductIds.stripPrefix(purchase.productId) == 'remove_ads' ? 'remove_ads_purchase' : 'purchase_completed',
-            {'product_id': ProductIds.stripPrefix(purchase.productId), 'product_type': productTypeFor(purchase.productId)},
+            bare == Products.removeAds ? 'remove_ads_purchase' : 'purchase_completed',
+            {'product_id': bare, 'product_type': productTypeFor(bare)},
           );
           return PurchaseOutcome.granted;
         case VerifyOutcome.transient:
-          await _queuePending(payload);
           return PurchaseOutcome.pending;
         case VerifyOutcome.needsSignIn:
-          await _queuePending(payload);
           return PurchaseOutcome.needsSignIn;
         case VerifyOutcome.rejected:
-          // The store says no: finish so it stops replaying, grant nothing.
-          await _finish(purchase, consumable: consumable);
           return PurchaseOutcome.failed;
       }
     } finally {
+      _verifyingProducts.remove(bare);
       if (identity != null) _fulfilling.remove(identity);
     }
+  }
+
+  static bool get _isIOS => !kIsWeb && Platform.isIOS;
+
+  /// Local delivery while the receipt waits for the API (transient verdict).
+  Future<void> _deliverProvisional(String bare) async {
+    if (bare == Products.removeAds || ProductIds.isSubscription(bare)) {
+      _provisional = _provisional.add(bare, DateTime.now().toUtc());
+      await _saveProvisional();
+      final sub = ProductIds.isSubscription(bare);
+      await _premium.apply(
+        isPro: _premium.state.isPro || sub,
+        proExpiresAt: sub ? _provisional.expiry[bare] : _premium.state.proExpiresAt,
+        proPlan: sub ? (bare == Products.proYearly ? 'yearly' : 'monthly') : _premium.state.proPlan,
+        adsRemoved: _premium.state.adsRemoved || bare == Products.removeAds,
+      );
+    }
+    final themes = Cosmetics.themesForProduct(bare);
+    if (themes.isNotEmpty) await _progress.grantThemes(themes, 'purchase');
+    // Coin packs: credited only via the server grant once verified.
+  }
+
+  Future<void> _clearProvisional(String bare) async {
+    if (!_provisional.expiry.containsKey(bare)) return;
+    _provisional = _provisional.remove(bare);
+    await _saveProvisional();
+  }
+
+  Future<void> _saveProvisional() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_provisionalKey, jsonEncode(_provisional.toJson()));
   }
 
   Future<void> _finish(Purchase purchase, {required bool consumable}) async {
@@ -256,7 +315,16 @@ class PurchaseService implements PurchasesPort {
   Future<void> _applyEntitlements(Object? json) async {
     final e = EntitlementsSnapshot.fromJson(json);
     if (e == null) return;
-    await _premium.apply(isPro: e.isPro, proExpiresAt: e.proExpiresAt, proPlan: e.proPlan, adsRemoved: e.adsRemoved);
+    // A receipt still waiting for verification keeps its local delivery.
+    final now = DateTime.now().toUtc();
+    final provisionalPro = !e.isPro && _provisional.pro(now);
+    final plan = _provisional.active(Products.proYearly, now) ? Products.proYearly : Products.proMonthly;
+    await _premium.apply(
+      isPro: e.isPro || provisionalPro,
+      proExpiresAt: provisionalPro ? _provisional.expiry[plan] : e.proExpiresAt,
+      proPlan: provisionalPro ? (plan == Products.proYearly ? 'yearly' : 'monthly') : e.proPlan,
+      adsRemoved: e.adsRemoved || _provisional.adsRemoved(now),
+    );
     if (e.purchasedThemes.isNotEmpty) await _progress.grantThemes(e.purchasedThemes, 'purchase');
     await CoinGrants(_db).credit(e.pendingGrants);
   }
@@ -281,19 +349,25 @@ class PurchaseService implements PurchasesPort {
       final payload = BackendPurchasePayload.fromJson((jsonDecode(raw) as Map).cast());
       if (payload == null) continue;
       final r = await _api.verifyPurchase(payload.toVerifyBody());
+      final bare = ProductIds.stripPrefix(payload.productId);
       switch (classifyVerify(r)) {
         case VerifyOutcome.granted:
+          await _clearProvisional(bare);
           await _applyEntitlements(r.value?['entitlements']);
         case VerifyOutcome.transient:
         case VerifyOutcome.needsSignIn:
           remaining.add(raw);
         case VerifyOutcome.rejected:
-          break;
+          await _clearProvisional(bare);
       }
     }
     await prefs.setStringList(_pendingKey, remaining);
-    // A fresh reconcile finishes anything verified above.
-    if (pending.length != remaining.length) unawaited(reconcileStoreState());
+    // A fresh reconcile finishes anything verified above; the refresh drops
+    // a rejected receipt's provisional entitlement.
+    if (pending.length != remaining.length) {
+      unawaited(reconcileStoreState());
+      unawaited(refreshEntitlements());
+    }
   }
 
   /// Runs every purchase the store still reports through delivery
@@ -319,8 +393,18 @@ class PurchaseService implements PurchasesPort {
     await refreshEntitlements();
   }
 
-  /// On resume.
+  /// On resume. The billing sheet closing is itself a resume, and a
+  /// backed-out sheet on Android sometimes reports nothing: a watchdog
+  /// releases any buy() still waiting once nothing is being verified for it.
   Future<void> onResume() async {
+    _watchdog?.cancel();
+    if (_waiting.isNotEmpty) {
+      _watchdog = Timer(const Duration(seconds: 6), () {
+        for (final id in [..._waiting.keys]) {
+          if (!_verifyingProducts.contains(id)) _complete(id, PurchaseOutcome.cancelled);
+        }
+      });
+    }
     await _premium.recheckLocalExpiry();
     if (!_api.isAuthenticated) return;
     await retryPendingVerifications();
@@ -335,9 +419,17 @@ class PurchaseService implements PurchasesPort {
     await prefs.setStringList(_deliveredKey, ids.length > 500 ? ids.sublist(ids.length - 500) : ids);
   }
 
-  void dispose() {
-    _purchaseSub?.cancel();
-    _errorSub?.cancel();
+  Future<void> dispose() async {
+    _watchdog?.cancel();
+    await _purchaseSub?.cancel();
+    await _errorSub?.cancel();
+    if (_available) {
+      try {
+        await _iap.endConnection();
+      } on Object catch (e) {
+        AppLog.warn('endConnection failed: $e');
+      }
+    }
   }
 }
 

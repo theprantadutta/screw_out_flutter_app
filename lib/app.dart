@@ -8,6 +8,7 @@ import 'core/di/injection.dart';
 import 'core/theme/app_theme.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
+import 'presentation/bloc/display/display_cubit.dart';
 import 'presentation/bloc/premium/premium_cubit.dart';
 import 'presentation/bloc/progress/progress_cubit.dart';
 import 'presentation/bloc/settings/settings_cubit.dart';
@@ -17,7 +18,8 @@ import 'services/progress_service.dart';
 
 /// Root widget. Provider contract for every screen:
 ///
-/// * Blocs: [SettingsCubit], [ProgressCubit], [PremiumCubit], [AuthCubit].
+/// * Blocs: [SettingsCubit], [ProgressCubit], [PremiumCubit], [AuthCubit],
+///   [DisplayCubit].
 /// * Repositories: [LevelRepository], [ProgressService], [AdsPort],
 ///   [AnalyticsPort], [PurchasesPort], [SoundPort].
 class ScrewOutApp extends StatelessWidget {
@@ -41,6 +43,7 @@ class ScrewOutApp extends StatelessWidget {
         BlocProvider<ProgressCubit>.value(value: getIt<ProgressCubit>()),
         BlocProvider<PremiumCubit>.value(value: getIt<PremiumCubit>()),
         BlocProvider<AuthCubit>.value(value: getIt<AuthCubit>()),
+        BlocProvider<DisplayCubit>.value(value: getIt<DisplayCubit>()),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         buildWhen: (a, b) => a.localeCode != b.localeCode,

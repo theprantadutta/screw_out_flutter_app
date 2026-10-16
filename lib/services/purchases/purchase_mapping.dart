@@ -33,21 +33,41 @@ abstract final class ProductIds {
   static bool isConsumable(String id) => _consumables.contains(stripPrefix(id));
 }
 
-/// What the backend said about a receipt.
+/// What the backend said about a receipt (migration playbook §5).
 enum VerifyOutcome {
-  /// Verified: deliver and finish the store transaction.
+  /// `is_valid: true` — deliver, mark delivered, finish.
   granted,
 
-  /// Could not decide now (store API down, deferred payment, 5xx, offline):
-  /// keep the receipt, do not finish.
+  /// Could not decide now (no reply / 401 / 5xx, `PURCHASE_PENDING`,
+  /// `PURCHASE_VERIFICATION_UNAVAILABLE`) — deliver locally, queue the receipt
+  /// for retry, finish (so Play does not refund a real purchase).
   transient,
 
-  /// Guest account: resolves once they sign in. Keep the receipt.
+  /// `ANONYMOUS_ACCOUNT_PURCHASE_BLOCKED` — handled like [transient]; the
+  /// queued receipt verifies once the player signs in.
   needsSignIn,
 
-  /// The store said no / unknown product: finish, grant nothing.
+  /// Explicit `is_valid: false` (or the store said no / unknown product) —
+  /// deliver nothing. Android: do NOT finish (Play refunds it within three
+  /// days). iOS: finish, or StoreKit replays it on every launch.
   rejected,
 }
+
+/// What the client does with a purchase for a given verdict.
+final class VerdictAction {
+  const VerdictAction({required this.deliver, required this.queueRetry, required this.finish, required this.markDelivered});
+  final bool deliver;
+  final bool queueRetry;
+  final bool finish;
+  final bool markDelivered;
+}
+
+VerdictAction actionFor(VerifyOutcome outcome, {required bool isIOS}) => switch (outcome) {
+  VerifyOutcome.granted => const VerdictAction(deliver: true, queueRetry: false, finish: true, markDelivered: true),
+  VerifyOutcome.transient ||
+  VerifyOutcome.needsSignIn => const VerdictAction(deliver: true, queueRetry: true, finish: true, markDelivered: false),
+  VerifyOutcome.rejected => VerdictAction(deliver: false, queueRetry: false, finish: isIOS, markDelivered: false),
+};
 
 /// Classifies a `/purchases/verify` result by the contract `code`.
 VerifyOutcome classifyVerify(ApiResult<Map<String, dynamic>> r) {
@@ -176,14 +196,132 @@ RequestPurchaseProps buildPurchaseRequest({required ProductCommon product, requi
   ));
 }
 
-/// Base plan first (no trials configured for Screw Out).
+/// Android subscriptions need an offer token: the free-trial offer when the
+/// store offers one (Play only returns offers the user is eligible for),
+/// else the base plan, else the first.
 SubscriptionOffer? pickSubscriptionOffer(List<SubscriptionOffer> offers) {
   if (offers.isEmpty) return null;
+  for (final offer in offers) {
+    if (trialDaysFromOffer(offer) != null) return offer;
+  }
   for (final offer in offers) {
     final basePlan = offer.basePlanIdAndroid;
     if (basePlan != null && offer.id == basePlan) return offer;
   }
   return offers.first;
+}
+
+/// Price to show for a product. A subscription's `displayPrice` reads "Free"
+/// when a trial phase comes first, so subscriptions use the base plan's last
+/// non-zero pricing phase.
+String displayPriceFor(ProductCommon product) {
+  final offers = switch (product) {
+    ProductSubscriptionAndroid p => p.subscriptionOffers,
+    _ => null,
+  };
+  return recurringPriceFromOffers(offers) ?? product.displayPrice;
+}
+
+/// Play's recurrenceMode for the perpetual base price.
+const _infiniteRecurring = 1;
+
+/// Formatted price of the recurring (non-zero) phase, base plan first.
+String? recurringPriceFromOffers(List<SubscriptionOffer>? offers) {
+  if (offers == null) return null;
+  for (final offer in _basePlanFirst(offers)) {
+    final phases = offer.pricingPhasesAndroid?.pricingPhaseList;
+    if (phases == null) continue;
+    PricingPhaseAndroid? recurring;
+    for (final phase in phases) {
+      if (_micros(phase) > 0) recurring = phase;
+    }
+    if (recurring != null && recurring.formattedPrice.isNotEmpty) return recurring.formattedPrice;
+  }
+  return null;
+}
+
+/// Days of free trial one offer carries, or null when it is not a trial.
+/// Android: a zero-priced phase that does not recur forever. iOS: a
+/// free-trial payment mode with a period.
+int? trialDaysFromOffer(SubscriptionOffer offer) {
+  final phases = offer.pricingPhasesAndroid?.pricingPhaseList;
+  if (phases != null) {
+    for (final phase in phases) {
+      if (_micros(phase) != 0) continue;
+      if (phase.recurrenceMode == _infiniteRecurring) continue;
+      final days = iso8601PeriodInDays(phase.billingPeriod);
+      if (days == null) continue;
+      final cycles = phase.billingCycleCount > 0 ? phase.billingCycleCount : 1;
+      return days * cycles;
+    }
+    return null;
+  }
+  if (offer.paymentMode != PaymentMode.FreeTrial) return null;
+  final period = offer.period;
+  if (period == null || period.value <= 0) return null;
+  final unitDays = switch (period.unit) {
+    SubscriptionPeriodUnit.Day => 1,
+    SubscriptionPeriodUnit.Week => 7,
+    SubscriptionPeriodUnit.Month => 30,
+    SubscriptionPeriodUnit.Year => 365,
+    SubscriptionPeriodUnit.Unknown => 0,
+  };
+  if (unitDays == 0) return null;
+  final count = (offer.periodCount ?? 1) > 0 ? (offer.periodCount ?? 1) : 1;
+  final days = period.value * unitDays * count;
+  return days > 0 ? days : null;
+}
+
+/// Days in an ISO-8601 period such as "P3D", "P1W", "P1M".
+int? iso8601PeriodInDays(String period) {
+  final match = RegExp(r'^P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)W)?(?:(\d+)D)?$').firstMatch(period);
+  if (match == null) return null;
+  int part(int group) => int.tryParse(match.group(group) ?? '') ?? 0;
+  final days = part(1) * 365 + part(2) * 30 + part(3) * 7 + part(4);
+  return days > 0 ? days : null;
+}
+
+int _micros(PricingPhaseAndroid phase) => int.tryParse(phase.priceAmountMicros) ?? -1;
+
+Iterable<SubscriptionOffer> _basePlanFirst(List<SubscriptionOffer> offers) {
+  bool isBasePlan(SubscriptionOffer o) => o.basePlanIdAndroid != null && o.id == o.basePlanIdAndroid;
+  return [...offers.where(isBasePlan), ...offers.where((o) => !isBasePlan(o))];
+}
+
+/// Locally-delivered entitlements while a receipt waits for verification
+/// (transient verdicts). Server entitlements win once the receipt verifies
+/// or is rejected; an entry also expires on its own after [ttl].
+final class ProvisionalEntitlements {
+  const ProvisionalEntitlements(this.expiry);
+
+  static const ttl = Duration(days: 3);
+
+  /// Bare product id → expiry.
+  final Map<String, DateTime> expiry;
+
+  static ProvisionalEntitlements fromJson(Object? json) {
+    final out = <String, DateTime>{};
+    if (json is Map) {
+      json.forEach((k, v) {
+        final t = DateTime.tryParse('$v');
+        if (t != null) out['$k'] = t.toUtc();
+      });
+    }
+    return ProvisionalEntitlements(out);
+  }
+
+  Map<String, String> toJson() => {for (final e in expiry.entries) e.key: e.value.toIso8601String()};
+
+  bool active(String bareId, DateTime now) {
+    final t = expiry[bareId];
+    return t != null && t.isAfter(now);
+  }
+
+  bool pro(DateTime now) => active(Products.proMonthly, now) || active(Products.proYearly, now);
+  bool adsRemoved(DateTime now) => active(Products.removeAds, now);
+
+  ProvisionalEntitlements add(String bareId, DateTime now) => ProvisionalEntitlements({...expiry, bareId: now.add(ttl)});
+  ProvisionalEntitlements remove(String bareId) => ProvisionalEntitlements({...expiry}..remove(bareId));
 }
 
 /// `EntitlementsDto` (API_CONTRACT §4) as client values.

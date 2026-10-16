@@ -65,6 +65,7 @@ dependencies:
   intl: ^0.20.3
   in_app_review: ^2.0.12
   in_app_update: ^5.0.0
+  refresh_rate: ^2.0.1
   flutter_native_splash: ^2.4.8
   flutter_localizations:
     sdk: flutter

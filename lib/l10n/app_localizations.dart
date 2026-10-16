@@ -778,6 +778,48 @@ abstract class AppLocalizations {
   /// **'GENERAL'**
   String get generalSection;
 
+  /// No description provided for @highRefreshRate.
+  ///
+  /// In en, this message translates to:
+  /// **'High refresh rate'**
+  String get highRefreshRate;
+
+  /// No description provided for @highRefreshRateOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Smoother motion · up to {hz} Hz · uses more battery'**
+  String highRefreshRateOn(int hz);
+
+  /// No description provided for @highRefreshRateOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Smoother motion · uses more battery'**
+  String get highRefreshRateOff;
+
+  /// No description provided for @highRefreshRateUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This screen runs at a single rate'**
+  String get highRefreshRateUnsupported;
+
+  /// No description provided for @highRefreshRateBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited by battery saver right now'**
+  String get highRefreshRateBattery;
+
+  /// No description provided for @highRefreshRateHeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited while the phone is warm'**
+  String get highRefreshRateHeat;
+
+  /// No description provided for @highRefreshRateNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Now {hz} Hz'**
+  String highRefreshRateNow(int hz);
+
   /// No description provided for @language.
   ///
   /// In en, this message translates to:
@@ -909,6 +951,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy policy'**
   String get privacyPolicy;
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use'**
+  String get termsOfUse;
+
+  /// No description provided for @refundPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund policy'**
+  String get refundPolicy;
 
   /// No description provided for @privacyChoices.
   ///

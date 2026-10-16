@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/blueprint_tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
+import '../../presentation/bloc/display/display_cubit.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
 import '../../router/routes.dart';
@@ -17,7 +18,9 @@ import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
 
-const kPrivacyPolicyUrl = 'https://screwout.pranta.dev/privacy';
+/// Hosted by privacy-project (Projects/screw_out); bundled copies live in
+/// assets/legal/.
+String legalUrl(String doc) => 'https://legal.pranta.dev/$doc/html?projectName=screw_out';
 
 /// 15 — Settings. Toggles persist immediately (no Save).
 class SettingsScreen extends StatelessWidget {
@@ -43,6 +46,7 @@ class SettingsScreen extends StatelessWidget {
           _ToggleRow(label: l.notifications, caption: l.notificationsCaption, value: s.dailyReminder, onChanged: cubit.setDailyReminder, last: true),
           const SizedBox(height: 18),
           _Section(l.generalSection),
+          const _RefreshRateRow(),
           _LinkRow(
             label: l.language,
             value: l.languageEnglish,
@@ -60,7 +64,17 @@ class SettingsScreen extends StatelessWidget {
           _LinkRow(
             label: l.privacyPolicy,
             icon: Symbols.open_in_new_sharp,
-            onTap: () => launchUrl(Uri.parse(kPrivacyPolicyUrl), mode: LaunchMode.externalApplication),
+            onTap: () => launchUrl(Uri.parse(legalUrl('privacy')), mode: LaunchMode.externalApplication),
+          ),
+          _LinkRow(
+            label: l.termsOfUse,
+            icon: Symbols.open_in_new_sharp,
+            onTap: () => launchUrl(Uri.parse(legalUrl('terms')), mode: LaunchMode.externalApplication),
+          ),
+          _LinkRow(
+            label: l.refundPolicy,
+            icon: Symbols.open_in_new_sharp,
+            onTap: () => launchUrl(Uri.parse(legalUrl('refund')), mode: LaunchMode.externalApplication),
           ),
           if (ads.privacyOptionsRequired)
             _LinkRow(label: l.privacyChoices, icon: Symbols.chevron_right_sharp, onTap: ads.showPrivacyOptions),
@@ -73,6 +87,43 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 40),
           const _VersionFooter(),
         ],
+      ),
+    );
+  }
+}
+
+/// High refresh rate (opt-in, device-only). The caption explains what the
+/// display can do and when the OS is capping it anyway.
+class _RefreshRateRow extends StatelessWidget {
+  const _RefreshRateRow();
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final d = context.watch<DisplayCubit>().state;
+    final unsupported = d.info != null && !d.supported;
+    String caption;
+    if (unsupported) {
+      caption = l.highRefreshRateUnsupported;
+    } else if (d.highRefreshRate && d.throttledByBattery) {
+      caption = l.highRefreshRateBattery;
+    } else if (d.highRefreshRate && d.throttledByHeat) {
+      caption = l.highRefreshRateHeat;
+    } else if (d.highRefreshRate && d.currentHz != null) {
+      caption = '${d.maxHz == null ? l.highRefreshRateOff : l.highRefreshRateOn(d.maxHz!)} · ${l.highRefreshRateNow(d.currentHz!)}';
+    } else {
+      caption = d.maxHz != null && d.supported ? l.highRefreshRateOn(d.maxHz!) : l.highRefreshRateOff;
+    }
+    return IgnorePointer(
+      ignoring: unsupported,
+      child: Opacity(
+        opacity: unsupported ? .45 : 1,
+        child: _ToggleRow(
+          label: l.highRefreshRate,
+          caption: caption,
+          value: d.highRefreshRate && !unsupported,
+          onChanged: context.read<DisplayCubit>().setHighRefreshRate,
+        ),
       ),
     );
   }

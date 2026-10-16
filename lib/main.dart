@@ -17,6 +17,7 @@ import 'core/theme/blueprint_tokens.dart';
 import 'data/database/app_database.dart';
 import 'firebase_options.dart';
 import 'game/generator/daily.dart';
+import 'presentation/bloc/display/display_cubit.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
 import 'presentation/bloc/premium/premium_cubit.dart';
 import 'presentation/bloc/progress/progress_cubit.dart';
@@ -55,7 +56,11 @@ Future<void> main() async {
     AppLog.error('Startup failed', e, s);
     runApp(_StartupFailureApp(error: e));
   } finally {
-    binding.addPostFrameCallback((_) => FlutterNativeSplash.remove());
+    binding.addPostFrameCallback((_) {
+      FlutterNativeSplash.remove();
+      // The refresh-rate plugin needs an attached view.
+      if (getIt.isRegistered<DisplayCubit>()) unawaited(getIt<DisplayCubit>().initialize());
+    });
   }
 }
 
@@ -210,6 +215,8 @@ class _AppLifecycle with WidgetsBindingObserver {
 
   Future<void> _onResume() async {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    // Android drops the window's preferred display mode in the background.
+    unawaited(getIt<DisplayCubit>().apply());
     getIt<TelemetryRecorder>().onForeground();
     if (firebase) unawaited(getIt<UserService>().ensureBackendSession());
     getIt<SyncEngine>().schedule(immediate: true);

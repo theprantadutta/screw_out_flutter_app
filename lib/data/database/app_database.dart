@@ -129,6 +129,21 @@ class LevelPacks extends Table {
   Set<Column<Object>> get primaryKey => {chapter};
 }
 
+/// Device-only preferences (single row, id = 1). Never synced: whether
+/// 120 Hz is worth the battery depends on the hardware in your hand, so a
+/// phone and a tablet on the same account may disagree.
+class DevicePreferences extends Table {
+  IntColumn get id => integer().withDefault(const Constant(1))();
+
+  /// Opt-in (snake-classic lesson: max refresh by default starved the frame
+  /// budget on low-end phones).
+  BoolColumn get highRefreshRate => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
 /// Sync outbox drained by the SyncEngine.
 class SyncQueue extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -175,6 +190,7 @@ abstract final class SyncDataType {
     UnlockedItems,
     DailyCompletions,
     Entitlements,
+    DevicePreferences,
     SavedGames,
     LevelPacks,
     SyncQueue,
@@ -204,6 +220,7 @@ class AppDatabase extends _$AppDatabase {
     await into(gameSettings).insert(GameSettingsCompanion.insert(), mode: InsertMode.insertOrIgnore);
     await into(playerProfile).insert(PlayerProfileCompanion.insert(), mode: InsertMode.insertOrIgnore);
     await into(entitlements).insert(EntitlementsCompanion.insert(), mode: InsertMode.insertOrIgnore);
+    await into(devicePreferences).insert(DevicePreferencesCompanion.insert(), mode: InsertMode.insertOrIgnore);
     await into(unlockedItems).insert(
       UnlockedItemsCompanion.insert(
         itemType: 'theme',

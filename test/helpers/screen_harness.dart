@@ -7,7 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:screw_out/data/database/app_database.dart';
 import 'package:screw_out/l10n/app_localizations.dart';
+import 'package:refresh_rate/refresh_rate.dart' show DisplayInfo;
 import 'package:screw_out/presentation/bloc/auth/auth_cubit.dart';
+import 'package:screw_out/presentation/bloc/display/display_cubit.dart';
 import 'package:screw_out/presentation/bloc/premium/premium_cubit.dart';
 import 'package:screw_out/presentation/bloc/progress/progress_cubit.dart';
 import 'package:screw_out/presentation/bloc/settings/settings_cubit.dart';
@@ -26,6 +28,7 @@ class ScreenEnv {
   final PremiumCubit premium;
   final SettingsCubit settings;
   final AuthCubit auth;
+  late final DisplayCubit display = DisplayCubit(DriftDisplayPreferenceStore(db), backend: const NoRefreshRate());
   AdsPort ads = const NoAds();
   PurchasesPort purchases = const FakePurchases();
 
@@ -97,6 +100,7 @@ class ScreenEnv {
         BlocProvider<ProgressCubit>.value(value: progressCubit),
         BlocProvider<PremiumCubit>.value(value: premium),
         BlocProvider<AuthCubit>.value(value: auth),
+        BlocProvider<DisplayCubit>.value(value: display),
       ],
       child: router != null
           ? MaterialApp.router(
@@ -150,4 +154,17 @@ Future<void> settle(WidgetTester tester) async {
   await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50)));
   await tester.pump(const Duration(milliseconds: 1500));
   await tester.pump(const Duration(milliseconds: 100));
+}
+
+/// Refresh-rate backend for tests: no platform channel, no display info.
+class NoRefreshRate implements RefreshRateBackend {
+  const NoRefreshRate();
+  @override
+  Future<void> preferMax() async {}
+  @override
+  Future<void> preferDefault() async {}
+  @override
+  Future<DisplayInfo?> read() async => null;
+  @override
+  Stream<DisplayInfo> get changes => const Stream.empty();
 }

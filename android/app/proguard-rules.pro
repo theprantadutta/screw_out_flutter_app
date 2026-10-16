@@ -24,7 +24,11 @@
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
 
-# Play Billing + flutter_inapp_purchase (OpenIAP) ship consumer rules;
-# silence optional references only.
+# Play Billing + flutter_inapp_purchase (OpenIAP). Kept explicitly per the
+# migration playbook: R8 full mode stripped OpenIAP's reflective bridge.
+-keep class dev.hyo.** { *; }
+-keep class io.github.hyochan.** { *; }
+-keep class com.android.vending.billing.**
+-keep class com.android.billingclient.** { *; }
 -dontwarn dev.hyo.**
 -dontwarn io.github.hyochan.**
