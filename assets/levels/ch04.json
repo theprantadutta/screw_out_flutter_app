@@ -1,0 +1,3582 @@
+{
+ "chapter": 4,
+ "name": "Interlocking",
+ "goal": "DEPENDENCIES & ORDER",
+ "newMechanic": "SHARED SUPPORTS",
+ "version": 1,
+ "levels": [
+  {
+   "id": 61,
+   "code": "DWG 061",
+   "chapter": 4,
+   "title": "Interlock",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "objective": "→ ONE PLATE CAN HOLD DOWN SEVERAL OTHERS",
+   "difficulty": 2,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 148,
+     "y": 16,
+     "w": 104,
+     "h": 268,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 36,
+     "y": 100,
+     "w": 204,
+     "h": 64,
+     "r": 18,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 68,
+     "y": 52,
+     "w": 188,
+     "h": 108,
+     "r": 18,
+     "depth": 2,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 64,
+     "y": 220,
+     "w": 196,
+     "h": 68,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "circle",
+     "x": 196,
+     "y": 12,
+     "d": 68,
+     "depth": 3,
+     "pattern": 0,
+     "label": "PL-05"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 200,
+     "y": 105
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 172,
+     "y": 150
+    },
+    {
+     "id": "P0-2",
+     "panel": "P0",
+     "x": 228,
+     "y": 150
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 60,
+     "y": 132
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 104,
+     "y": 132
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 138,
+     "y": 132
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 131,
+     "y": 76
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 162,
+     "y": 106
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 195,
+     "y": 264
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 230,
+     "y": 46
+    }
+   ],
+   "solution": [
+    "P2-0",
+    "P2-1",
+    "P1-0",
+    "P1-1",
+    "P1-2",
+    "P0-0",
+    "P0-1",
+    "P0-2",
+    "P3-0",
+    "P4-0"
+   ]
+  },
+  {
+   "id": 62,
+   "code": "DWG 062",
+   "chapter": 4,
+   "title": "Gusset",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 5,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 48,
+     "y": 18,
+     "w": 204,
+     "h": 144,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 26,
+     "y": 174,
+     "w": 248,
+     "h": 40,
+     "r": 20,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 104,
+     "y": 50,
+     "w": 92,
+     "h": 228,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "circle",
+     "x": 164,
+     "y": 170,
+     "d": 112,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "circle",
+     "x": 24,
+     "y": 170,
+     "d": 112,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 62,
+     "y": 206,
+     "w": 176,
+     "h": 56,
+     "r": 18,
+     "depth": 3,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "circle",
+     "x": 164,
+     "y": 26,
+     "d": 76,
+     "depth": 3,
+     "pattern": 2,
+     "label": "PL-07"
+    },
+    {
+     "id": "P7",
+     "shape": "circle",
+     "x": 60,
+     "y": 26,
+     "d": 76,
+     "depth": 3,
+     "pattern": 3,
+     "label": "PL-08"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 72,
+     "y": 42
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 46,
+     "y": 194
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 254,
+     "y": 194
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 150,
+     "y": 164
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 150,
+     "y": 202
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 220,
+     "y": 226
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 220,
+     "y": 262
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 80,
+     "y": 226
+    },
+    {
+     "id": "P4-1",
+     "panel": "P4",
+     "x": 80,
+     "y": 262
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 150,
+     "y": 238
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 202,
+     "y": 64
+    },
+    {
+     "id": "P7-0",
+     "panel": "P7",
+     "x": 98,
+     "y": 64
+    }
+   ],
+   "solution": [
+    "P2-0",
+    "P5-0",
+    "P2-1",
+    "P3-0",
+    "P3-1",
+    "P1-1",
+    "P4-0",
+    "P4-1",
+    "P1-0",
+    "P6-0",
+    "P7-0",
+    "P0-0"
+   ]
+  },
+  {
+   "id": 63,
+   "code": "DWG 063",
+   "chapter": 4,
+   "title": "Keystone",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 6,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 22,
+     "y": 118,
+     "w": 256,
+     "h": 156,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 180,
+     "y": 26,
+     "w": 88,
+     "h": 244,
+     "r": 18,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 32,
+     "y": 26,
+     "w": 88,
+     "h": 244,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 44,
+     "y": 38,
+     "w": 96,
+     "h": 224,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 160,
+     "y": 38,
+     "w": 96,
+     "h": 224,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 54,
+     "y": 174,
+     "w": 192,
+     "h": 56,
+     "r": 18,
+     "depth": 3,
+     "pattern": 1,
+     "label": "PL-06"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 193,
+     "y": 250
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 254,
+     "y": 250
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 244,
+     "y": 148
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 224,
+     "y": 189
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 56,
+     "y": 148
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 76,
+     "y": 189
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 92,
+     "y": 113
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 116,
+     "y": 150
+    },
+    {
+     "id": "P3-2",
+     "panel": "P3",
+     "x": 116,
+     "y": 238
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 184,
+     "y": 62
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 182,
+     "y": 198
+    },
+    {
+     "id": "P5-1",
+     "panel": "P5",
+     "x": 150,
+     "y": 202
+    }
+   ],
+   "solution": [
+    "P3-0",
+    "P4-0",
+    "P5-0",
+    "P5-1",
+    "P1-0",
+    "P1-1",
+    "P0-0",
+    "P0-1",
+    "P3-1",
+    "P3-2",
+    "P2-0",
+    "P2-1"
+   ]
+  },
+  {
+   "id": 64,
+   "code": "DWG 064",
+   "chapter": 4,
+   "title": "Lap Joint",
+   "trayCapacity": 4,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 3,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 32,
+     "y": 52,
+     "w": 236,
+     "h": 180,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 164,
+     "y": 36,
+     "w": 72,
+     "h": 236,
+     "r": 18,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 64,
+     "y": 36,
+     "w": 72,
+     "h": 236,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 172,
+     "y": 28,
+     "w": 40,
+     "h": 208,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 88,
+     "y": 28,
+     "w": 40,
+     "h": 208,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 236,
+     "y": 68,
+     "w": 52,
+     "h": 168,
+     "r": 18,
+     "depth": 2,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "rect",
+     "x": 12,
+     "y": 68,
+     "w": 52,
+     "h": 168,
+     "r": 18,
+     "depth": 2,
+     "pattern": 2,
+     "label": "PL-07"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 111,
+     "y": 112
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 56,
+     "y": 208
+    },
+    {
+     "id": "P0-2",
+     "panel": "P0",
+     "x": 111,
+     "y": 208
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 188,
+     "y": 60
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 188,
+     "y": 193
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 88,
+     "y": 60
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 192,
+     "y": 97
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 108,
+     "y": 167
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 262,
+     "y": 124
+    },
+    {
+     "id": "P5-1",
+     "panel": "P5",
+     "x": 264,
+     "y": 180
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 38,
+     "y": 124
+    },
+    {
+     "id": "P6-1",
+     "panel": "P6",
+     "x": 36,
+     "y": 180
+    }
+   ],
+   "solution": [
+    "P3-0",
+    "P1-0",
+    "P1-1",
+    "P4-0",
+    "P2-0",
+    "P0-0",
+    "P0-2",
+    "P5-0",
+    "P5-1",
+    "P6-0",
+    "P6-1",
+    "P0-1"
+   ]
+  },
+  {
+   "id": 65,
+   "code": "DWG 065",
+   "chapter": 4,
+   "title": "Splice Plate",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 7,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 170,
+     "y": 42,
+     "w": 44,
+     "h": 228,
+     "r": 22,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 94,
+     "y": 14,
+     "w": 48,
+     "h": 272,
+     "r": 24,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 38,
+     "y": 18,
+     "w": 44,
+     "h": 200,
+     "r": 22,
+     "depth": 0,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 46,
+     "y": 54,
+     "w": 216,
+     "h": 128,
+     "r": 18,
+     "depth": 1,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 42,
+     "y": 50,
+     "w": 204,
+     "h": 64,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "circle",
+     "x": 106,
+     "y": 158,
+     "d": 80,
+     "depth": 2,
+     "pattern": 1,
+     "label": "PL-06"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 192,
+     "y": 118
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 192,
+     "y": 156
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 118,
+     "y": 105
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 118,
+     "y": 262
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 60,
+     "y": 85
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 60,
+     "y": 118
+    },
+    {
+     "id": "P2-2",
+     "panel": "P2",
+     "x": 60,
+     "y": 151
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 154,
+     "y": 78
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 190,
+     "y": 78
+    },
+    {
+     "id": "P3-2",
+     "panel": "P3",
+     "x": 238,
+     "y": 118
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 110,
+     "y": 74
+    },
+    {
+     "id": "P4-1",
+     "panel": "P4",
+     "x": 222,
+     "y": 90
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 146,
+     "y": 198
+    }
+   ],
+   "solution": [
+    "P4-0",
+    "P4-1",
+    "P3-0",
+    "P3-1",
+    "P3-2",
+    "P0-0",
+    "P0-1",
+    "P1-0",
+    "P1-1",
+    "P2-0",
+    "P2-1",
+    "P2-2",
+    "P5-0"
+   ]
+  },
+  {
+   "id": 66,
+   "code": "DWG 066",
+   "chapter": 4,
+   "title": "Dovetail",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 3,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 16,
+     "y": 94,
+     "w": 260,
+     "h": 128,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 100,
+     "y": 46,
+     "w": 80,
+     "h": 228,
+     "r": 18,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "circle",
+     "x": 192,
+     "y": 54,
+     "d": 64,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 28,
+     "y": 34,
+     "w": 64,
+     "h": 188,
+     "r": 18,
+     "depth": 1,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 176,
+     "y": 26,
+     "w": 108,
+     "h": 204,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 16,
+     "y": 166,
+     "w": 200,
+     "h": 68,
+     "r": 18,
+     "depth": 3,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "rect",
+     "x": 64,
+     "y": 78,
+     "w": 192,
+     "h": 40,
+     "r": 18,
+     "depth": 3,
+     "pattern": 2,
+     "label": "PL-07"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 146,
+     "y": 118
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 156,
+     "y": 70
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 124,
+     "y": 160
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 124,
+     "y": 198
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 224,
+     "y": 86
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 68,
+     "y": 198
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 230,
+     "y": 50
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 192,
+     "y": 200
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 84,
+     "y": 98
+    },
+    {
+     "id": "P6-1",
+     "panel": "P6",
+     "x": 192,
+     "y": 98
+    }
+   ],
+   "solution": [
+    "P4-0",
+    "P5-0",
+    "P1-1",
+    "P3-0",
+    "P6-0",
+    "P6-1",
+    "P1-0",
+    "P1-2",
+    "P0-0",
+    "P2-0"
+   ]
+  },
+  {
+   "id": 67,
+   "code": "DWG 067",
+   "chapter": 4,
+   "title": "Lintel",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 7,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 24,
+     "y": 128,
+     "w": 264,
+     "h": 156,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 12,
+     "y": 16,
+     "w": 256,
+     "h": 72,
+     "r": 28,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 96,
+     "y": 44,
+     "w": 84,
+     "h": 232,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "circle",
+     "x": 172,
+     "y": 48,
+     "d": 112,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 128,
+     "y": 20,
+     "w": 68,
+     "h": 216,
+     "r": 18,
+     "depth": 3,
+     "pattern": 0,
+     "label": "PL-05"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 156,
+     "y": 152
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 200,
+     "y": 206
+    },
+    {
+     "id": "P0-2",
+     "panel": "P0",
+     "x": 156,
+     "y": 260
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 140,
+     "y": 64
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 120,
+     "y": 121
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 120,
+     "y": 199
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 264,
+     "y": 104
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 203,
+     "y": 129
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 172,
+     "y": 44
+    },
+    {
+     "id": "P4-1",
+     "panel": "P4",
+     "x": 172,
+     "y": 92
+    },
+    {
+     "id": "P4-2",
+     "panel": "P4",
+     "x": 162,
+     "y": 212
+    }
+   ],
+   "solution": [
+    "P4-0",
+    "P4-1",
+    "P4-2",
+    "P0-1",
+    "P2-0",
+    "P2-1",
+    "P0-0",
+    "P0-2",
+    "P1-0",
+    "P3-0",
+    "P3-1"
+   ]
+  },
+  {
+   "id": 68,
+   "code": "DWG 068",
+   "chapter": 4,
+   "title": "Off Cut",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 5,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 80,
+     "y": 44,
+     "w": 120,
+     "h": 208,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "circle",
+     "x": 116,
+     "y": 104,
+     "d": 68,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 40,
+     "y": 68,
+     "w": 196,
+     "h": 72,
+     "r": 18,
+     "depth": 2,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 64,
+     "y": 208,
+     "w": 176,
+     "h": 48,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "circle",
+     "x": 188,
+     "y": 48,
+     "d": 72,
+     "depth": 3,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "circle",
+     "x": 68,
+     "y": 152,
+     "d": 72,
+     "depth": 3,
+     "pattern": 1,
+     "label": "PL-06"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 104,
+     "y": 68
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 176,
+     "y": 113
+    },
+    {
+     "id": "P0-2",
+     "panel": "P0",
+     "x": 176,
+     "y": 228
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 150,
+     "y": 138
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 64,
+     "y": 92
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 138,
+     "y": 104
+    },
+    {
+     "id": "P2-2",
+     "panel": "P2",
+     "x": 212,
+     "y": 116
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 216,
+     "y": 232
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 224,
+     "y": 84
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 104,
+     "y": 188
+    }
+   ],
+   "solution": [
+    "P2-0",
+    "P2-1",
+    "P3-0",
+    "P4-0",
+    "P2-2",
+    "P0-0",
+    "P0-2",
+    "P1-0",
+    "P0-1",
+    "P5-0"
+   ]
+  },
+  {
+   "id": 69,
+   "code": "DWG 069",
+   "chapter": 4,
+   "title": "Strut",
+   "trayCapacity": 4,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 3,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 80,
+     "y": 48,
+     "w": 140,
+     "h": 208,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 232,
+     "y": 36,
+     "w": 48,
+     "h": 236,
+     "r": 24,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 20,
+     "y": 36,
+     "w": 48,
+     "h": 236,
+     "r": 24,
+     "depth": 0,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "circle",
+     "x": 108,
+     "y": 140,
+     "d": 84,
+     "depth": 1,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "circle",
+     "x": 102,
+     "y": 28,
+     "d": 96,
+     "depth": 1,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 220,
+     "y": 52,
+     "w": 52,
+     "h": 144,
+     "r": 18,
+     "depth": 2,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "rect",
+     "x": 28,
+     "y": 52,
+     "w": 52,
+     "h": 144,
+     "r": 18,
+     "depth": 2,
+     "pattern": 2,
+     "label": "PL-07"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 150,
+     "y": 117
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 256,
+     "y": 115
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 256,
+     "y": 193
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 44,
+     "y": 115
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 44,
+     "y": 193
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 150,
+     "y": 182
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 150,
+     "y": 48
+    },
+    {
+     "id": "P4-1",
+     "panel": "P4",
+     "x": 122,
+     "y": 76
+    },
+    {
+     "id": "P4-2",
+     "panel": "P4",
+     "x": 178,
+     "y": 76
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 244,
+     "y": 76
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 56,
+     "y": 76
+    }
+   ],
+   "solution": [
+    "P3-0",
+    "P4-0",
+    "P4-1",
+    "P4-2",
+    "P0-0",
+    "P5-0",
+    "P1-0",
+    "P1-1",
+    "P6-0",
+    "P2-0",
+    "P2-1"
+   ]
+  },
+  {
+   "id": 70,
+   "code": "DWG 070",
+   "chapter": 4,
+   "title": "Truss",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 7,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 22,
+     "y": 54,
+     "w": 256,
+     "h": 124,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 48,
+     "y": 14,
+     "w": 40,
+     "h": 196,
+     "r": 18,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 212,
+     "y": 14,
+     "w": 40,
+     "h": 196,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 180,
+     "y": 58,
+     "w": 44,
+     "h": 228,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 76,
+     "y": 58,
+     "w": 44,
+     "h": 228,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 76,
+     "y": 38,
+     "w": 48,
+     "h": 192,
+     "r": 18,
+     "depth": 3,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "rect",
+     "x": 176,
+     "y": 38,
+     "w": 48,
+     "h": 192,
+     "r": 18,
+     "depth": 3,
+     "pattern": 2,
+     "label": "PL-07"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 150,
+     "y": 154
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 254,
+     "y": 154
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 68,
+     "y": 112
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 68,
+     "y": 145
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 68,
+     "y": 190
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 232,
+     "y": 190
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 202,
+     "y": 134
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 202,
+     "y": 172
+    },
+    {
+     "id": "P3-2",
+     "panel": "P3",
+     "x": 202,
+     "y": 264
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 98,
+     "y": 210
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 100,
+     "y": 62
+    },
+    {
+     "id": "P5-1",
+     "panel": "P5",
+     "x": 100,
+     "y": 134
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 200,
+     "y": 102
+    }
+   ],
+   "solution": [
+    "P3-2",
+    "P5-0",
+    "P5-1",
+    "P4-0",
+    "P6-0",
+    "P3-0",
+    "P3-1",
+    "P0-0",
+    "P1-0",
+    "P2-0",
+    "P0-1",
+    "P1-1",
+    "P1-2"
+   ]
+  },
+  {
+   "id": 71,
+   "code": "DWG 071",
+   "chapter": 4,
+   "title": "Clevis",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 5,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 12,
+     "y": 36,
+     "w": 88,
+     "h": 224,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 200,
+     "y": 36,
+     "w": 88,
+     "h": 224,
+     "r": 28,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 40,
+     "y": 16,
+     "w": 220,
+     "h": 152,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 34,
+     "y": 176,
+     "w": 232,
+     "h": 104,
+     "r": 18,
+     "depth": 1,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 216,
+     "y": 36,
+     "w": 56,
+     "h": 160,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 28,
+     "y": 36,
+     "w": 56,
+     "h": 160,
+     "r": 18,
+     "depth": 2,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "rect",
+     "x": 84,
+     "y": 148,
+     "w": 48,
+     "h": 136,
+     "r": 18,
+     "depth": 3,
+     "pattern": 2,
+     "label": "PL-07"
+    },
+    {
+     "id": "P7",
+     "shape": "rect",
+     "x": 168,
+     "y": 148,
+     "w": 48,
+     "h": 136,
+     "r": 18,
+     "depth": 3,
+     "pattern": 3,
+     "label": "PL-08"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 76,
+     "y": 60
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 76,
+     "y": 185
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 224,
+     "y": 60
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 224,
+     "y": 185
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 113,
+     "y": 40
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 187,
+     "y": 40
+    },
+    {
+     "id": "P2-2",
+     "panel": "P2",
+     "x": 187,
+     "y": 144
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 150,
+     "y": 228
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 248,
+     "y": 116
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 52,
+     "y": 116
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 108,
+     "y": 260
+    },
+    {
+     "id": "P7-0",
+     "panel": "P7",
+     "x": 192,
+     "y": 260
+    }
+   ],
+   "solution": [
+    "P2-0",
+    "P2-1",
+    "P3-0",
+    "P4-0",
+    "P5-0",
+    "P6-0",
+    "P7-0",
+    "P2-2",
+    "P0-0",
+    "P0-1",
+    "P1-0",
+    "P1-1"
+   ]
+  },
+  {
+   "id": 72,
+   "code": "DWG 072",
+   "chapter": 4,
+   "title": "Yoke",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 7,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 52,
+     "y": 12,
+     "w": 56,
+     "h": 276,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 36,
+     "y": 116,
+     "w": 172,
+     "h": 68,
+     "r": 18,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 64,
+     "y": 208,
+     "w": 208,
+     "h": 56,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 28,
+     "y": 76,
+     "w": 120,
+     "h": 40,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 28,
+     "y": 208,
+     "w": 192,
+     "h": 68,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 76,
+     "y": 36
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 76,
+     "y": 150
+    },
+    {
+     "id": "P0-2",
+     "panel": "P0",
+     "x": 84,
+     "y": 264
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 151,
+     "y": 140
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 184,
+     "y": 150
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 122,
+     "y": 160
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 133,
+     "y": 236
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 203,
+     "y": 236
+    },
+    {
+     "id": "P2-2",
+     "panel": "P2",
+     "x": 168,
+     "y": 240
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 48,
+     "y": 96
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 88,
+     "y": 96
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 92,
+     "y": 232
+    },
+    {
+     "id": "P4-1",
+     "panel": "P4",
+     "x": 52,
+     "y": 252
+    }
+   ],
+   "solution": [
+    "P1-0",
+    "P1-1",
+    "P1-2",
+    "P3-0",
+    "P3-1",
+    "P4-0",
+    "P4-1",
+    "P2-0",
+    "P2-1",
+    "P2-2",
+    "P0-0",
+    "P0-1",
+    "P0-2"
+   ]
+  },
+  {
+   "id": 73,
+   "code": "DWG 073",
+   "chapter": 4,
+   "title": "Saddle",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 7,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 24,
+     "y": 60,
+     "w": 248,
+     "h": 60,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 44,
+     "y": 84,
+     "w": 228,
+     "h": 76,
+     "r": 18,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 28,
+     "y": 36,
+     "w": 72,
+     "h": 196,
+     "r": 18,
+     "depth": 2,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "circle",
+     "x": 164,
+     "y": 92,
+     "d": 112,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 60,
+     "y": 100,
+     "w": 68,
+     "h": 172,
+     "r": 18,
+     "depth": 3,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "circle",
+     "x": 80,
+     "y": 28,
+     "d": 64,
+     "depth": 3,
+     "pattern": 1,
+     "label": "PL-06"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 107,
+     "y": 96
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 189,
+     "y": 96
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 248,
+     "y": 122
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 68,
+     "y": 136
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 158,
+     "y": 136
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 76,
+     "y": 167
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 52,
+     "y": 208
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 220,
+     "y": 148
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 195,
+     "y": 173
+    },
+    {
+     "id": "P3-2",
+     "panel": "P3",
+     "x": 245,
+     "y": 173
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 104,
+     "y": 186
+    },
+    {
+     "id": "P4-1",
+     "panel": "P4",
+     "x": 84,
+     "y": 215
+    },
+    {
+     "id": "P4-2",
+     "panel": "P4",
+     "x": 94,
+     "y": 248
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 112,
+     "y": 60
+    }
+   ],
+   "solution": [
+    "P3-0",
+    "P3-1",
+    "P3-2",
+    "P4-0",
+    "P4-1",
+    "P4-2",
+    "P1-0",
+    "P2-0",
+    "P2-1",
+    "P1-1",
+    "P1-2",
+    "P0-1",
+    "P5-0",
+    "P0-0"
+   ]
+  },
+  {
+   "id": 74,
+   "code": "DWG 074",
+   "chapter": 4,
+   "title": "Footing",
+   "trayCapacity": 4,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 2,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 168,
+     "y": 14,
+     "w": 108,
+     "h": 220,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 24,
+     "y": 70,
+     "w": 76,
+     "h": 216,
+     "r": 28,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 208,
+     "y": 50,
+     "w": 44,
+     "h": 164,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 48,
+     "y": 58,
+     "w": 68,
+     "h": 204,
+     "r": 18,
+     "depth": 1,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 32,
+     "y": 86,
+     "w": 160,
+     "h": 44,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 222,
+     "y": 124
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 222,
+     "y": 161
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 48,
+     "y": 94
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 76,
+     "y": 214
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 230,
+     "y": 72
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 230,
+     "y": 192
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 82,
+     "y": 82
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 72,
+     "y": 126
+    },
+    {
+     "id": "P3-2",
+     "panel": "P3",
+     "x": 92,
+     "y": 160
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 112,
+     "y": 108
+    }
+   ],
+   "solution": [
+    "P2-0",
+    "P2-1",
+    "P0-0",
+    "P0-1",
+    "P3-2",
+    "P4-0",
+    "P3-0",
+    "P3-1",
+    "P1-0",
+    "P1-1"
+   ]
+  },
+  {
+   "id": 75,
+   "code": "DWG 075",
+   "chapter": 4,
+   "title": "Bracket Pair",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 8,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 232,
+     "y": 18,
+     "w": 48,
+     "h": 264,
+     "r": 24,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 20,
+     "y": 18,
+     "w": 48,
+     "h": 264,
+     "r": 24,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 52,
+     "y": 82,
+     "w": 196,
+     "h": 80,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 32,
+     "y": 94,
+     "w": 108,
+     "h": 148,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 160,
+     "y": 94,
+     "w": 108,
+     "h": 148,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 72,
+     "y": 214,
+     "w": 156,
+     "h": 40,
+     "r": 18,
+     "depth": 3,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "rect",
+     "x": 54,
+     "y": 126,
+     "w": 192,
+     "h": 52,
+     "r": 18,
+     "depth": 3,
+     "pattern": 2,
+     "label": "PL-07"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 256,
+     "y": 42
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 256,
+     "y": 106
+    },
+    {
+     "id": "P0-2",
+     "panel": "P0",
+     "x": 256,
+     "y": 194
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 44,
+     "y": 42
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 44,
+     "y": 106
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 44,
+     "y": 194
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 117,
+     "y": 122
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 183,
+     "y": 122
+    },
+    {
+     "id": "P2-2",
+     "panel": "P2",
+     "x": 76,
+     "y": 138
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 116,
+     "y": 168
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 86,
+     "y": 218
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 184,
+     "y": 168
+    },
+    {
+     "id": "P4-1",
+     "panel": "P4",
+     "x": 214,
+     "y": 218
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 150,
+     "y": 234
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 150,
+     "y": 150
+    },
+    {
+     "id": "P6-1",
+     "panel": "P6",
+     "x": 222,
+     "y": 152
+    }
+   ],
+   "solution": [
+    "P5-0",
+    "P3-1",
+    "P6-0",
+    "P6-1",
+    "P3-0",
+    "P2-0",
+    "P4-0",
+    "P4-1",
+    "P2-1",
+    "P2-2",
+    "P0-0",
+    "P0-1",
+    "P0-2",
+    "P1-0",
+    "P1-1",
+    "P1-2"
+   ]
+  },
+  {
+   "id": 76,
+   "code": "DWG 076",
+   "chapter": 4,
+   "title": "Clamp Bar",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 5,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 12,
+     "y": 68,
+     "w": 276,
+     "h": 100,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 44,
+     "y": 236,
+     "w": 212,
+     "h": 40,
+     "r": 20,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 30,
+     "y": 24,
+     "w": 240,
+     "h": 132,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 72,
+     "y": 92,
+     "w": 72,
+     "h": 184,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 156,
+     "y": 92,
+     "w": 72,
+     "h": 184,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 172,
+     "y": 60,
+     "w": 52,
+     "h": 180,
+     "r": 18,
+     "depth": 3,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "rect",
+     "x": 76,
+     "y": 60,
+     "w": 52,
+     "h": 180,
+     "r": 18,
+     "depth": 3,
+     "pattern": 2,
+     "label": "PL-07"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 264,
+     "y": 144
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 64,
+     "y": 256
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 150,
+     "y": 256
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 236,
+     "y": 256
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 110,
+     "y": 90
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 190,
+     "y": 90
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 108,
+     "y": 184
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 192,
+     "y": 184
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 196,
+     "y": 150
+    },
+    {
+     "id": "P5-1",
+     "panel": "P5",
+     "x": 196,
+     "y": 216
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 104,
+     "y": 150
+    },
+    {
+     "id": "P6-1",
+     "panel": "P6",
+     "x": 104,
+     "y": 216
+    }
+   ],
+   "solution": [
+    "P5-0",
+    "P5-1",
+    "P4-0",
+    "P1-2",
+    "P6-0",
+    "P6-1",
+    "P2-1",
+    "P3-0",
+    "P2-0",
+    "P0-0",
+    "P1-0",
+    "P1-1"
+   ]
+  },
+  {
+   "id": 77,
+   "code": "DWG 077",
+   "chapter": 4,
+   "title": "Tie Plate",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 7,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 18,
+     "y": 52,
+     "w": 236,
+     "h": 104,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 34,
+     "y": 176,
+     "w": 248,
+     "h": 48,
+     "r": 24,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 22,
+     "y": 132,
+     "w": 164,
+     "h": 124,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "circle",
+     "x": 86,
+     "y": 12,
+     "d": 68,
+     "depth": 1,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 194,
+     "y": 24,
+     "w": 76,
+     "h": 240,
+     "r": 18,
+     "depth": 1,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 54,
+     "y": 12,
+     "w": 128,
+     "h": 60,
+     "r": 18,
+     "depth": 2,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "circle",
+     "x": 70,
+     "y": 212,
+     "d": 76,
+     "depth": 2,
+     "pattern": 2,
+     "label": "PL-07"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 136,
+     "y": 76
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 42,
+     "y": 104
+    },
+    {
+     "id": "P0-2",
+     "panel": "P0",
+     "x": 136,
+     "y": 132
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 58,
+     "y": 200
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 158,
+     "y": 200
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 258,
+     "y": 200
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 162,
+     "y": 156
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 120,
+     "y": 46
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 246,
+     "y": 144
+    },
+    {
+     "id": "P4-1",
+     "panel": "P4",
+     "x": 218,
+     "y": 184
+    },
+    {
+     "id": "P4-2",
+     "panel": "P4",
+     "x": 246,
+     "y": 240
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 158,
+     "y": 36
+    },
+    {
+     "id": "P5-1",
+     "panel": "P5",
+     "x": 78,
+     "y": 48
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 108,
+     "y": 250
+    }
+   ],
+   "solution": [
+    "P0-1",
+    "P2-0",
+    "P5-0",
+    "P5-1",
+    "P0-2",
+    "P3-0",
+    "P0-0",
+    "P4-0",
+    "P4-1",
+    "P4-2",
+    "P1-0",
+    "P1-1",
+    "P1-2",
+    "P6-0"
+   ]
+  },
+  {
+   "id": 78,
+   "code": "DWG 078",
+   "chapter": 4,
+   "title": "Plain Panel",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 7,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 54,
+     "y": 38,
+     "w": 44,
+     "h": 244,
+     "r": 22,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 174,
+     "y": 18,
+     "w": 100,
+     "h": 256,
+     "r": 28,
+     "depth": 0,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 74,
+     "y": 50,
+     "w": 72,
+     "h": 220,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "circle",
+     "x": 202,
+     "y": 102,
+     "d": 68,
+     "depth": 1,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 26,
+     "y": 74,
+     "w": 52,
+     "h": 168,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 174,
+     "y": 30,
+     "w": 76,
+     "h": 164,
+     "r": 18,
+     "depth": 2,
+     "pattern": 1,
+     "label": "PL-06"
+    },
+    {
+     "id": "P6",
+     "shape": "rect",
+     "x": 106,
+     "y": 62,
+     "w": 48,
+     "h": 164,
+     "r": 18,
+     "depth": 3,
+     "pattern": 2,
+     "label": "PL-07"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 76,
+     "y": 119
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 76,
+     "y": 160
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 250,
+     "y": 42
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 198,
+     "y": 250
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 250,
+     "y": 250
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 110,
+     "y": 74
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 110,
+     "y": 123
+    },
+    {
+     "id": "P2-2",
+     "panel": "P2",
+     "x": 122,
+     "y": 160
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 236,
+     "y": 136
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 52,
+     "y": 218
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 198,
+     "y": 54
+    },
+    {
+     "id": "P5-1",
+     "panel": "P5",
+     "x": 198,
+     "y": 112
+    },
+    {
+     "id": "P5-2",
+     "panel": "P5",
+     "x": 212,
+     "y": 170
+    },
+    {
+     "id": "P6-0",
+     "panel": "P6",
+     "x": 130,
+     "y": 202
+    }
+   ],
+   "solution": [
+    "P4-0",
+    "P5-0",
+    "P5-1",
+    "P5-2",
+    "P1-0",
+    "P1-1",
+    "P1-2",
+    "P3-0",
+    "P6-0",
+    "P2-0",
+    "P2-1",
+    "P2-2",
+    "P0-0",
+    "P0-1"
+   ]
+  },
+  {
+   "id": 79,
+   "code": "DWG 079",
+   "chapter": 4,
+   "title": "Cantilever",
+   "trayCapacity": 4,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 3,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 130,
+     "y": 30,
+     "w": 104,
+     "h": 208,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "rect",
+     "x": 182,
+     "y": 54,
+     "w": 72,
+     "h": 216,
+     "r": 18,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "circle",
+     "x": 46,
+     "y": 150,
+     "d": 108,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 142,
+     "y": 34,
+     "w": 48,
+     "h": 124,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 86,
+     "y": 50,
+     "w": 40,
+     "h": 216,
+     "r": 18,
+     "depth": 2,
+     "pattern": 0,
+     "label": "PL-05"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 154,
+     "y": 99
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 210,
+     "y": 134
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 230,
+     "y": 162
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 100,
+     "y": 170
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 134,
+     "y": 204
+    },
+    {
+     "id": "P2-2",
+     "panel": "P2",
+     "x": 100,
+     "y": 238
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 166,
+     "y": 58
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 166,
+     "y": 134
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 106,
+     "y": 70
+    },
+    {
+     "id": "P4-1",
+     "panel": "P4",
+     "x": 106,
+     "y": 122
+    }
+   ],
+   "solution": [
+    "P1-0",
+    "P0-1",
+    "P3-0",
+    "P3-1",
+    "P0-0",
+    "P4-0",
+    "P4-1",
+    "P2-0",
+    "P2-1",
+    "P2-2"
+   ]
+  },
+  {
+   "id": 80,
+   "code": "DWG 080",
+   "chapter": 4,
+   "title": "Moment Frame",
+   "trayCapacity": 3,
+   "mechanics": [
+    "dependency",
+    "overlap",
+    "tray"
+   ],
+   "difficulty": 8,
+   "panels": [
+    {
+     "id": "P0",
+     "shape": "rect",
+     "x": 64,
+     "y": 96,
+     "w": 212,
+     "h": 76,
+     "r": 28,
+     "depth": 0,
+     "pattern": 0,
+     "label": "PL-01"
+    },
+    {
+     "id": "P1",
+     "shape": "circle",
+     "x": 36,
+     "y": 84,
+     "d": 116,
+     "depth": 1,
+     "pattern": 1,
+     "label": "PL-02"
+    },
+    {
+     "id": "P2",
+     "shape": "rect",
+     "x": 168,
+     "y": 20,
+     "w": 80,
+     "h": 232,
+     "r": 18,
+     "depth": 1,
+     "pattern": 2,
+     "label": "PL-03"
+    },
+    {
+     "id": "P3",
+     "shape": "rect",
+     "x": 40,
+     "y": 188,
+     "w": 208,
+     "h": 92,
+     "r": 18,
+     "depth": 2,
+     "pattern": 3,
+     "label": "PL-04"
+    },
+    {
+     "id": "P4",
+     "shape": "rect",
+     "x": 48,
+     "y": 180,
+     "w": 208,
+     "h": 60,
+     "r": 18,
+     "depth": 3,
+     "pattern": 0,
+     "label": "PL-05"
+    },
+    {
+     "id": "P5",
+     "shape": "rect",
+     "x": 24,
+     "y": 64,
+     "w": 140,
+     "h": 52,
+     "r": 18,
+     "depth": 3,
+     "pattern": 1,
+     "label": "PL-06"
+    }
+   ],
+   "screws": [
+    {
+     "id": "P0-0",
+     "panel": "P0",
+     "x": 252,
+     "y": 120
+    },
+    {
+     "id": "P0-1",
+     "panel": "P0",
+     "x": 135,
+     "y": 148
+    },
+    {
+     "id": "P0-2",
+     "panel": "P0",
+     "x": 205,
+     "y": 148
+    },
+    {
+     "id": "P1-0",
+     "panel": "P1",
+     "x": 94,
+     "y": 104
+    },
+    {
+     "id": "P1-1",
+     "panel": "P1",
+     "x": 56,
+     "y": 142
+    },
+    {
+     "id": "P1-2",
+     "panel": "P1",
+     "x": 94,
+     "y": 142
+    },
+    {
+     "id": "P2-0",
+     "panel": "P2",
+     "x": 192,
+     "y": 44
+    },
+    {
+     "id": "P2-1",
+     "panel": "P2",
+     "x": 208,
+     "y": 97
+    },
+    {
+     "id": "P2-2",
+     "panel": "P2",
+     "x": 208,
+     "y": 228
+    },
+    {
+     "id": "P3-0",
+     "panel": "P3",
+     "x": 64,
+     "y": 212
+    },
+    {
+     "id": "P3-1",
+     "panel": "P3",
+     "x": 109,
+     "y": 212
+    },
+    {
+     "id": "P3-2",
+     "panel": "P3",
+     "x": 179,
+     "y": 212
+    },
+    {
+     "id": "P4-0",
+     "panel": "P4",
+     "x": 232,
+     "y": 204
+    },
+    {
+     "id": "P5-0",
+     "panel": "P5",
+     "x": 48,
+     "y": 90
+    },
+    {
+     "id": "P5-1",
+     "panel": "P5",
+     "x": 140,
+     "y": 90
+    }
+   ],
+   "solution": [
+    "P1-1",
+    "P4-0",
+    "P5-0",
+    "P5-1",
+    "P1-0",
+    "P1-2",
+    "P3-0",
+    "P3-1",
+    "P3-2",
+    "P2-0",
+    "P2-1",
+    "P2-2",
+    "P0-0",
+    "P0-1",
+    "P0-2"
+   ]
+  }
+ ]
+}

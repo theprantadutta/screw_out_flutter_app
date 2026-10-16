@@ -1,0 +1,50 @@
+{
+  "$schema_notes": "Coordinates are in a 300x300 unit play area (origin top-left). Depth 0 = bottom. A screw belongs to exactly one panel and sits at that panel's depth. Screw head radius for overlap tests = 13 units. pattern: 0 solid, 1 hatch45, 2 dots, 3 crosshatch. All three levels are solver-validated.",
+  "levels": [
+    {
+      "id": 1, "code": "DWG 001", "chapter": 1, "title": "First Turn",
+      "trayCapacity": 3, "mechanics": ["basic_removal"], "tutorial": "STEP 1 · TAP THE SCREW",
+      "panels": [
+        { "id": "T", "shape": "rect", "x": 50, "y": 80, "w": 200, "h": 140, "r": 18, "depth": 0, "pattern": 2, "label": "PL-03" }
+      ],
+      "screws": [ { "id": "T-0", "panel": "T", "x": 150, "y": 150 } ],
+      "solution": ["T-0"]
+    },
+    {
+      "id": 12, "code": "DWG 012", "chapter": 1, "title": "Cross Brace",
+      "trayCapacity": 4, "mechanics": ["overlap", "tray"], "objective": "→ LIFT PL-04 BEFORE THE PLATES BELOW",
+      "panels": [
+        { "id": "P0", "shape": "rect", "x": 24,  "y": 24,  "w": 252, "h": 96,  "r": 18, "depth": 0, "pattern": 0, "label": "PL-01" },
+        { "id": "P1", "shape": "rect", "x": 24,  "y": 180, "w": 252, "h": 96,  "r": 18, "depth": 0, "pattern": 1, "label": "PL-02" },
+        { "id": "P2", "shape": "rect", "x": 110, "y": 60,  "w": 80,  "h": 200, "r": 18, "depth": 1, "pattern": 2, "label": "PL-03" },
+        { "id": "P3", "shape": "rect", "x": 40,  "y": 110, "w": 220, "h": 80,  "r": 18, "depth": 2, "pattern": 3, "label": "PL-04" }
+      ],
+      "screws": [
+        { "id": "P0-0", "panel": "P0", "x": 48,  "y": 48 },  { "id": "P0-1", "panel": "P0", "x": 252, "y": 48 },  { "id": "P0-2", "panel": "P0", "x": 108, "y": 80 },
+        { "id": "P1-0", "panel": "P1", "x": 48,  "y": 252 }, { "id": "P1-1", "panel": "P1", "x": 252, "y": 252 }, { "id": "P1-2", "panel": "P1", "x": 192, "y": 226 },
+        { "id": "P2-0", "panel": "P2", "x": 150, "y": 106 }, { "id": "P2-1", "panel": "P2", "x": 150, "y": 236 },
+        { "id": "P3-0", "panel": "P3", "x": 64,  "y": 150 }, { "id": "P3-1", "panel": "P3", "x": 236, "y": 150 }
+      ],
+      "solution": ["P3-0", "P3-1", "P2-0", "P2-1", "P0-0", "P0-1", "P0-2", "P1-0", "P1-1", "P1-2"]
+    },
+    {
+      "id": 24, "code": "DWG 024", "chapter": 2, "title": "Hidden Bracket",
+      "trayCapacity": 4, "mechanics": ["overlap", "circle_panel", "multi_layer"], "objective": "→ REMOVE PL-04 TO REACH THE CORNER",
+      "panels": [
+        { "id": "A", "shape": "rect",   "x": 30, "y": 30,  "w": 240, "h": 240, "r": 40, "depth": 0, "pattern": 0, "label": "PL-01" },
+        { "id": "B", "shape": "circle", "x": 72, "y": 72,  "d": 156,                    "depth": 1, "pattern": 1, "label": "PL-02" },
+        { "id": "C", "shape": "rect",   "x": 40, "y": 136, "w": 220, "h": 36,  "r": 18, "depth": 2, "pattern": 2, "label": "PL-03" },
+        { "id": "D", "shape": "circle", "x": 52, "y": 52,  "d": 68,                     "depth": 3, "pattern": 3, "label": "PL-04" }
+      ],
+      "screws": [
+        { "id": "A-0", "panel": "A", "x": 58,  "y": 58 },  { "id": "A-1", "panel": "A", "x": 242, "y": 58 },
+        { "id": "A-2", "panel": "A", "x": 58,  "y": 242 }, { "id": "A-3", "panel": "A", "x": 242, "y": 242 },
+        { "id": "B-0", "panel": "B", "x": 120, "y": 130 }, { "id": "B-1", "panel": "B", "x": 200, "y": 178 },
+        { "id": "C-0", "panel": "C", "x": 62,  "y": 154 }, { "id": "C-1", "panel": "C", "x": 238, "y": 154 },
+        { "id": "D-0", "panel": "D", "x": 86,  "y": 86 }
+      ],
+      "solution": ["D-0", "C-0", "C-1", "B-0", "B-1", "A-0", "A-1", "A-2", "A-3"],
+      "trap": "Pulling A-1, A-2, A-3 + C-0 first fills the tray with nothing releasable (see screen 10)."
+    }
+  ]
+}
