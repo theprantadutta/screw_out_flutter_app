@@ -36,8 +36,12 @@ class SharedBanner extends ChangeNotifier {
   bool get loaded => _loaded && !_disabled;
   BannerAd? get ad => _ad;
 
-  /// Computes the slot size for the device's real width and starts loading.
-  Future<void> prepare() async {
+  bool _started = false;
+
+  /// Computes the slot size for the device's real width. Cheap native call,
+  /// needs no consent — done at startup so Home reserves the right space
+  /// from its very first frame.
+  Future<void> prepareSize() async {
     if (_size != null || _disabled) return;
     final view = ui.PlatformDispatcher.instance.views.first;
     final width = (view.physicalSize.width / view.devicePixelRatio).truncate();
@@ -48,7 +52,14 @@ class SharedBanner extends ChangeNotifier {
       _size = AdSize.banner;
     }
     notifyListeners();
-    _load();
+    if (_started) _load();
+  }
+
+  /// Starts loading once the SDK is ready and consent allows ad requests.
+  void start() {
+    if (_started || _disabled) return;
+    _started = true;
+    if (_size != null) _load();
   }
 
   void _load() {

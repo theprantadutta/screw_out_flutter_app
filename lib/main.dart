@@ -126,6 +126,8 @@ Future<void> _bootstrapServices({required bool firebase}) async {
     }
     // Store, ads and push never block the first screen.
     unawaited(purchases.initialize());
+    // Size the banner slot first (fast), so Home never shifts when it loads.
+    await getIt<AdService>().prepareBanner().timeout(const Duration(seconds: 2), onTimeout: () {});
     unawaited(getIt<AdService>().initialize());
     if (firebase) {
       unawaited(notifications.initialize().then((_) => notifications.registerToken()));

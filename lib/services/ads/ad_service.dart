@@ -78,13 +78,14 @@ class AdService implements AdsPort {
       await _refreshCanRequestAds();
       await sdk;
       _sdkReady = true;
+      // Ads impossible for this player (no consent): release the slot.
+      if (!adsEnabled || _noAds) _banner?.disable();
       if (adsEnabled) {
         _loadRewarded();
         if (!_noAds) {
           _loadInterstitial();
           _loadAppOpen();
-          // Preload so Home reserves the right space from its first frame.
-          unawaited(_banner?.prepare());
+          _banner?.start();
         }
       }
     } on Object catch (e) {
@@ -429,11 +430,19 @@ class AdService implements AdsPort {
 
   late final SharedBanner? _banner = AdConfig.bannerUnitId == null ? null : SharedBanner(AdConfig.bannerUnitId!);
 
+  /// Startup: size the banner slot before the first screen draws.
+  Future<void> prepareBanner() async {
+    if (!_mobile || _noAds) return;
+    await _banner?.prepareSize();
+  }
+
+  /// Always the same reactive slot while ads are possible: it reserves the
+  /// banner's space immediately and shows the ad once the SDK and consent
+  /// allow it, so the screen never jumps.
   @override
   Widget? menuBanner() {
     final banner = _banner;
-    if (!adsEnabled || _noAds || banner == null) return null;
-    unawaited(banner.prepare());
+    if (!_mobile || _noAds || banner == null) return null;
     return BannerSlot(banner: banner);
   }
 

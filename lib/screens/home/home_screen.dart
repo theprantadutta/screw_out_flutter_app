@@ -192,6 +192,37 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+/// Leader line: diagonal from the anchor dot to a short horizontal shoulder
+/// that ends at the label (drafting convention).
+class _LeaderPainter extends CustomPainter {
+  const _LeaderPainter({required this.from, required this.labelY, required this.labelX});
+
+  final Offset from;
+  final double labelY;
+  final double labelX;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = BpColor.lineMuted
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+    final shoulder = math.max(from.dx + 8, labelX - 28);
+    final path = Path()..moveTo(from.dx, from.dy);
+    if ((labelY - from.dy).abs() < 0.5) {
+      path.lineTo(labelX, labelY);
+    } else {
+      path
+        ..lineTo(shoulder, labelY)
+        ..lineTo(labelX, labelY);
+    }
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(_LeaderPainter old) => old.from != from || old.labelY != labelY || old.labelX != labelX;
+}
+
 /// |—— CHAPTER 02/05 ——| dimension line.
 class _DimensionLine extends StatelessWidget {
   const _DimensionLine({required this.label});
@@ -281,16 +312,30 @@ class _ExplodedViewState extends State<_ExplodedView> with SingleTickerProviderS
         const labelLeft = 234.0;
         final labelX = math.min(labelLeft, c.maxWidth - 102);
 
-        var lastY = -100.0;
-        final anchors = <(Panel, Offset)>[];
-        for (final p in callouts) {
-          final ax = p.isCircle ? p.cx + p.w / 2 : p.x + p.w;
-          var ay = (p.isCircle ? p.cy : p.y + math.min(p.h / 2, 24)) * scale + inset;
-          ay = math.max(ay, lastY + 70);
-          lastY = ay;
-          anchors.add((p, Offset(inset + ax * scale, ay)));
+        // Anchor dots stay on the plate's right edge; only the labels are
+        // spaced apart, joined to their dots by drafting-style leaders.
+        final anchors = <(Panel, Offset)>[
+          for (final p in callouts)
+            (
+              p,
+              Offset(
+                inset + (p.isCircle ? p.cx + p.w / 2 : p.x + p.w) * scale,
+                inset + (p.isCircle ? p.cy : p.y + math.min(p.h / 2, 24)) * scale,
+              ),
+            ),
+        ]..sort((a, b) => a.$2.dy.compareTo(b.$2.dy));
+        const labelGap = 44.0;
+        final labelYs = <double>[];
+        for (final a in anchors) {
+          labelYs.add(labelYs.isEmpty ? a.$2.dy : math.max(a.$2.dy, labelYs.last + labelGap));
         }
-        anchors.sort((a, b) => a.$2.dy.compareTo(b.$2.dy));
+        // Keep the label column inside the view.
+        final overflow = labelYs.isEmpty ? 0.0 : labelYs.last - (frame + 4);
+        if (overflow > 0) {
+          for (var i = 0; i < labelYs.length; i++) {
+            labelYs[i] -= overflow;
+          }
+        }
 
         return AnimatedBuilder(
           animation: _float,
@@ -312,11 +357,19 @@ class _ExplodedViewState extends State<_ExplodedView> with SingleTickerProviderS
                 ),
                 for (var i = 0; i < anchors.length; i++) ...[
                   Positioned(
-                    left: anchors[i].$2.dx,
-                    top: top + dy + anchors[i].$2.dy,
-                    width: math.max(0, labelX - 4 - anchors[i].$2.dx),
-                    height: 1,
-                    child: const ColoredBox(color: BpColor.lineMuted),
+                    left: 0,
+                    top: top + dy,
+                    right: 0,
+                    height: frame,
+                    child: IgnorePointer(
+                      child: CustomPaint(
+                        painter: _LeaderPainter(
+                          from: anchors[i].$2,
+                          labelY: labelYs[i],
+                          labelX: labelX - 4,
+                        ),
+                      ),
+                    ),
                   ),
                   Positioned(
                     left: anchors[i].$2.dx - 3.5,
@@ -332,7 +385,7 @@ class _ExplodedViewState extends State<_ExplodedView> with SingleTickerProviderS
                   ),
                   Positioned(
                     left: labelX,
-                    top: top + dy + anchors[i].$2.dy - 10,
+                    top: top + dy + labelYs[i] - 10,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
