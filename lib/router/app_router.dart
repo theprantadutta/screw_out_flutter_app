@@ -23,13 +23,12 @@ final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 /// analytics/screen views.
 ///
 /// * [ready] — bootstrap future the splash waits for.
-/// * [downloadChapter] — downloads chapter packs past the bundled five;
-///   null until the API integration provides it (campaign shows
-///   MORE SHEETS SOON).
+/// * [packs] — chapter packs past the bundled five (null: the campaign
+///   shows MORE SHEETS SOON).
 GoRouter createAppRouter({
   required Future<void> ready,
   List<NavigatorObserver> observers = const [],
-  ChapterDownloader? downloadChapter,
+  ChapterPacks? packs,
   String initialLocation = AppRoutes.splash,
 }) => GoRouter(
   navigatorKey: rootNavigatorKey,
@@ -49,7 +48,7 @@ GoRouter createAppRouter({
     GoRoute(
       path: AppRoutes.campaign,
       name: 'campaign',
-      pageBuilder: (context, state) => _slide(state, CampaignScreen(downloadChapter: downloadChapter)),
+      pageBuilder: (context, state) => _slide(state, CampaignScreen(packs: packs)),
     ),
     GoRoute(
       path: AppRoutes.chapter,

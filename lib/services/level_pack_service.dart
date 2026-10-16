@@ -5,11 +5,12 @@ import '../core/network/api_service.dart';
 import '../game/generator/curriculum.dart';
 import 'app_log.dart';
 import 'level_repository.dart';
+import '../screens/campaign/campaign_screen.dart' show ChapterPacks;
 
 /// Chapters past the bundled five come from the API in packs of 20
 /// (API_CONTRACT §6). Every downloaded sheet passes the fairness validator
 /// before it is stored ([LevelRepository.installPack]).
-class LevelPackService {
+class LevelPackService implements ChapterPacks {
   LevelPackService(this._api, this._levels);
 
   final ApiService _api;
@@ -22,6 +23,7 @@ class LevelPackService {
 
   /// Chapters the server publishes that are not installed yet (or have a
   /// newer version). Replays the latest value to new listeners.
+  @override
   Stream<Set<int>> get availableRemoteChapters async* {
     yield _available;
     yield* _remote.stream;
@@ -30,6 +32,7 @@ class LevelPackService {
   Set<int> get available => _available;
 
   /// GET /levels/packs (cached for 5 minutes).
+  @override
   Future<void> refresh({bool force = false}) async {
     final last = _lastCheck;
     if (!force && last != null && DateTime.now().difference(last) < const Duration(minutes: 5)) return;
@@ -53,6 +56,7 @@ class LevelPackService {
   }
 
   /// Downloads, validates and installs one chapter. False on any failure.
+  @override
   Future<bool> downloadChapter(int chapter) async {
     final r = await _api.levelPack(chapter);
     final data = r.value;

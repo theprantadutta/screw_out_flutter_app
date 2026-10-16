@@ -47,7 +47,7 @@ Future<void> main() async {
     final router = createAppRouter(
       ready: ready,
       observers: [AnalyticsRouteObserver(getIt<AnalyticsPort>())],
-      downloadChapter: getIt<LevelPackService>().downloadChapter,
+      packs: getIt<LevelPackService>(),
     );
     _wireRouter(router, ready);
     _AppLifecycle(firebase: firebase).attach();

@@ -6,5 +6,7 @@ flutter_native_splash:
   image: assets/brand/logomark-512.png
   android_12:
     color: "#1E4B7E"
-    image: assets/brand/logomark-512.png
+    # Android 12+ masks the icon to a circle 2/3 of the canvas: this version
+    # insets the mark so the arrow and centre lines aren't clipped.
+    image: assets/brand/splash-android12.png
   web: false

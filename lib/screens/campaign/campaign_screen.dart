@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -16,13 +18,19 @@ import '../../widgets/bp/bp_screen.dart';
 
 /// Downloads chapter packs past the bundled five. Null = not available yet
 /// (the card reads MORE SHEETS SOON).
-typedef ChapterDownloader = Future<bool> Function(int chapter);
+abstract interface class ChapterPacks {
+  /// Chapters the server publishes that aren't installed (or are newer).
+  Stream<Set<int>> get availableRemoteChapters;
+  Future<void> refresh({bool force});
+  Future<bool> downloadChapter(int chapter);
+}
 
 /// 04 — Campaign: one card per chapter.
 class CampaignScreen extends StatefulWidget {
-  const CampaignScreen({super.key, this.downloadChapter});
+  const CampaignScreen({super.key, this.packs});
 
-  final ChapterDownloader? downloadChapter;
+  /// Null (tests/offline builds): the card reads MORE SHEETS SOON.
+  final ChapterPacks? packs;
 
   @override
   State<CampaignScreen> createState() => _CampaignScreenState();
@@ -30,6 +38,26 @@ class CampaignScreen extends StatefulWidget {
 
 class _CampaignScreenState extends State<CampaignScreen> {
   bool _downloading = false;
+  Set<int> _remote = const {};
+  StreamSubscription<Set<int>>? _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    final packs = widget.packs;
+    if (packs != null) {
+      _sub = packs.availableRemoteChapters.listen((s) {
+        if (mounted) setState(() => _remote = s);
+      });
+      unawaited(packs.refresh(force: true));
+    }
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +101,12 @@ class _CampaignScreenState extends State<CampaignScreen> {
           _MoreSheetsCard(
             number: pad2(nextChapter),
             downloading: _downloading,
-            onDownload: widget.downloadChapter == null
+            // Only offered once the server actually publishes that chapter.
+            onDownload: widget.packs == null || !_remote.contains(nextChapter)
                 ? null
                 : () async {
                     setState(() => _downloading = true);
-                    final ok = await widget.downloadChapter!(nextChapter);
+                    final ok = await widget.packs!.downloadChapter(nextChapter);
                     if (!mounted) return;
                     setState(() => _downloading = false);
                     if (!ok) showBpToast(this.context, l.somethingWentWrong);

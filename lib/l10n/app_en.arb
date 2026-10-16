@@ -182,7 +182,7 @@
   "skipTutorial": "SKIP TUTORIAL",
   "splashTagline": "A PUZZLE OF LAYERS",
   "splashFooter": "REV 1.0 · SHEET 001",
-  "homeFigure": "FIG. 1\nEXPLODED VIEW\n{plates} PLATES · {screws}\nFASTENERS",
+  "homeFigure": "FIG. 1\nEXPLODED VIEW\n{plates, plural, =1{1 PLATE} other{{plates} PLATES}} · {screws}\n{screws, plural, =1{FASTENER} other{FASTENERS}}",
   "@homeFigure": {
     "placeholders": {
       "plates": {
@@ -281,7 +281,7 @@
       }
     }
   },
-  "sheetMeta": "{plates} plates · {layers} layers · tray {tray}",
+  "sheetMeta": "{plates, plural, =1{1 plate} other{{plates} plates}} · {layers, plural, =1{1 layer} other{{layers} layers}} · tray {tray}",
   "@sheetMeta": {
     "placeholders": {
       "plates": {

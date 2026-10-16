@@ -244,7 +244,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeFigure(int plates, int screws) {
-    return 'FIG. 1\nEXPLODED VIEW\n$plates PLATES · $screws\nFASTENERS';
+    String _temp0 = intl.Intl.pluralLogic(
+      plates,
+      locale: localeName,
+      other: '$plates PLATES',
+      one: '1 PLATE',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      screws,
+      locale: localeName,
+      other: 'FASTENERS',
+      one: 'FASTENER',
+    );
+    return 'FIG. 1\nEXPLODED VIEW\n$_temp0 · $screws\n$_temp1';
   }
 
   @override
@@ -332,7 +344,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String sheetMeta(int plates, int layers, int tray) {
-    return '$plates plates · $layers layers · tray $tray';
+    String _temp0 = intl.Intl.pluralLogic(
+      plates,
+      locale: localeName,
+      other: '$plates plates',
+      one: '1 plate',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      layers,
+      locale: localeName,
+      other: '$layers layers',
+      one: '1 layer',
+    );
+    return '$_temp0 · $_temp1 · tray $tray';
   }
 
   @override

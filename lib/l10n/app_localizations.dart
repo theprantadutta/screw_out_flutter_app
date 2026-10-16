@@ -487,7 +487,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeFigure.
   ///
   /// In en, this message translates to:
-  /// **'FIG. 1\nEXPLODED VIEW\n{plates} PLATES · {screws}\nFASTENERS'**
+  /// **'FIG. 1\nEXPLODED VIEW\n{plates, plural, =1{1 PLATE} other{{plates} PLATES}} · {screws}\n{screws, plural, =1{FASTENER} other{FASTENERS}}'**
   String homeFigure(int plates, int screws);
 
   /// No description provided for @chapterOf.
@@ -613,7 +613,7 @@ abstract class AppLocalizations {
   /// No description provided for @sheetMeta.
   ///
   /// In en, this message translates to:
-  /// **'{plates} plates · {layers} layers · tray {tray}'**
+  /// **'{plates, plural, =1{1 plate} other{{plates} plates}} · {layers, plural, =1{1 layer} other{{layers} layers}} · tray {tray}'**
   String sheetMeta(int plates, int layers, int tray);
 
   /// No description provided for @theCampaign.
