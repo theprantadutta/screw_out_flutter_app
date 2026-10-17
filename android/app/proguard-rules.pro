@@ -32,3 +32,12 @@
 -keep class com.android.billingclient.** { *; }
 -dontwarn dev.hyo.**
 -dontwarn io.github.hyochan.**
+
+# WorkManager (pulled in by plugins) opens its Room database reflectively:
+# Room looks up the generated `<Database>_Impl` class and its no-arg
+# constructor. R8 stripped androidx.work.impl.WorkDatabase_Impl, so release
+# builds crashed at launch in WorkManagerInitializer ("Failed to create an
+# instance of androidx.work.impl.WorkDatabase").
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
+-keep class androidx.work.impl.WorkDatabase_Impl { *; }
+-dontwarn androidx.room.paging.**
