@@ -633,9 +633,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get deleteConfirm => 'TAP AGAIN TO DELETE';
-
-  @override
   String get licensesTitle => 'Licenses';
 
   @override
@@ -814,7 +811,44 @@ class AppLocalizationsEn extends AppLocalizations {
       'Pro is active · no ads, every theme and unlimited hints';
 
   @override
-  String get accountDeletedToast => 'Account deleted.';
+  String get accountDeletedToast =>
+      'Your account and all its data were deleted.';
+
+  @override
+  String accountDeletedProToast(String store) {
+    return 'Account deleted. Pro is still billed until you cancel it in $store.';
+  }
+
+  @override
+  String get deleteSheetTitle => 'Delete your account?';
+
+  @override
+  String get deleteSheetBody =>
+      'This permanently deletes your account and everything saved with it: progress on every sheet, coins, themes, your daily streak and leaderboard places. It can\'t be undone.';
+
+  @override
+  String deleteSheetPro(String store) {
+    return 'You have Screw Out Pro. Deleting your account does not cancel it: cancel the subscription in $store or you\'ll keep being billed.';
+  }
+
+  @override
+  String get manageSubscription => 'Manage subscription';
+
+  @override
+  String get deleteForever => 'Delete my account';
+
+  @override
+  String get deleting => 'Deleting…';
+
+  @override
+  String get keepAccount => 'Keep my account';
+
+  @override
+  String get deleteOffline =>
+      'You\'re offline. Connect to the internet to delete your account.';
+
+  @override
+  String get deleteFailed => 'Couldn\'t delete your account. Please try again.';
 
   @override
   String get restoreNothing => 'Nothing to restore on this account.';

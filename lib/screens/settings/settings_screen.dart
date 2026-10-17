@@ -18,6 +18,7 @@ import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
 import '../../widgets/sync_notices.dart';
+import 'delete_account_sheet.dart';
 
 /// Hosted by privacy-project (Projects/screw_out); bundled copies live in
 /// assets/legal/.
@@ -225,15 +226,8 @@ class _LinkRow extends StatelessWidget {
 
 /// Guest: caption + Sign in with Google / Apple. Signed in: name + sign out
 /// / delete account (tap twice to confirm).
-class _AccountBlock extends StatefulWidget {
+class _AccountBlock extends StatelessWidget {
   const _AccountBlock();
-
-  @override
-  State<_AccountBlock> createState() => _AccountBlockState();
-}
-
-class _AccountBlockState extends State<_AccountBlock> {
-  bool _confirmDelete = false;
 
   @override
   Widget build(BuildContext context) {
@@ -300,20 +294,24 @@ class _AccountBlockState extends State<_AccountBlock> {
                 color: BpColor.blocked,
                 textColor: BpColor.blocked,
                 onPressed: () async {
-                  if (!_confirmDelete) {
-                    setState(() => _confirmDelete = true);
-                    return;
-                  }
-                  setState(() => _confirmDelete = false);
-                  final ok = await cubit.deleteAccount();
-                  if (!context.mounted) return;
-                  showBpToast(
+                  final outcome = await showDeleteAccountSheet(
                     context,
-                    ok ? l.accountDeletedToast : l.somethingWentWrong,
-                    kind: ok ? BpToastKind.success : BpToastKind.error,
+                    isPro: context.read<PremiumCubit>().state.isPro,
+                    delete: cubit.deleteAccount,
                   );
+                  if (outcome == null || !context.mounted) return;
+                  final (msg, kind) = switch (outcome) {
+                    AccountDeletion.deleted => (l.accountDeletedToast, BpToastKind.success),
+                    AccountDeletion.deletedProStillBilled => (
+                      l.accountDeletedProToast(subscriptionStoreName()),
+                      BpToastKind.info,
+                    ),
+                    AccountDeletion.offline => (l.deleteOffline, BpToastKind.error),
+                    AccountDeletion.failed || AccountDeletion.cancelled => (l.deleteFailed, BpToastKind.error),
+                  };
+                  showBpToast(context, msg, kind: kind, queue: true);
                 },
-                child: Text(_confirmDelete ? l.deleteConfirm : l.deleteAccount, style: BpType.monoSmallButton),
+                child: Text(l.deleteAccount, style: BpType.monoSmallButton),
               ),
             ),
           ],

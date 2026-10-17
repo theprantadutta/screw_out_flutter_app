@@ -1102,12 +1102,6 @@ abstract class AppLocalizations {
   /// **'+{coins} ¢'**
   String coinPackAmount(int coins);
 
-  /// No description provided for @deleteConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'TAP AGAIN TO DELETE'**
-  String get deleteConfirm;
-
   /// No description provided for @licensesTitle.
   ///
   /// In en, this message translates to:
@@ -1333,8 +1327,68 @@ abstract class AppLocalizations {
   /// No description provided for @accountDeletedToast.
   ///
   /// In en, this message translates to:
-  /// **'Account deleted.'**
+  /// **'Your account and all its data were deleted.'**
   String get accountDeletedToast;
+
+  /// No description provided for @accountDeletedProToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted. Pro is still billed until you cancel it in {store}.'**
+  String accountDeletedProToast(String store);
+
+  /// No description provided for @deleteSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteSheetTitle;
+
+  /// No description provided for @deleteSheetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes your account and everything saved with it: progress on every sheet, coins, themes, your daily streak and leaderboard places. It can\'t be undone.'**
+  String get deleteSheetBody;
+
+  /// No description provided for @deleteSheetPro.
+  ///
+  /// In en, this message translates to:
+  /// **'You have Screw Out Pro. Deleting your account does not cancel it: cancel the subscription in {store} or you\'ll keep being billed.'**
+  String deleteSheetPro(String store);
+
+  /// No description provided for @manageSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage subscription'**
+  String get manageSubscription;
+
+  /// No description provided for @deleteForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account'**
+  String get deleteForever;
+
+  /// No description provided for @deleting.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting…'**
+  String get deleting;
+
+  /// No description provided for @keepAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep my account'**
+  String get keepAccount;
+
+  /// No description provided for @deleteOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline. Connect to the internet to delete your account.'**
+  String get deleteOffline;
+
+  /// No description provided for @deleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete your account. Please try again.'**
+  String get deleteFailed;
 
   /// No description provided for @restoreNothing.
   ///

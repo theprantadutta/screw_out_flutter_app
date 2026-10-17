@@ -361,12 +361,58 @@ class UserService implements AuthPort {
     await _teardown();
   }
 
+  /// Permanently deletes the account (store rule: reachable in-app).
+  ///
+  /// 1. Needs a live API session; without one nothing is touched.
+  /// 2. Sign in with Apple: Apple requires the app to revoke its token on
+  ///    deletion, which needs a fresh authorization code, so the player
+  ///    re-confirms with Apple first (dismissing it cancels the deletion).
+  /// 3. `DELETE /users/me` removes the account, its data and the Firebase
+  ///    identity server-side.
+  /// 4. Google access is disconnected (best effort), then this device is
+  ///    signed out and wiped.
   @override
-  Future<bool> deleteAccount() async {
-    final deleted = await _api.deleteAccount();
-    if (!deleted) return false;
+  Future<AccountDeletion> deleteAccount() async {
+    final user = _safeCurrentUser;
+    if (user == null || user.isAnonymous) return AccountDeletion.failed;
+    if (!await ensureBackendSession()) return AccountDeletion.offline;
+
+    final provider = _providerOf(user);
+    if (provider == AuthProviderKind.apple) {
+      try {
+        final cred = await user.reauthenticateWithProvider(AppleAuthProvider());
+        final code = cred.additionalUserInfo?.authorizationCode;
+        if (code != null) await _auth.revokeTokenWithAuthorizationCode(code);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'canceled' || e.code == 'user-cancelled' || e.code == 'web-context-canceled') {
+          return AccountDeletion.cancelled;
+        }
+        // Revocation is best effort; the account itself is still deleted.
+        AppLog.warn('Apple token revocation failed (continuing): ${e.code}');
+      } on Object catch (e) {
+        AppLog.warn('Apple token revocation failed (continuing): $e');
+      }
+    }
+
+    final result = await _api.deleteAccount();
+    if (!result.isSuccess) {
+      return switch (result.failure) {
+        ApiFailure.offlineOrTransport || ApiFailure.timeout => AccountDeletion.offline,
+        _ => AccountDeletion.failed,
+      };
+    }
+    final stillBilled = result.value?['subscription_was_active'] == true;
+
+    if (provider == AuthProviderKind.google) {
+      try {
+        await _prepareGoogle();
+        await _google.disconnect(); // revokes this app's Google grant
+      } on Object catch (e) {
+        AppLog.warn('Google disconnect failed (continuing): $e');
+      }
+    }
     await _teardown();
-    return true;
+    return stillBilled ? AccountDeletion.deletedProStillBilled : AccountDeletion.deleted;
   }
 
   Future<void> _teardown() async {

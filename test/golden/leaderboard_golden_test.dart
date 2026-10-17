@@ -26,7 +26,7 @@ class _SignedIn implements AuthPort {
   @override
   Future<void> signOut() async {}
   @override
-  Future<bool> deleteAccount() async => true;
+  Future<AccountDeletion> deleteAccount() async => AccountDeletion.deleted;
   @override
   SyncReport? takeSignInReport() => null;
 }

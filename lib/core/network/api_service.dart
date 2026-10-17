@@ -187,10 +187,12 @@ class ApiService {
   }
 
   /// DELETE /users/me. True only when the server confirmed.
-  Future<bool> deleteAccount() async {
+  /// `DELETE /users/me`. The body says whether Pro was still live
+  /// (`subscription_was_active`): deletion never cancels store billing.
+  Future<ApiResult<Map<String, dynamic>>> deleteAccount() async {
     final r = await sendJson(method: 'DELETE', path: '/users/me');
     if (r.isSuccess) await clearToken();
-    return r.isSuccess;
+    return r;
   }
 
   Future<ApiResult<Map<String, dynamic>>> registerToken(String token, String platform) => sendJson(

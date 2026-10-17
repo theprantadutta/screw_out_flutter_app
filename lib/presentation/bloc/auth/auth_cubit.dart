@@ -12,11 +12,30 @@ abstract interface class AuthPort {
   Future<bool> signInWithGoogle();
   Future<bool> signInWithApple();
   Future<void> signOut();
-  Future<bool> deleteAccount();
+  Future<AccountDeletion> deleteAccount();
 
   /// What the sign-in just completed pulled or saved (null when the API
   /// could not be reached). Read once by the screen that started it.
   SyncReport? takeSignInReport();
+}
+
+/// How an account deletion ended (the Settings sheet words the result).
+enum AccountDeletion {
+  /// Account and data are gone; this device is signed out and cleared.
+  deleted,
+
+  /// Deleted, but Pro was still live: store billing continues until the
+  /// player cancels it in Google Play / the App Store.
+  deletedProStillBilled,
+
+  /// The player backed out (e.g. dismissed the Apple re-confirmation).
+  cancelled,
+
+  /// No connection or no session: nothing was deleted.
+  offline,
+
+  /// The server refused or failed: nothing was deleted.
+  failed,
 }
 
 enum AuthProviderKind { guest, google, apple }
@@ -82,7 +101,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> signOut() => _port.signOut();
-  Future<bool> deleteAccount() => _port.deleteAccount();
+  Future<AccountDeletion> deleteAccount() => _port.deleteAccount();
   SyncReport? takeSignInReport() => _port.takeSignInReport();
 }
 
@@ -101,7 +120,7 @@ final class GuestAuth implements AuthPort {
   @override
   Future<void> signOut() async {}
   @override
-  Future<bool> deleteAccount() async => false;
+  Future<AccountDeletion> deleteAccount() async => AccountDeletion.failed;
   @override
   SyncReport? takeSignInReport() => null;
 }
