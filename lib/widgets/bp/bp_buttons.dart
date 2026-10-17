@@ -112,7 +112,7 @@ class BpOutlineButton extends StatefulWidget {
   final Color textColor;
   final Color? fill;
 
-  /// 45% opacity look (e.g. Undo with empty history) — still tappable.
+  /// 45% opacity look (e.g. Undo with empty history) - still tappable.
   final bool dimmed;
   final EdgeInsetsGeometry padding;
   final String? semanticLabel;

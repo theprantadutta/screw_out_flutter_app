@@ -7,7 +7,7 @@
 	     App Store archive. -->
 	<key>aps-environment</key>
 	<string>development</string>
-	<!-- Sign in with Apple (App Store Guideline 4.8 — required alongside
+	<!-- Sign in with Apple (App Store Guideline 4.8 - required alongside
 	     Google sign-in). The matching capability must also be enabled on the
 	     App ID in the Apple Developer portal. -->
 	<key>com.apple.developer.applesignin</key>

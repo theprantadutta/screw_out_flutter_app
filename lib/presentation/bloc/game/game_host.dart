@@ -48,7 +48,7 @@ final class LevelResult {
   final int moves;
   final Duration elapsed;
 
-  /// ◆ — cleared without hint, restart or rescue in this session.
+  /// ◆ - cleared without hint, restart or rescue in this session.
   final bool mastered;
   final bool usedHint;
   final bool restarted;
@@ -74,7 +74,7 @@ final class LevelReward {
   /// Set when this clear finished a chapter (screen 12 follows).
   final int? chapterCompleted;
 
-  /// A replay beat the sheet's best moves or earned its first ◆ — the
+  /// A replay beat the sheet's best moves or earned its first ◆ - the
   /// "high score" moment (kept rare on purpose; first clears don't count).
   final bool newBest;
 }

@@ -17,7 +17,7 @@ import 'ad_gate.dart';
 
 /// google_mobile_ads + UMP consent + iOS ATT (ported from snake-classic).
 ///
-/// * Rewarded is always an *optional* choice (hints, rescue) — never forced.
+/// * Rewarded is always an *optional* choice (hints, rescue) - never forced.
 /// * Interstitial only at natural breaks (after a result card), capped by
 ///   [AdGate]; never during a level, never on the first sheets.
 /// * Banner only on menu screens; app-open only after ≥ 30 min away.

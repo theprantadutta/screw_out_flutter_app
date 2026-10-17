@@ -260,7 +260,7 @@ class _GameplayScreenState extends State<GameplayScreen>
             pauseLabel: l.pause,
           ),
         ),
-        // Objective chip — collapses after the first valid move.
+        // Objective chip - collapses after the first valid move.
         if (s.level.objective != null)
           Positioned(
             top: top + 64,
@@ -357,7 +357,7 @@ class _GameplayScreenState extends State<GameplayScreen>
             ],
           ),
         ),
-        // Scrim — tray sits above it so the cause of "stuck" stays visible.
+        // Scrim - tray sits above it so the cause of "stuck" stays visible.
         if (_shownOverlay != GameOverlay.none)
           Positioned.fill(
             child: AnimatedBuilder(

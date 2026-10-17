@@ -178,7 +178,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String nextSheet(String code) {
-    return 'Next sheet — $code';
+    return 'Next sheet · $code';
   }
 
   @override
@@ -293,7 +293,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String continueSheet(String code) {
-    return 'Continue — $code';
+    return 'Continue · $code';
   }
 
   @override
@@ -318,7 +318,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get masteryNote =>
-      '◆ MASTERY = CLEARED WITHOUT A HINT OR RESTART. PURELY COSMETIC — NEVER NEEDED TO PROGRESS.';
+      '◆ MASTERY = CLEARED WITHOUT A HINT OR RESTART. PURELY COSMETIC, NEVER NEEDED TO PROGRESS.';
 
   @override
   String chapterProgress(int done, int total) {
@@ -364,7 +364,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignFooter =>
-      'Chapters unlock by finishing the one before. Mastery marks are optional — hints never block progress.';
+      'Chapters unlock by finishing the one before. Mastery marks are optional. Hints never block progress.';
 
   @override
   String get chapterBonus => 'CHAPTER BONUS';
@@ -389,18 +389,18 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       streak,
       locale: localeName,
-      other: '$streak-day streak —',
-      one: '1-day streak —',
-      zero: 'Start a streak —',
+      other: '$streak-day streak.',
+      one: '1-day streak.',
+      zero: 'Start a streak.',
     );
-    return 'Same sheet for everyone today. No timer. $_temp0 missing a day costs nothing.';
+    return 'Same sheet for everyone today. No timer. $_temp0 Missing a day costs nothing.';
   }
 
   @override
   String get startDaily => 'Start today\'s sheet';
 
   @override
-  String get dailyCompleted => 'Done for today — back tomorrow';
+  String get dailyCompleted => 'Done for today · back tomorrow';
 
   @override
   String get replayDaily => 'Replay today\'s sheet';
@@ -591,7 +591,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get purchasePending =>
-      'Purchase pending — it will apply once confirmed.';
+      'Purchase pending. It will apply once confirmed.';
 
   @override
   String get purchaseFailed => 'Purchase didn\'t go through.';
@@ -730,7 +730,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Sign in to put your name on the board. Your progress comes with you.';
 
   @override
-  String get boardEmpty => 'No one here yet — be the first.';
+  String get boardEmpty => 'No one here yet. Be the first.';
 
   @override
   String get boardOffline => 'Can\'t reach the leaderboard right now.';
@@ -825,7 +825,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get hintEarnedToast => '+1 hint — thanks for watching';
+  String get hintEarnedToast => '+1 hint · thanks for watching';
 
   @override
   String get rescueToast => '+1 tray slot for this sheet';
@@ -836,7 +836,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get adNotCompleted => 'Video didn\'t finish — no reward this time.';
+  String get adNotCompleted => 'Video didn\'t finish, so no reward this time.';
 
   @override
   String themeEquippedToast(String name) {

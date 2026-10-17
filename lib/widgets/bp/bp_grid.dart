@@ -51,7 +51,7 @@ class _GridPainter extends CustomPainter {
   bool shouldRepaint(_GridPainter oldDelegate) => false;
 }
 
-/// Rectangular border, solid or dashed (square corners — UI is never rounded).
+/// Rectangular border, solid or dashed (square corners - UI is never rounded).
 class BpBorderPainter extends CustomPainter {
   const BpBorderPainter({
     required this.color,
@@ -122,7 +122,7 @@ class BpOutlined extends StatelessWidget {
   );
 }
 
-/// Mastery mark ◆ — drawn, not a glyph (Space Grotesk has no U+25C6).
+/// Mastery mark ◆ - drawn, not a glyph (Space Grotesk has no U+25C6).
 class BpDiamond extends StatelessWidget {
   const BpDiamond({super.key, this.size = 14, this.color = BpColor.action, this.filled = true});
 

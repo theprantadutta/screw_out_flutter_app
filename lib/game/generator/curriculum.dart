@@ -2,7 +2,7 @@ import 'generator.dart';
 
 /// Campaign plan: chapter metadata and the generator spec for every sheet.
 ///
-/// Only `tool/generate_levels.dart` runs this — the app ships the resulting
+/// Only `tool/generate_levels.dart` runs this - the app ships the resulting
 /// JSON (assets/levels/chNN.json), so editing a spec never silently changes
 /// shipped levels. Sheets 1, 12 and 24 are the hand-validated design samples.
 
@@ -259,7 +259,7 @@ final _chapterOne = <int, SheetPlan>{
   ),
 };
 
-/// Sheet titles — drafting vocabulary. Index = sheet id − 1; downloaded
+/// Sheet titles - drafting vocabulary. Index = sheet id − 1; downloaded
 /// chapters reuse the list with a roman suffix.
 const kSheetTitles = <String>[
   'First Turn', 'Two Point', 'Side by Side', 'Cover Plate', 'Reveal', //

@@ -60,7 +60,7 @@ final class TapIgnored extends TapResult {
   const TapIgnored(super.screwId);
 }
 
-/// What an undo reversed — enough for the reverse animation.
+/// What an undo reversed - enough for the reverse animation.
 final class Undone {
   const Undone({
     required this.screwId,

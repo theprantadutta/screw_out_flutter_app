@@ -22,7 +22,7 @@ import '../helpers/harness.dart';
   return (rate, channels, bits, frames);
 }
 
-/// Reads an Ogg Vorbis stream: (sample rate, channels, frames) — frames from
+/// Reads an Ogg Vorbis stream: (sample rate, channels, frames) - frames from
 /// the last page's granule position.
 (int, int, int) _ogg(String path) {
   final bytes = File(path).readAsBytesSync();

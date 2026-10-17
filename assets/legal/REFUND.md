@@ -8,10 +8,10 @@ All purchases in Screw Out are made through **Google Play** or the **Apple App S
 
 ## What you can buy
 
-- **Screw Out Pro** — monthly or yearly auto-renewing subscription
-- **Remove ads** — one-time purchase
-- **Coin packs** — consumable virtual currency
-- **Theme packs** — one-time cosmetic unlocks
+- **Screw Out Pro** - monthly or yearly auto-renewing subscription
+- **Remove ads** - one-time purchase
+- **Coin packs** - consumable virtual currency
+- **Theme packs** - one-time cosmetic unlocks
 
 ## Requesting a refund
 

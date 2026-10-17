@@ -17,7 +17,7 @@ import '../../widgets/bp/bp_screen.dart';
 import '../../widgets/bp/bp_sheet.dart';
 import '../chapter_complete/chapter_complete_screen.dart';
 
-/// 14 — Themes. Cosmetic only; tap a card → preview sheet → Equip / Buy.
+/// 14 - Themes. Cosmetic only; tap a card → preview sheet → Equip / Buy.
 class ThemesScreen extends StatefulWidget {
   const ThemesScreen({super.key});
 
@@ -65,7 +65,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
                 status = l.proIncluded;
                 statusColor = BpColor.textSecondary;
               } else {
-                status = t.price == null ? '—' : l.priceCoins(t.price!);
+                status = t.price == null ? '-' : l.priceCoins(t.price!);
                 statusColor = BpColor.textSecondary;
               }
               return _ThemeCard(
@@ -261,7 +261,7 @@ class _PreviewSheet extends StatelessWidget {
                                 showBpToast(context, l.notEnoughCoins, kind: BpToastKind.error);
                               }
                             },
-                      child: Text(price == null ? '—' : l.buyFor(price), style: BpType.monoButtonBold.copyWith(color: BpColor.ink)),
+                      child: Text(price == null ? '-' : l.buyFor(price), style: BpType.monoButtonBold.copyWith(color: BpColor.ink)),
                     ),
             ),
           ],

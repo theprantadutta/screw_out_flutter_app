@@ -7,7 +7,7 @@
 // Pure Dart, deterministic (seeded noise), every sound ours. The style is
 // upbeat & playful: C major, 124 BPM, modelled marimba and glockenspiel,
 // bouncy octave bass, offbeat chord stabs, claps and shakers. Everything
-// hangs off one hook — G4 C5 E5 G5, the chorus' opening — which also opens
+// hangs off one hook - G4 C5 E5 G5, the chorus' opening - which also opens
 // the level, crowns a clear and lifts a new best, so the game's sound is
 // recognisable.
 import 'dart:io';
@@ -420,7 +420,7 @@ Float64List unscrew() {
   return trim(reverb(pad(o, 0.1), wet: 0.08));
 }
 
-/// Clink: the screw lands in its slot — a bright glock "ding".
+/// Clink: the screw lands in its slot - a bright glock "ding".
 Float64List clink() {
   final o = buf(0.6);
   mix(o, glock(hz(e6), dur: 0.6), 0, gain: 0.6);
@@ -504,7 +504,7 @@ Float64List _hook({List<int> notes = const [g4, c5, e5, g5], double step = 0.085
   return o;
 }
 
-/// Level start: "ready… go!" — a quick pickup into the hook's first note.
+/// Level start: "ready… go!" - a quick pickup into the hook's first note.
 Float64List levelStart() {
   final o = buf(1.0);
   mix(o, _hook(notes: const [e4, g4, c5], step: 0.07), 0, gain: 0.9);
@@ -517,7 +517,7 @@ Float64List levelStart() {
   return trim(reverb(pad(o, 0.2), wet: 0.15));
 }
 
-/// Sheet cleared: "ta-da!" — the hook resolving onto a bright C chord.
+/// Sheet cleared: "ta-da!" - the hook resolving onto a bright C chord.
 Float64List success() {
   final o = buf(2.0);
   mix(o, _hook(), 0);
@@ -543,7 +543,7 @@ Float64List best() {
   return trim(reverb(pad(o, 0.4), wet: 0.28));
 }
 
-/// Tray full — the comic "wah-wah-waaah": a soft muted horn sliding down.
+/// Tray full - the comic "wah-wah-waaah": a soft muted horn sliding down.
 Float64List stuck() {
   final o = buf(1.7);
   final notes = [(g4, 0.22), (f4 + 1, 0.22), (f4, 0.22), (e4, 0.75)];
@@ -601,7 +601,7 @@ Float64List dailyDone() {
   return trim(reverb(pad(o, 0.3), wet: 0.25));
 }
 
-/// Purchase: "cha-ching" — a register click, a bell and a sparkle.
+/// Purchase: "cha-ching" - a register click, a bell and a sparkle.
 Float64List purchase() {
   final o = buf(1.4);
   mix(o, woodblock(900, dur: 0.06), 0, gain: 0.5);
@@ -642,7 +642,7 @@ Float64List chapterFanfare() {
 
 // ================================================================= song
 
-/// "Workshop" — upbeat & playful. 124 BPM, C major, 32 bars:
+/// "Workshop" - upbeat & playful. 124 BPM, C major, 32 bars:
 /// Chorus · Verse · Chorus (bigger) · Verse (break). The hook comes first.
 class Song {
   static const bpm = 124.0;
@@ -719,7 +719,7 @@ class Song {
 
   void _note(Float64List bus, Float64List src, double beats, {double gain = 1}) => mix(bus, src, beats * beat, gain: gain);
 
-  // Chorus: C G Am F | C G F C — the hook on marimba.
+  // Chorus: C G Am F | C G F C - the hook on marimba.
   static const _chorusChords = [
     [c4, e4, g4], [b4 - 12, d4, g4], [a4 - 12, c4, e4], [a4 - 12, c4, f4], //
     [c4, e4, g4], [b4 - 12, d4, g4], [a4 - 12, c4, f4], [c4, e4, g4],
@@ -780,7 +780,7 @@ class Song {
     }
   }
 
-  // Verse: F G Em Am | Dm G C G — pizzicato call-and-response.
+  // Verse: F G Em Am | Dm G C G - pizzicato call-and-response.
   static const _verseChords = [
     [a4 - 12, c4, f4], [b4 - 12, d4, g4], [b4 - 12, e4, g4], [a4 - 12, c4, e4], //
     [a4 - 12, d4, f4], [b4 - 12, d4, g4], [c4, e4, g4], [b4 - 12, d4, g4],

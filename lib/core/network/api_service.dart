@@ -141,7 +141,7 @@ class ApiService {
       final result = ApiFailureClassifier.decodeObject(response);
       _observe(result);
       if (result.failure == ApiFailure.unauthorized && authenticated) {
-        AppLog.warn('API 401 on $path — re-auth');
+        AppLog.warn('API 401 on $path - re-auth');
         await clearToken();
         onUnauthorized?.call();
       } else if (!result.isSuccess) {

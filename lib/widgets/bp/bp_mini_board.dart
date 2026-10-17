@@ -5,7 +5,7 @@ import '../../game/domain/level.dart';
 import '../../game/presentation/plate_painter.dart';
 import '../../services/cosmetics.dart';
 
-/// Static, non-interactive render of a level's initial board — previews on
+/// Static, non-interactive render of a level's initial board - previews on
 /// home, chapter map, daily and theme sheets. [size] is the 300-unit play
 /// area in dp (no frame).
 class BpMiniBoard extends StatelessWidget {

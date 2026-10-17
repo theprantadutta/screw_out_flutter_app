@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 /// the merits, rate limiting and a backend 5xx apart. The sync outbox keeps
 /// its own [SyncOutcome] ("retry later" vs "never retry").
 enum ApiFailure {
-  /// Never reached the server — DNS, TLS, refused, no route.
+  /// Never reached the server - DNS, TLS, refused, no route.
   offlineOrTransport,
 
   /// Reached the network but nothing answered in time.
@@ -22,7 +22,7 @@ enum ApiFailure {
   /// 403.
   forbidden,
 
-  /// 400/404/409/422 — refused on its merits; retrying unchanged fails again.
+  /// 400/404/409/422 - refused on its merits; retrying unchanged fails again.
   validation,
 
   /// 429. Back off.
@@ -31,12 +31,12 @@ enum ApiFailure {
   /// 5xx. Worth retrying later.
   serverUnavailable,
 
-  /// 2xx that could not be parsed — the contract drifted.
+  /// 2xx that could not be parsed - the contract drifted.
   badResponse,
 }
 
 /// A value, or a reason. Failures carry the API's `code` (match on it, never
-/// on the `error` text — API_CONTRACT §0).
+/// on the `error` text - API_CONTRACT §0).
 class ApiResult<T> {
   const ApiResult._({this.value, this.failure, this.statusCode, this.retryAfter, this.errorCode});
 
@@ -57,11 +57,11 @@ class ApiResult<T> {
 
   bool get isSuccess => failure == null;
 
-  /// Transport failure, timeout or 5xx — says the backend may be down.
+  /// Transport failure, timeout or 5xx - says the backend may be down.
   bool get indicatesBackendUnreachable =>
       failure == ApiFailure.offlineOrTransport || failure == ApiFailure.timeout || failure == ApiFailure.serverUnavailable;
 
-  /// Any HTTP response at all — including a refusal — proves reachability.
+  /// Any HTTP response at all - including a refusal - proves reachability.
   bool get indicatesBackendReachable => isSuccess || statusCode != null;
 
   ApiResult<R> map<R>(R Function(T value) f) => isSuccess

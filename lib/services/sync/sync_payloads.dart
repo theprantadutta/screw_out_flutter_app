@@ -8,7 +8,7 @@ import 'wire_ids.dart';
 
 /// Builds `/sync/*` request bodies from Drift (API_CONTRACT §3). Snapshot
 /// types read the latest rows; event types use the payload frozen in the
-/// outbox row. Pure functions of the database — unit-tested in memory.
+/// outbox row. Pure functions of the database - unit-tested in memory.
 class SyncPayloads {
   SyncPayloads(this._db);
 
@@ -194,7 +194,7 @@ class SyncPayloads {
   }
 }
 
-/// Server coin grants (coin packs, Pro monthly coins) — exactly-once
+/// Server coin grants (coin packs, Pro monthly coins) - exactly-once
 /// crediting per API_CONTRACT §3 "Server coin grants".
 class CoinGrants {
   CoinGrants(this._db);

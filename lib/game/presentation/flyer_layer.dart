@@ -7,7 +7,7 @@ import 'gameplay_visuals.dart';
 import 'plate_painter.dart';
 
 /// Screws in flight, painted above board and tray so they are never clipped.
-/// X and Y run on separate curves (arcX / arcY) — arcY's negative control
+/// X and Y run on separate curves (arcX / arcY) - arcY's negative control
 /// point lifts the screw ~30 px before it drops into the slot.
 class FlyerLayer extends StatelessWidget {
   const FlyerLayer({super.key, required this.visuals});

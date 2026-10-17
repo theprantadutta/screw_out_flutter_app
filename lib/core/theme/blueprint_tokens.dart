@@ -1,4 +1,4 @@
-// Screw Out — Blueprint theme tokens.
+// Screw Out - Blueprint theme tokens.
 // Generated from design/design-tokens.json. This file is the single source of
 // truth in code: never hard-code colours, type, sizes or durations in widgets.
 // (`grep "Color(0x"` outside this file must return nothing.)
@@ -112,7 +112,7 @@ abstract final class BpSize {
   static const toggleW = 46.0, toggleH = 26.0, toggleKnob = 17.0;
   static const sheetInset = 12.0, sheetPad = 20.0;
 
-  /// Design frame — 1:1 dp.
+  /// Design frame - 1:1 dp.
   static const frameW = 360.0, frameH = 780.0;
   static const headerTop = 48.0, trayBottom = 100.0, actionsBottom = 34.0;
 }

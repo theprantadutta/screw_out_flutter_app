@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 import '../../services/app_log.dart';
 
 /// Who this install is: the install id plus the build facts every request
-/// carries (API_CONTRACT §0 headers). Device-only — lives in
+/// carries (API_CONTRACT §0 headers). Device-only - lives in
 /// SharedPreferences, never synced, never cleared on sign-out.
 class InstallIdentity {
   InstallIdentity({

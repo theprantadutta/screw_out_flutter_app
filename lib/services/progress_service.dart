@@ -9,7 +9,7 @@ import '../game/generator/curriculum.dart';
 import '../presentation/bloc/game/game_host.dart';
 import 'cosmetics.dart';
 
-/// Coin rewards (light, never pressure — design system §9).
+/// Coin rewards (light, never pressure - design system §9).
 abstract final class Rewards {
   /// First clear of a campaign sheet: 15 + 5 × chapter (DWG 024 → +25).
   static int firstClear(int chapter) => 15 + 5 * chapter.clamp(1, 10);

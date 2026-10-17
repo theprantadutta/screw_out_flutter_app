@@ -41,7 +41,7 @@ final class GameState {
     moves: moves ?? this.moves,
   );
 
-  /// Pads (never truncates) the tray to [capacity] — used when a rescue slot
+  /// Pads (never truncates) the tray to [capacity] - used when a rescue slot
   /// was added after this snapshot was taken.
   GameState withCapacity(int capacity) => tray.length >= capacity
       ? this

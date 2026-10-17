@@ -21,7 +21,7 @@ import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_mini_board.dart';
 import '../../widgets/bp/bp_screen.dart';
 
-/// 02 — Home. One primary action (Continue); secondary actions are quiet.
+/// 02 - Home. One primary action (Continue); secondary actions are quiet.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, this.today});
 
@@ -231,7 +231,7 @@ class _LeaderPainter extends CustomPainter {
   bool shouldRepaint(_LeaderPainter old) => old.from != from || old.labelY != labelY || old.labelX != labelX;
 }
 
-/// |—— CHAPTER 02/05 ——| dimension line.
+/// |-- CHAPTER 02/05 --| dimension line.
 class _DimensionLine extends StatelessWidget {
   const _DimensionLine({required this.label});
 

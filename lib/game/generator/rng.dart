@@ -1,4 +1,4 @@
-/// Mulberry32 — a tiny, fully specified 32-bit PRNG.
+/// Mulberry32 - a tiny, fully specified 32-bit PRNG.
 ///
 /// `dart:math`'s `Random` makes no cross-platform or cross-version stability
 /// promise; daily sheets must be bit-identical on every install forever, so

@@ -64,10 +64,10 @@ We do not sell your personal information.
 ## Advertising (Google AdMob)
 
 The free version of Screw Out shows ads through **Google AdMob**:
-- **Rewarded videos** — always optional; you choose to watch one for an extra hint or an extra tray slot
-- **Interstitial ads** — only between sheets, never during a puzzle, and not on the first sheets
-- **Banner ads** — on menu screens only, never on the puzzle screen
-- **App open ads** — occasionally, when you come back after a long break
+- **Rewarded videos** - always optional; you choose to watch one for an extra hint or an extra tray slot
+- **Interstitial ads** - only between sheets, never during a puzzle, and not on the first sheets
+- **Banner ads** - on menu screens only, never on the puzzle screen
+- **App open ads** - occasionally, when you come back after a long break
 
 **Pro** and **Remove ads** turn off interstitial, banner and app open ads.
 
@@ -97,7 +97,7 @@ Our own server (screwout.pranta.dev) stores synced progress, purchases and level
 - Or email **prantadutta1997@gmail.com** from the address linked to your account and we will delete it within 30 days.
 - Uninstalling the App removes all data stored on your device.
 
-Deleting your account does not cancel an active subscription — cancel it in Google Play or the App Store.
+Deleting your account does not cancel an active subscription - cancel it in Google Play or the App Store.
 
 ## Your Rights
 
@@ -121,4 +121,4 @@ If we change this policy we will update the "Last Updated" date above and, for m
 **Email:** prantadutta1997@gmail.com
 
 ### Version History
-- **1.0 — October 16, 2026:** Initial privacy policy.
+- **1.0 - October 16, 2026:** Initial privacy policy.

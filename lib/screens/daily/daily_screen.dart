@@ -19,7 +19,7 @@ import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_mini_board.dart';
 import '../../widgets/bp/bp_screen.dart';
 
-/// 06 — Daily sheet. Same sheet for everyone (date seed), works offline.
+/// 06 - Daily sheet. Same sheet for everyone (date seed), works offline.
 class DailyScreen extends StatelessWidget {
   const DailyScreen({super.key, this.now});
 

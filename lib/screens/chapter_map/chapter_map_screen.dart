@@ -21,7 +21,7 @@ import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_mini_board.dart';
 import '../../widgets/bp/bp_screen.dart';
 
-/// 05 — Chapter map: serpentine path of 20 nodes (3 per row), auto-scrolled
+/// 05 - Chapter map: serpentine path of 20 nodes (3 per row), auto-scrolled
 /// to the current sheet, with a preview card for the selected sheet.
 class ChapterMapScreen extends StatefulWidget {
   const ChapterMapScreen({super.key, required this.chapter});

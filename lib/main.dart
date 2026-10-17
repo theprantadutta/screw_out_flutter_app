@@ -77,7 +77,7 @@ Future<bool> _preBoot() async {
   try {
     await dotenv.load(fileName: '.env');
   } on Object catch (e) {
-    AppLog.warn('.env missing — using production defaults: $e');
+    AppLog.warn('.env missing - using production defaults: $e');
   }
   var firebase = false;
   try {
@@ -85,7 +85,7 @@ Future<bool> _preBoot() async {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     firebase = true;
   } on Object catch (e) {
-    AppLog.warn('Firebase unavailable — accounts, push and analytics off: $e');
+    AppLog.warn('Firebase unavailable - accounts, push and analytics off: $e');
   }
   registerFontLicenses();
   await InstallIdentity.load();
@@ -156,7 +156,7 @@ Future<void> _bootstrapServices({required bool firebase}) async {
 
   await run().timeout(
     const Duration(seconds: 25),
-    onTimeout: () => AppLog.warn('Bootstrap exceeded 25 s — continuing with what is ready'),
+    onTimeout: () => AppLog.warn('Bootstrap exceeded 25 s - continuing with what is ready'),
   );
 }
 
@@ -233,7 +233,7 @@ class _AccountNotices {
     premium.stream.listen((s) {
       final was = _wasPro;
       _wasPro = s.isPro;
-      // Only a real switch-on (sign-in, grant, purchase restore) — never the
+      // Only a real switch-on (sign-in, grant, purchase restore) - never the
       // cached state loading at launch.
       if (was != false || !s.isPro) return;
       final target = _target();

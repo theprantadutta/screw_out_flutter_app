@@ -11,7 +11,7 @@ import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
 import '../../widgets/sync_notices.dart';
 
-/// Leaderboards: SHEETS · DAILY · STREAK. Kept deliberately simple — one
+/// Leaderboards: SHEETS · DAILY · STREAK. Kept deliberately simple - one
 /// list, your row highlighted, your standing pinned at the bottom.
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key, this.initial = Board.sheets, this.today});
@@ -123,7 +123,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       );
     }
     if (page == null) {
-      // Static skeleton rows (no shimmer — nothing loops while you wait).
+      // Static skeleton rows (no shimmer - nothing loops while you wait).
       return ListView(
         padding: pad,
         physics: const NeverScrollableScrollPhysics(),

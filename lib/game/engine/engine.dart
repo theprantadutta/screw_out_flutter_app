@@ -140,7 +140,7 @@ final class GameEngine {
   );
 
   /// Releases every unreleased panel whose screws are all out, returning their
-  /// screws' tray slots (positions kept — the tray is never compacted).
+  /// screws' tray slots (positions kept - the tray is never compacted).
   /// Repeats until stable.
   (GameState, List<PanelRelease>) _settle(GameState s) {
     var state = s;

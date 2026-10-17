@@ -7,7 +7,7 @@ import '../../../core/theme/blueprint_tokens.dart';
 import '../../../game/presentation/gameplay_visuals.dart';
 import '../../../l10n/app_localizations.dart';
 
-/// 03 — First-run coach mark on DWG 001: a 68 dp spotlight in a 72% scrim
+/// 03 - First-run coach mark on DWG 001: a 68 dp spotlight in a 72% scrim
 /// around the screw, pulsing yellow ring, leader line to the STEP 1 callout,
 /// a nudging finger, "↓ IT LANDS IN THE TRAY" and SKIP TUTORIAL.
 /// Only the spotlight lets taps through to the board.

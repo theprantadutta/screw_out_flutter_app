@@ -25,8 +25,8 @@ final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 /// Flat route table (snake pattern). Every route has a `name` for
 /// analytics/screen views.
 ///
-/// * [ready] — bootstrap future the splash waits for.
-/// * [packs] — chapter packs past the bundled five (null: the campaign
+/// * [ready] - bootstrap future the splash waits for.
+/// * [packs] - chapter packs past the bundled five (null: the campaign
 ///   shows MORE SHEETS SOON).
 GoRouter createAppRouter({
   required Future<void> ready,

@@ -1,4 +1,4 @@
-/// Pure-Dart level model. No Flutter imports — the engine, solver, validator
+/// Pure-Dart level model. No Flutter imports - the engine, solver, validator
 /// and level generator all run under plain `dart test` and in `tool/` CLIs.
 ///
 /// Coordinates live in a 300×300 unit play area, origin top-left. Depth 0 is

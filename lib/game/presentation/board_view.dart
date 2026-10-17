@@ -12,7 +12,7 @@ import 'plate_painter.dart';
 /// The drawing frame (corner marks) and the 300×300-unit play area.
 ///
 /// Children are stacked by z: plates at `depth*10+1`, screws at
-/// `depth*10+5` — a screw is above its own plate and below every higher
+/// `depth*10+5` - a screw is above its own plate and below every higher
 /// plate. Plates absorb taps inside their shape, so the topmost visible
 /// thing under a finger always wins.
 class BoardView extends StatelessWidget {
@@ -28,7 +28,7 @@ class BoardView extends StatelessWidget {
 
   final GameplayVisuals visuals;
 
-  /// Authoritative state — decides hit-testability.
+  /// Authoritative state - decides hit-testability.
   final GameState state;
 
   /// Frame size in dp (324 on the design frame).
@@ -385,7 +385,7 @@ class _ScrewWidgetState extends State<_ScrewWidget> {
     );
   }
 
-  /// +6, −5, +3, 0 px — 40 ms per step, linear.
+  /// +6, −5, +3, 0 px - 40 ms per step, linear.
   static double _shakeOffset(double v) {
     if (v <= 0 || v >= 1) return 0;
     const keys = [0.0, 6.0, -5.0, 3.0, 0.0];

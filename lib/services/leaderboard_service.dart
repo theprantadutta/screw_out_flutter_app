@@ -32,7 +32,7 @@ final class BoardEntry {
 
   factory BoardEntry.fromJson(Map<String, dynamic> j) => BoardEntry(
     rank: (j['rank'] as num?)?.toInt() ?? 0,
-    username: j['username'] as String? ?? '—',
+    username: j['username'] as String? ?? '-',
     isMe: j['is_me'] == true,
     levelsCleared: (j['levels_cleared'] as num?)?.toInt() ?? 0,
     mastered: (j['mastered_count'] as num?)?.toInt() ?? 0,

@@ -8,7 +8,7 @@ These Terms of Use ("Terms") govern your use of the Screw Out mobile app (the "A
 
 ## 1. The App
 
-Screw Out is a single-player puzzle game. The bundled campaign and the daily sheet can be played offline and without an account. Some features — syncing progress, leaderboards, downloading new chapters, verifying purchases — need an internet connection.
+Screw Out is a single-player puzzle game. The bundled campaign and the daily sheet can be played offline and without an account. Some features - syncing progress, leaderboards, downloading new chapters, verifying purchases - need an internet connection.
 
 ## 2. Accounts
 

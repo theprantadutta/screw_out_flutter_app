@@ -107,7 +107,7 @@ final class DisplayState extends Equatable {
 /// Flutter's engine doesn't request a refresh rate on its own, so a 120 Hz
 /// phone can render the board at 60 Hz. When the player opts in we submit a
 /// high-rate *preference*; the OS still decides, based on battery saver,
-/// heat and device settings. Device-only — never synced.
+/// heat and device settings. Device-only - never synced.
 class DisplayCubit extends Cubit<DisplayState> {
   DisplayCubit(this._store, {this.backend = const PluginRefreshRateBackend()})
     : super(const DisplayState());

@@ -32,7 +32,7 @@ class LevelRepository {
       try {
         _packs[row.chapter] = LevelPack.fromJson((jsonDecode(row.json) as Map).cast());
       } on Object {
-        // Corrupt download — drop it; it will be fetched again.
+        // Corrupt download - drop it; it will be fetched again.
         await (_db.delete(_db.levelPacks)..where((p) => p.chapter.equals(row.chapter))).go();
       }
     }

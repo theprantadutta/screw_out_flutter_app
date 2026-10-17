@@ -22,7 +22,7 @@ void main() {
               onExit: () {},
               onNext: (_) {},
               onReplay: () {},
-              nextLabel: 'Next sheet — DWG 025',
+              nextLabel: 'Next sheet · DWG 025',
             ),
           ),
         ),

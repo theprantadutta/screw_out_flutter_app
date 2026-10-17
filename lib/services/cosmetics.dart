@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import '../core/theme/blueprint_tokens.dart';
 
-/// Cosmetic board themes. Purely visual — never changes rules, never makes
+/// Cosmetic board themes. Purely visual - never changes rules, never makes
 /// screws harder to see. Blueprint is the only fully-specced theme; the
 /// others recolour plates and screws on the same blueprint sheet.
 final class BoardTheme {

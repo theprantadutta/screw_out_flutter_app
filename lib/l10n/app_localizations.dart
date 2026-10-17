@@ -379,7 +379,7 @@ abstract class AppLocalizations {
   /// No description provided for @nextSheet.
   ///
   /// In en, this message translates to:
-  /// **'Next sheet — {code}'**
+  /// **'Next sheet · {code}'**
   String nextSheet(String code);
 
   /// No description provided for @replay.
@@ -529,7 +529,7 @@ abstract class AppLocalizations {
   /// No description provided for @continueSheet.
   ///
   /// In en, this message translates to:
-  /// **'Continue — {code}'**
+  /// **'Continue · {code}'**
   String continueSheet(String code);
 
   /// No description provided for @daily.
@@ -571,7 +571,7 @@ abstract class AppLocalizations {
   /// No description provided for @masteryNote.
   ///
   /// In en, this message translates to:
-  /// **'◆ MASTERY = CLEARED WITHOUT A HINT OR RESTART. PURELY COSMETIC — NEVER NEEDED TO PROGRESS.'**
+  /// **'◆ MASTERY = CLEARED WITHOUT A HINT OR RESTART. PURELY COSMETIC, NEVER NEEDED TO PROGRESS.'**
   String get masteryNote;
 
   /// No description provided for @chapterProgress.
@@ -625,7 +625,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignFooter.
   ///
   /// In en, this message translates to:
-  /// **'Chapters unlock by finishing the one before. Mastery marks are optional — hints never block progress.'**
+  /// **'Chapters unlock by finishing the one before. Mastery marks are optional. Hints never block progress.'**
   String get campaignFooter;
 
   /// No description provided for @chapterBonus.
@@ -667,7 +667,7 @@ abstract class AppLocalizations {
   /// No description provided for @dailyBody.
   ///
   /// In en, this message translates to:
-  /// **'Same sheet for everyone today. No timer. {streak, plural, =0{Start a streak —} =1{1-day streak —} other{{streak}-day streak —}} missing a day costs nothing.'**
+  /// **'Same sheet for everyone today. No timer. {streak, plural, =0{Start a streak.} =1{1-day streak.} other{{streak}-day streak.}} Missing a day costs nothing.'**
   String dailyBody(int streak);
 
   /// No description provided for @startDaily.
@@ -679,7 +679,7 @@ abstract class AppLocalizations {
   /// No description provided for @dailyCompleted.
   ///
   /// In en, this message translates to:
-  /// **'Done for today — back tomorrow'**
+  /// **'Done for today · back tomorrow'**
   String get dailyCompleted;
 
   /// No description provided for @replayDaily.
@@ -1033,7 +1033,7 @@ abstract class AppLocalizations {
   /// No description provided for @purchasePending.
   ///
   /// In en, this message translates to:
-  /// **'Purchase pending — it will apply once confirmed.'**
+  /// **'Purchase pending. It will apply once confirmed.'**
   String get purchasePending;
 
   /// No description provided for @purchaseFailed.
@@ -1237,7 +1237,7 @@ abstract class AppLocalizations {
   /// No description provided for @boardEmpty.
   ///
   /// In en, this message translates to:
-  /// **'No one here yet — be the first.'**
+  /// **'No one here yet. Be the first.'**
   String get boardEmpty;
 
   /// No description provided for @boardOffline.
@@ -1351,7 +1351,7 @@ abstract class AppLocalizations {
   /// No description provided for @hintEarnedToast.
   ///
   /// In en, this message translates to:
-  /// **'+1 hint — thanks for watching'**
+  /// **'+1 hint · thanks for watching'**
   String get hintEarnedToast;
 
   /// No description provided for @rescueToast.
@@ -1369,7 +1369,7 @@ abstract class AppLocalizations {
   /// No description provided for @adNotCompleted.
   ///
   /// In en, this message translates to:
-  /// **'Video didn\'t finish — no reward this time.'**
+  /// **'Video didn\'t finish, so no reward this time.'**
   String get adNotCompleted;
 
   /// No description provided for @themeEquippedToast.

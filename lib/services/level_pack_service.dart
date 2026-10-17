@@ -78,7 +78,7 @@ class LevelPackService implements ChapterPacks {
         _available = {..._available}..remove(chapter);
         _remote.add(_available);
       } else {
-        AppLog.warn('Pack $chapter failed validation — not installed');
+        AppLog.warn('Pack $chapter failed validation - not installed');
       }
       return ok;
     } on Object catch (e) {

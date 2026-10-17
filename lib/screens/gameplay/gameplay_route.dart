@@ -23,7 +23,7 @@ import 'widgets/tutorial_overlay.dart';
 
 /// `/play/:level` and `/daily/play`. Loads the sheet, resumes a saved
 /// position, and swaps to the next sheet *in place* (MOTION_SPEC §7: board
-/// out 180 ms, new board in) — the page itself never re-transitions.
+/// out 180 ms, new board in) - the page itself never re-transitions.
 class GameplayRoute extends StatefulWidget {
   const GameplayRoute({super.key, this.levelId, this.daily = false});
 

@@ -90,7 +90,7 @@ class _LicensesScreenState extends State<LicensesScreen> {
                         child: Text(
                           [
                             for (final e in data[pkg]!) e.paragraphs.map((p) => p.text).join('\n\n'),
-                          ].join('\n\n————\n\n'),
+                          ].join('\n\n----\n\n'),
                           style: BpType.monoBody.copyWith(fontSize: 10, color: BpColor.textSecondary),
                         ),
                       ),

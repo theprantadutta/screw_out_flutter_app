@@ -2,7 +2,7 @@ import 'level.dart';
 
 /// Static, precomputed geometry of a level: index lookups and, for every
 /// screw, the panels that can ever cover it. Blocking never changes for a
-/// given level, only which of those panels are released — so the engine and
+/// given level, only which of those panels are released - so the engine and
 /// solver never redo geometry at runtime.
 final class Board {
   Board(this.level)

@@ -1,4 +1,4 @@
-SCREW OUT — ADMOB IDS
+SCREW OUT - ADMOB IDS
 =====================
 
 Fill in the values after the "=" signs (no quotes, no spaces) and tell Claude

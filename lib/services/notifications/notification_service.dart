@@ -23,7 +23,7 @@ import 'notification_primer.dart';
 /// * The FCM token is fetched at startup **without** a permission prompt; the
 ///   OS prompt only follows the in-app soft-ask (after the 3rd cleared sheet).
 /// * `POST /users/register-token` on every launch (it is also the activity
-///   heartbeat) and on token refresh — after a backend identity exists.
+///   heartbeat) and on token refresh - after a backend identity exists.
 /// * Deep links come from `data.nav_route` (never `route`), held until the
 ///   app is ready.
 /// * A local 19:00 reminder is the offline fallback for the daily sheet; the
@@ -97,7 +97,7 @@ class NotificationService {
     }
   }
 
-  /// The router is ready — deliver any held deep link.
+  /// The router is ready - deliver any held deep link.
   void markAppReady() {
     _appReady = true;
     final r = _pendingRoute;

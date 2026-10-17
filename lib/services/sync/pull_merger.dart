@@ -290,7 +290,7 @@ class PullMerger {
 
     final merged = (server + unpushed).clamp(0, 10000000);
     await (_db.update(_db.playerProfile)..where((p) => p.id.equals(1))).write(
-      // First link: the combined balance is the newest truth — push it.
+      // First link: the combined balance is the newest truth - push it.
       PlayerProfileCompanion(coins: Value(merged), coinsUpdatedAt: Value(now)),
     );
     await _db.enqueueSyncOutbox(dataType: SyncDataType.coinBalance, entityKey: 'balance');

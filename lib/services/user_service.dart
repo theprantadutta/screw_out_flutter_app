@@ -24,7 +24,7 @@ import 'sync/sync_report.dart';
 ///   anonymous account so pushes and sync can reach them; signing in later
 ///   *links* that account (same UID, nothing lost).
 /// * There is no refresh token: [ensureBackendSession] re-mints the JWT from
-///   a fresh Firebase ID token — single-flight, at most once a minute.
+///   a fresh Firebase ID token - single-flight, at most once a minute.
 class UserService implements AuthPort {
   UserService({
     required ApiService api,
@@ -72,7 +72,7 @@ class UserService implements AuthPort {
   @override
   AuthState get current => _state;
 
-  /// Non-anonymous account with a live API session — required to purchase.
+  /// Non-anonymous account with a live API session - required to purchase.
   bool get canPurchase => !_state.isGuest && _api.isAuthenticated;
 
   /// A Firebase user exists (guest-anonymous or real).

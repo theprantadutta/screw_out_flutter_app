@@ -110,7 +110,7 @@ class ConnectivityService extends ChangeNotifier {
     _snapshot.copyWith(link: LinkState.available, backend: BackendState.reachable, lastBackendSuccessAt: _clock()),
   );
 
-  /// Transport failure, timeout or 5xx only — never 4xx.
+  /// Transport failure, timeout or 5xx only - never 4xx.
   void recordBackendFailure() =>
       _publish(_snapshot.copyWith(backend: BackendState.unavailable, lastBackendFailureAt: _clock()));
 

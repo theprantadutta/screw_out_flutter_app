@@ -116,7 +116,7 @@
   "statMoves": "MOVES",
   "statTime": "TIME",
   "statMastery": "MASTERY",
-  "nextSheet": "Next sheet — {code}",
+  "nextSheet": "Next sheet · {code}",
   "@nextSheet": {
     "placeholders": {
       "code": {
@@ -233,7 +233,7 @@
       }
     }
   },
-  "continueSheet": "Continue — {code}",
+  "continueSheet": "Continue · {code}",
   "@continueSheet": {
     "placeholders": {
       "code": {
@@ -257,7 +257,7 @@
   },
   "fiveChapters": "Five chapters",
   "chaptersTitle": "Chapters",
-  "masteryNote": "◆ MASTERY = CLEARED WITHOUT A HINT OR RESTART. PURELY COSMETIC — NEVER NEEDED TO PROGRESS.",
+  "masteryNote": "◆ MASTERY = CLEARED WITHOUT A HINT OR RESTART. PURELY COSMETIC, NEVER NEEDED TO PROGRESS.",
   "chapterProgress": "{done}/{total}",
   "@chapterProgress": {
     "placeholders": {
@@ -296,14 +296,14 @@
     }
   },
   "theCampaign": "THE CAMPAIGN",
-  "campaignFooter": "Chapters unlock by finishing the one before. Mastery marks are optional — hints never block progress.",
+  "campaignFooter": "Chapters unlock by finishing the one before. Mastery marks are optional. Hints never block progress.",
   "chapterBonus": "CHAPTER BONUS",
   "play": "Play",
   "dailySheet": "DAILY SHEET",
   "dailyTitle": "TITLE",
   "dailyPlates": "PLATES",
   "dailyReward": "REWARD",
-  "dailyBody": "Same sheet for everyone today. No timer. {streak, plural, =0{Start a streak —} =1{1-day streak —} other{{streak}-day streak —}} missing a day costs nothing.",
+  "dailyBody": "Same sheet for everyone today. No timer. {streak, plural, =0{Start a streak.} =1{1-day streak.} other{{streak}-day streak.}} Missing a day costs nothing.",
   "@dailyBody": {
     "placeholders": {
       "streak": {
@@ -312,7 +312,7 @@
     }
   },
   "startDaily": "Start today's sheet",
-  "dailyCompleted": "Done for today — back tomorrow",
+  "dailyCompleted": "Done for today · back tomorrow",
   "replayDaily": "Replay today's sheet",
   "themesTitle": "Themes",
   "themesCaption": "COSMETIC · NEVER CHANGES RULES",
@@ -404,7 +404,7 @@
   "somethingWentWrong": "Something went wrong.",
   "tryAgain": "Try again",
   "purchaseThanks": "Thank you! Purchase applied.",
-  "purchasePending": "Purchase pending — it will apply once confirmed.",
+  "purchasePending": "Purchase pending. It will apply once confirmed.",
   "purchaseFailed": "Purchase didn't go through.",
   "signInToPurchase": "Sign in first so your purchase follows you.",
   "restored": "Purchases restored.",
@@ -487,7 +487,7 @@
   "boardOfPlayers": "OF {count}",
   "@boardOfPlayers": { "placeholders": { "count": { "type": "int", "format": "decimalPattern" } } },
   "boardGuest": "Sign in to put your name on the board. Your progress comes with you.",
-  "boardEmpty": "No one here yet — be the first.",
+  "boardEmpty": "No one here yet. Be the first.",
   "boardOffline": "Can't reach the leaderboard right now.",
   "tryAgainCaps": "TRY AGAIN",
   "todaysBoard": "TODAY'S BOARD",
@@ -513,11 +513,11 @@
   "restoreNothing": "Nothing to restore on this account.",
   "hintBoughtToast": "−{coins} ¢ · +1 hint",
   "@hintBoughtToast": { "placeholders": { "coins": { "type": "int" } } },
-  "hintEarnedToast": "+1 hint — thanks for watching",
+  "hintEarnedToast": "+1 hint · thanks for watching",
   "rescueToast": "+1 tray slot for this sheet",
   "rescuePaidToast": "−{coins} ¢ · +1 tray slot",
   "@rescuePaidToast": { "placeholders": { "coins": { "type": "int" } } },
-  "adNotCompleted": "Video didn't finish — no reward this time.",
+  "adNotCompleted": "Video didn't finish, so no reward this time.",
   "themeEquippedToast": "{name} equipped",
   "@themeEquippedToast": { "placeholders": { "name": { "type": "String" } } },
   "chapterDownloadedToast": "Chapter {chapter} is ready",

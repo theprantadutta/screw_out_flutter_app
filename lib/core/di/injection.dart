@@ -27,7 +27,7 @@ import '../network/connectivity_service.dart';
 final getIt = GetIt.instance;
 
 /// Registers everything (snake-classic order: database → network → domain
-/// services → platform services → cubits). Constructor injection only — no
+/// services → platform services → cubits). Constructor injection only - no
 /// `getIt` inside methods. Registration is synchronous; async start-up work
 /// lives in `bootstrapServices()` (main.dart).
 ///

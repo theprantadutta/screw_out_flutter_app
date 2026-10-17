@@ -25,7 +25,7 @@ abstract interface class ChapterPacks {
   Future<bool> downloadChapter(int chapter);
 }
 
-/// 04 — Campaign: one card per chapter.
+/// 04 - Campaign: one card per chapter.
 class CampaignScreen extends StatefulWidget {
   const CampaignScreen({super.key, this.packs});
 

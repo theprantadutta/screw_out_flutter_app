@@ -7,7 +7,7 @@ import '../../../widgets/bp/bp_buttons.dart';
 import '../../../widgets/bp/bp_grid.dart';
 import '../../../widgets/bp/bp_sheet.dart';
 
-/// 09 — Pause.
+/// 09 - Pause.
 class PauseSheet extends StatelessWidget {
   const PauseSheet({
     super.key,
@@ -89,7 +89,7 @@ class PauseSheet extends StatelessWidget {
   }
 }
 
-/// 10 — Stuck (tray full). The lifted tray is drawn by the gameplay screen.
+/// 10 - Stuck (tray full). The lifted tray is drawn by the gameplay screen.
 class StuckSheet extends StatelessWidget {
   const StuckSheet({
     super.key,
@@ -223,7 +223,7 @@ class RescueRow extends StatelessWidget {
   }
 }
 
-/// 13 — Out of hints. "Keep thinking" is the default; ad and coins are
+/// 13 - Out of hints. "Keep thinking" is the default; ad and coins are
 /// equal-weight outlines; the video row is hidden when no ad is available.
 class OutOfHintsSheet extends StatelessWidget {
   const OutOfHintsSheet({

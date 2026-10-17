@@ -14,7 +14,7 @@ import '../ports.dart';
 ///
 /// * `SoLoud.instance` is resolved lazily, so constructing this never loads
 ///   the native library (tests, settings-only callers).
-/// * The engine is torn down in the background and rebuilt on resume — a
+/// * The engine is torn down in the background and rebuilt on resume - a
 ///   mixer left running past the activity crashed snake (SIGABRT minutes
 ///   after backgrounding). Init / suspend / resume are serialised.
 /// * Every voice handle is validated before use: SoLoud hands back a zeroed

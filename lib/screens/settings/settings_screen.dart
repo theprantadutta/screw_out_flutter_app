@@ -23,7 +23,7 @@ import '../../widgets/sync_notices.dart';
 /// assets/legal/.
 String legalUrl(String doc) => 'https://legal.pranta.dev/$doc/html?projectName=screw_out';
 
-/// 15 — Settings. Toggles persist immediately (no Save).
+/// 15 - Settings. Toggles persist immediately (no Save).
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 

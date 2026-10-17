@@ -15,7 +15,7 @@ export 'game_state.dart';
 
 /// One level session. Owns the authoritative [GameEngine]; every tap commits
 /// synchronously, then a [BoardEvent] tells the visuals what to depict.
-/// Nothing here waits for an animation — the only timers are *when sheets
+/// Nothing here waits for an animation - the only timers are *when sheets
 /// appear*, mirroring MOTION_SPEC §4 and §9.
 class GameCubit extends Cubit<GameSessionState> {
   GameCubit({

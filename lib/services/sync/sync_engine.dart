@@ -93,7 +93,7 @@ class SyncEngine {
         final group = groups[type];
         if (group == null) continue;
         final stop = await _drainGroup(type, group);
-        if (stop) break; // backend down / session gone — try again later
+        if (stop) break; // backend down / session gone - try again later
       }
     } on Object catch (e, s) {
       AppLog.error('SyncEngine drain failed', e, s);
@@ -157,7 +157,7 @@ class SyncEngine {
   /// Called after every successful `/auth/firebase`.
   ///
   /// * First time this device meets an account that has cloud data: pull and
-  ///   merge (additive — local progress is never lost) → [SyncReportKind.restored].
+  ///   merge (additive - local progress is never lost) → [SyncReportKind.restored].
   /// * A brand-new account: push everything the guest built → [SyncReportKind.savedNew].
   /// * Already linked: a routine [refresh] in the background → null.
   ///

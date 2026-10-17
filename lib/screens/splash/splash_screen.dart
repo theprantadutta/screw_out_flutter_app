@@ -10,7 +10,7 @@ import '../../presentation/bloc/settings/settings_cubit.dart';
 import '../../router/routes.dart';
 import '../../widgets/bp/bp_grid.dart';
 
-/// 01 — Splash. ≈ 900 ms: centre lines draw → ring settles → cross turns a
+/// 01 - Splash. ≈ 900 ms: centre lines draw → ring settles → cross turns a
 /// quarter in → arc sweeps → wordmark rises → caption. Static 300 ms under
 /// reduced motion. Waits for [ready] (bootstrap) before leaving.
 class SplashScreen extends StatefulWidget {

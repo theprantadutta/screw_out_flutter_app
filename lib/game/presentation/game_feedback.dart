@@ -18,7 +18,7 @@ abstract interface class GameFeedback {
   /// Exactly one tray slot left (subtle, no alarm).
   void trayWarn();
 
-  /// Tray full — the gentle "game over" for a sheet.
+  /// Tray full - the gentle "game over" for a sheet.
   void stuck();
 
   /// Clear with a new best / mastery ◆ ("high score").
@@ -30,7 +30,7 @@ abstract interface class GameFeedback {
   /// Extra tray slot granted.
   void rescue();
 
-  /// The gameplay screen is (no longer) showing — music sits lower in play.
+  /// The gameplay screen is (no longer) showing - music sits lower in play.
   void gameplayVisible(bool visible);
 }
 

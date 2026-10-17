@@ -1,6 +1,6 @@
 import '../domain/level.dart';
 
-/// One chapter's worth of sheets — the unit bundled in assets and served by
+/// One chapter's worth of sheets - the unit bundled in assets and served by
 /// the API for chapters beyond the bundled five.
 final class LevelPack {
   const LevelPack({

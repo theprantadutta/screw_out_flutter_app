@@ -148,7 +148,7 @@ class _Bit {
   final Color color;
 }
 
-/// 11 — Level complete card.
+/// 11 - Level complete card.
 class ResultCard extends StatefulWidget {
   const ResultCard({
     super.key,
@@ -291,7 +291,7 @@ class _ResultCardState extends State<ResultCard> {
                       alignment: Alignment.centerLeft,
                       child: r.mastered
                           ? const BpDiamond(size: 20)
-                          : Text('—', style: valueStyle.copyWith(color: BpColor.textMuted)),
+                          : Text('-', style: valueStyle.copyWith(color: BpColor.textMuted)),
                     ),
                   ),
                 ),

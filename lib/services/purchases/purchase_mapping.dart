@@ -35,19 +35,19 @@ abstract final class ProductIds {
 
 /// What the backend said about a receipt (migration playbook §5).
 enum VerifyOutcome {
-  /// `is_valid: true` — deliver, mark delivered, finish.
+  /// `is_valid: true` - deliver, mark delivered, finish.
   granted,
 
   /// Could not decide now (no reply / 401 / 5xx, `PURCHASE_PENDING`,
-  /// `PURCHASE_VERIFICATION_UNAVAILABLE`) — deliver locally, queue the receipt
+  /// `PURCHASE_VERIFICATION_UNAVAILABLE`) - deliver locally, queue the receipt
   /// for retry, finish (so Play does not refund a real purchase).
   transient,
 
-  /// `ANONYMOUS_ACCOUNT_PURCHASE_BLOCKED` — handled like [transient]; the
+  /// `ANONYMOUS_ACCOUNT_PURCHASE_BLOCKED` - handled like [transient]; the
   /// queued receipt verifies once the player signs in.
   needsSignIn,
 
-  /// Explicit `is_valid: false` (or the store said no / unknown product) —
+  /// Explicit `is_valid: false` (or the store said no / unknown product) -
   /// deliver nothing. Android: do NOT finish (Play refunds it within three
   /// days). iOS: finish, or StoreKit replays it on every launch.
   rejected,

@@ -147,7 +147,7 @@ final List<(OverlayState, String, BpToastKind)> _queuedToasts = [];
 
 /// Toast in Blueprint style: card, white outline, mono text, with a tone
 /// marker (success = mint ✓, error = coral ✕). Pinned below the header so it
-/// never covers the board, tray or action buttons. One at a time — a new
+/// never covers the board, tray or action buttons. One at a time - a new
 /// toast replaces the current one, unless [queue] is set: account and sync
 /// notices wait their turn so none is lost. Announced to screen readers.
 void showBpToast(BuildContext context, String message, {BpToastKind kind = BpToastKind.info, bool queue = false}) {

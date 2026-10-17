@@ -19,7 +19,7 @@ import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
 
-/// 12 — Chapter complete. Full screen, once per chapter. Ticks fill left →
+/// 12 - Chapter complete. Full screen, once per chapter. Ticks fill left →
 /// right at a 30 ms stagger, then the bonus counts up once.
 class ChapterCompleteScreen extends StatefulWidget {
   const ChapterCompleteScreen({super.key, required this.chapter});
@@ -166,7 +166,7 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
                                   ],
                                 )
                               else
-                                Text('—', style: BpType.body.copyWith(color: BpColor.textMuted)),
+                                Text('-', style: BpType.body.copyWith(color: BpColor.textMuted)),
                             ],
                           ),
                         ),
