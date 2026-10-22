@@ -92,18 +92,21 @@ Future<bool> _preBoot() async {
   return firebase;
 }
 
-/// Async start-up the splash waits on (25 s budget, like snake-classic).
+/// Async start-up the splash waits on. Local state (levels, settings,
+/// progress) always finishes first - routing depends on it - and only the
+/// rest gets the 25 s budget (like snake-classic).
 Future<void> _bootstrapServices({required bool firebase}) async {
-  Future<void> run() async {
-    final db = getIt<AppDatabase>();
-    await db.initializeDefaults();
-    await getIt<LevelRepository>().load();
+  final db = getIt<AppDatabase>();
+  await db.initializeDefaults();
+  await getIt<LevelRepository>().load();
 
-    final settings = getIt<SettingsCubit>();
-    final osReducedMotion = WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations;
-    await settings.load(osReducedMotion: osReducedMotion);
-    await getIt<ProgressCubit>().initialize();
-    await getIt<PremiumCubit>().initialize();
+  final settings = getIt<SettingsCubit>();
+  final osReducedMotion = WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations;
+  await settings.load(osReducedMotion: osReducedMotion);
+  await getIt<ProgressCubit>().initialize();
+  await getIt<PremiumCubit>().initialize();
+
+  Future<void> run() async {
     await getIt<ConnectivityService>().initialize();
 
     // Music is on by default since the "Workshop" loop exists; installs that

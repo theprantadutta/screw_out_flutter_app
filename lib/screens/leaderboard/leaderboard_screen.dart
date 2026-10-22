@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -346,6 +347,13 @@ class _MeBar extends StatelessWidget {
     );
     if (guest) {
       final auth = context.read<AuthCubit>();
+      // Guideline 4.8: Apple must be offered wherever Google is.
+      final apple = defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS;
+      Future<void> signIn(Future<bool> Function() f) async {
+        final ok = await f();
+        if (context.mounted) showSignInResult(context, auth, ok);
+      }
+
       return shell(
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -354,12 +362,17 @@ class _MeBar extends StatelessWidget {
             const SizedBox(height: 10),
             BpPrimaryButton(
               height: 48,
-              onPressed: () async {
-                final ok = await auth.signInWithGoogle();
-                if (context.mounted) showSignInResult(context, auth, ok);
-              },
+              onPressed: () => signIn(auth.signInWithGoogle),
               child: Text(l.signInGoogle),
             ),
+            if (apple) ...[
+              const SizedBox(height: 8),
+              BpOutlineButton(
+                height: 48,
+                onPressed: () => signIn(auth.signInWithApple),
+                child: Text(l.signInApple, style: BpType.body.copyWith(fontSize: 14, color: BpColor.line)),
+              ),
+            ],
           ],
         ),
       );

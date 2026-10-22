@@ -72,10 +72,9 @@
 		<string>ca-app-pub-9242904787767394~2123676352</string>
 		<key>NSUserTrackingUsageDescription</key>
 		<string>Lets ads be more relevant. Screw Out works the same either way.</string>
-		<!-- Google Sign-In. TODO(ios): set GIDClientID to the iOS OAuth client id and the URL scheme to its
-	     REVERSED_CLIENT_ID (both in GoogleService-Info.plist once the iOS app is registered in Firebase). -->
+		<!-- Google Sign-In: iOS OAuth client id and its REVERSED_CLIENT_ID (from GoogleService-Info.plist). -->
 		<key>GIDClientID</key>
-		<string>TODO_IOS_CLIENT_ID.apps.googleusercontent.com</string>
+		<string>243939326485-d463rvjscefoif69e29q2phpj8rl24tc.apps.googleusercontent.com</string>
 		<key>CFBundleURLTypes</key>
 		<array>
 			<dict>
@@ -83,7 +82,7 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>com.googleusercontent.apps.TODO_REVERSED_CLIENT_ID</string>
+					<string>com.googleusercontent.apps.243939326485-d463rvjscefoif69e29q2phpj8rl24tc</string>
 				</array>
 			</dict>
 		</array>
