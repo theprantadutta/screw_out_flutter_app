@@ -912,4 +912,112 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderBody => 'One fresh drawing, same for everyone. No timer.';
+
+  @override
+  String get signInEmail => 'Continue with email';
+
+  @override
+  String get emailSignInTitle => 'Sign in';
+
+  @override
+  String get emailCreateTitle => 'Create account';
+
+  @override
+  String get emailTabSignIn => 'SIGN IN';
+
+  @override
+  String get emailTabCreate => 'CREATE ACCOUNT';
+
+  @override
+  String get emailSheetBody => 'Your progress on this device comes with you.';
+
+  @override
+  String get emailLabel => 'EMAIL';
+
+  @override
+  String get passwordLabel => 'PASSWORD';
+
+  @override
+  String get showPassword => 'Show password';
+
+  @override
+  String get hidePassword => 'Hide password';
+
+  @override
+  String passwordHint(int min) {
+    return 'At least $min characters';
+  }
+
+  @override
+  String get emailRequired => 'Enter your email.';
+
+  @override
+  String get emailInvalid => 'That email address doesn\'t look right.';
+
+  @override
+  String get passwordRequired => 'Enter your password.';
+
+  @override
+  String passwordTooShort(int min) {
+    return 'Use at least $min characters.';
+  }
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get forgotNeedsEmail =>
+      'Enter your email above, then tap Forgot password.';
+
+  @override
+  String resetSent(String email) {
+    return 'If $email has an account, a reset link is on its way.';
+  }
+
+  @override
+  String get emailWorking => 'One moment…';
+
+  @override
+  String get authErrWrongCredentials => 'Wrong email or password.';
+
+  @override
+  String get authErrEmailInUse =>
+      'This email already has an account. Sign in instead.';
+
+  @override
+  String get authErrWeakPassword => 'Pick a stronger password.';
+
+  @override
+  String get authErrDisabled => 'This account has been disabled.';
+
+  @override
+  String get authErrNotEnabled => 'Email sign-in isn\'t available right now.';
+
+  @override
+  String get authErrTooMany => 'Too many tries. Wait a moment and try again.';
+
+  @override
+  String get authErrNetwork =>
+      'No connection. Check your internet and try again.';
+
+  @override
+  String get authErrGeneric => 'Couldn\'t sign in. Please try again.';
+
+  @override
+  String get deletePasswordBody => 'Enter your password to confirm it\'s you.';
+
+  @override
+  String get deleteWrongPassword =>
+      'That password doesn\'t match this account.';
+
+  @override
+  String get purchaseGateTitle => 'Sign in to buy';
+
+  @override
+  String get purchaseGateBody =>
+      'Create an account or sign in to buy. Your purchases and progress stay with your account.';
+
+  @override
+  String get purchaseNeedsConnection =>
+      'Couldn\'t reach the server. Check your connection and try again.';
 }

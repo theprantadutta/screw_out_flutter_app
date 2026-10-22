@@ -17,6 +17,8 @@ import '../../services/ports.dart';
 import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
+import '../../widgets/purchase_gate.dart';
+import '../../widgets/sign_in_buttons.dart';
 import '../../widgets/sync_notices.dart';
 import 'delete_account_sheet.dart';
 
@@ -224,8 +226,8 @@ class _LinkRow extends StatelessWidget {
   );
 }
 
-/// Guest: caption + Sign in with Google / Apple. Signed in: name + sign out
-/// / delete account (tap twice to confirm).
+/// Guest: caption + Sign in with Google / Apple / email. Signed in: name +
+/// sign out / delete account (confirmed in a sheet).
 class _AccountBlock extends StatelessWidget {
   const _AccountBlock();
 
@@ -234,13 +236,6 @@ class _AccountBlock extends StatelessWidget {
     final l = AppLocalizations.of(context);
     final auth = context.watch<AuthCubit>().state;
     final cubit = context.read<AuthCubit>();
-    final busy = auth.status == AuthStatus.loading;
-    final apple = defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS;
-
-    Future<void> signIn(Future<bool> Function() f) async {
-      final ok = await f();
-      if (context.mounted) showSignInResult(context, cubit, ok);
-    }
 
     if (auth.isGuest) {
       return Column(
@@ -251,19 +246,11 @@ class _AccountBlock extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(l.guestCaption, style: BpType.caption.copyWith(letterSpacing: .6, height: 1.5, color: BpColor.textMuted)),
           ),
-          BpOutlineButton(
-            height: 50,
-            onPressed: busy ? null : () => signIn(cubit.signInWithGoogle),
-            child: Text(l.signInGoogle, style: BpType.body.copyWith(fontSize: 14, color: BpColor.line)),
+          SignInButtons(
+            onResult: (ok) {
+              if (context.mounted) showSignInResult(context, cubit, ok);
+            },
           ),
-          if (apple) ...[
-            const SizedBox(height: 8),
-            BpOutlineButton(
-              height: 50,
-              onPressed: busy ? null : () => signIn(cubit.signInWithApple),
-              child: Text(l.signInApple, style: BpType.body.copyWith(fontSize: 14, color: BpColor.line)),
-            ),
-          ],
         ],
       );
     }
@@ -297,7 +284,8 @@ class _AccountBlock extends StatelessWidget {
                   final outcome = await showDeleteAccountSheet(
                     context,
                     isPro: context.read<PremiumCubit>().state.isPro,
-                    delete: cubit.deleteAccount,
+                    needsPassword: auth.provider == AuthProviderKind.email,
+                    delete: (password) => cubit.deleteAccount(password: password),
                   );
                   if (outcome == null || !context.mounted) return;
                   final (msg, kind) = switch (outcome) {
@@ -307,7 +295,9 @@ class _AccountBlock extends StatelessWidget {
                       BpToastKind.info,
                     ),
                     AccountDeletion.offline => (l.deleteOffline, BpToastKind.error),
-                    AccountDeletion.failed || AccountDeletion.cancelled => (l.deleteFailed, BpToastKind.error),
+                    AccountDeletion.failed ||
+                    AccountDeletion.cancelled ||
+                    AccountDeletion.wrongPassword => (l.deleteFailed, BpToastKind.error),
                   };
                   showBpToast(context, msg, kind: kind, queue: true);
                 },
@@ -330,14 +320,21 @@ class _PurchasesBlock extends StatelessWidget {
     final premium = context.watch<PremiumCubit>().state;
     final store = context.read<PurchasesPort>();
 
+    // Signed in but the API session could not be re-minted: not a sign-in
+    // problem, so don't ask for one.
+    String needsAccount() => context.read<AuthCubit>().state.isGuest ? l.signInToPurchase : l.purchaseNeedsConnection;
+
     Future<void> buy(String id) async {
+      // Guests sign in (or create an account) first, then the purchase
+      // they tapped continues.
+      if (!await ensureAccountForPurchase(context) || !context.mounted) return;
       final outcome = await store.buy(id);
       if (!context.mounted) return;
       final (msg, kind) = switch (outcome) {
         PurchaseOutcome.granted => (l.purchaseThanks, BpToastKind.success),
         PurchaseOutcome.pending => (l.purchasePending, BpToastKind.info),
         PurchaseOutcome.failed => (l.purchaseFailed, BpToastKind.error),
-        PurchaseOutcome.needsSignIn => (l.signInToPurchase, BpToastKind.info),
+        PurchaseOutcome.needsSignIn => (needsAccount(), BpToastKind.info),
         PurchaseOutcome.cancelled => (null, BpToastKind.info),
       };
       if (outcome == PurchaseOutcome.granted) context.read<SoundPort>().play(Sfx.purchase);
@@ -425,11 +422,12 @@ class _PurchasesBlock extends StatelessWidget {
               child: BpOutlineButton(
                 height: 50,
                 onPressed: () async {
+                  if (!await ensureAccountForPurchase(context) || !context.mounted) return;
                   final o = await store.restore();
                   if (!context.mounted) return;
                   final (msg, kind) = switch (o) {
                     PurchaseOutcome.granted => (l.restored, BpToastKind.success),
-                    PurchaseOutcome.needsSignIn => (l.signInToPurchase, BpToastKind.info),
+                    PurchaseOutcome.needsSignIn => (needsAccount(), BpToastKind.info),
                     PurchaseOutcome.cancelled => (null, BpToastKind.info),
                     _ => (l.restoreNothing, BpToastKind.info),
                   };

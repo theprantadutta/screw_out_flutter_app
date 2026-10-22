@@ -18,8 +18,8 @@ import 'sync/sync_report.dart';
 /// Accounts (ported from snake-classic's UnifiedUserService, trimmed to
 /// Screw Out's needs). Play-first: everyone starts as an offline guest.
 ///
-/// * Google / Apple sign-in go through Firebase Auth; the Firebase ID token
-///   is exchanged for the API's own 7-day JWT (`POST /auth/firebase`).
+/// * Google / Apple / email sign-in go through Firebase Auth; the Firebase
+///   ID token is exchanged for the API's own 7-day JWT (`POST /auth/firebase`).
 /// * A guest who allows notifications is silently given a Firebase
 ///   anonymous account so pushes and sync can reach them; signing in later
 ///   *links* that account (same UID, nothing lost).
@@ -136,11 +136,13 @@ class UserService implements AuthPort {
     );
   }
 
+  /// Google / Apple win over a password also linked to the same account
+  /// (their deletion handling covers it).
   AuthProviderKind _providerOf(User user) {
-    for (final p in user.providerData) {
-      if (p.providerId == 'google.com') return AuthProviderKind.google;
-      if (p.providerId == 'apple.com') return AuthProviderKind.apple;
-    }
+    final ids = {for (final p in user.providerData) p.providerId};
+    if (ids.contains('google.com')) return AuthProviderKind.google;
+    if (ids.contains('apple.com')) return AuthProviderKind.apple;
+    if (ids.contains('password')) return AuthProviderKind.email;
     return AuthProviderKind.guest;
   }
 
@@ -289,6 +291,76 @@ class UserService implements AuthPort {
     }
   }
 
+  /// Firebase codes for "that email already has an account".
+  static const _emailTaken = {'email-already-in-use', 'credential-already-in-use', 'provider-already-linked'};
+
+  /// Firebase codes for a wrong email / password pair.
+  static const wrongCredentialCodes = {
+    'wrong-password',
+    'invalid-credential',
+    'user-not-found',
+    'invalid-login-credentials',
+    'INVALID_LOGIN_CREDENTIALS',
+  };
+
+  /// Email/password. Creating an account links a guest's anonymous identity
+  /// (same UID, nothing lost), like Google / Apple. If the address already
+  /// has an account, the right password signs into it instead (the
+  /// credential-already-in-use path of [_signInOrLink]); a wrong one reports
+  /// `email-already-in-use`. Signing in never links: a mistyped address must
+  /// not quietly become a new account, and an existing account wins anyway,
+  /// with the pull merging this device's progress into it.
+  @override
+  Future<EmailAuthResult> signInWithEmail({required String email, required String password, bool create = false}) async {
+    final address = email.trim();
+    try {
+      final credential = EmailAuthProvider.credential(email: address, password: password);
+      if (create) {
+        try {
+          final user = _safeCurrentUser;
+          if (user != null && user.isAnonymous) {
+            await user.linkWithCredential(credential);
+          } else {
+            await _auth.createUserWithEmailAndPassword(email: address, password: password);
+          }
+        } on FirebaseAuthException catch (e) {
+          if (!_emailTaken.contains(e.code)) rethrow;
+          try {
+            await _auth.signInWithCredential(credential);
+          } on FirebaseAuthException catch (e2) {
+            if (wrongCredentialCodes.contains(e2.code)) return const EmailAuthResult.failure('email-already-in-use');
+            rethrow;
+          }
+        }
+      } else {
+        await _auth.signInWithCredential(credential);
+      }
+      return await _finishSignIn() ? const EmailAuthResult.success() : const EmailAuthResult.failure();
+    } on FirebaseAuthException catch (e) {
+      AppLog.warn('Email sign-in failed: ${e.code}');
+      return EmailAuthResult.failure(e.code);
+    } on Object catch (e) {
+      AppLog.warn('Email sign-in failed: $e');
+      return const EmailAuthResult.failure();
+    }
+  }
+
+  @override
+  Future<EmailAuthResult> sendPasswordReset(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email.trim());
+      return const EmailAuthResult.success();
+    } on FirebaseAuthException catch (e) {
+      // Same answer whether or not the address has an account.
+      if (e.code == 'user-not-found') return const EmailAuthResult.success();
+      AppLog.warn('Password reset failed: ${e.code}');
+      return EmailAuthResult.failure(e.code);
+    } on Object catch (e) {
+      AppLog.warn('Password reset failed: $e');
+      return const EmailAuthResult.failure();
+    }
+  }
+
   /// Links an anonymous guest (keeps the UID and its synced data) or signs
   /// in. If the credential already belongs to another account, that account
   /// wins and the pull merges this device's progress into it.
@@ -364,7 +436,9 @@ class UserService implements AuthPort {
   /// Permanently deletes the account (store rule: reachable in-app).
   ///
   /// 1. Needs a live API session; without one nothing is touched.
-  /// 2. Sign in with Apple: Apple requires the app to revoke its token on
+  /// 2. Email accounts re-confirm with their [password] (a wrong one stops
+  ///    here with [AccountDeletion.wrongPassword]).
+  ///    Sign in with Apple: Apple requires the app to revoke its token on
   ///    deletion, which needs a fresh authorization code, so the player
   ///    re-confirms with Apple first (dismissing it cancels the deletion).
   /// 3. `DELETE /users/me` removes the account, its data and the Firebase
@@ -372,12 +446,27 @@ class UserService implements AuthPort {
   /// 4. Google access is disconnected (best effort), then this device is
   ///    signed out and wiped.
   @override
-  Future<AccountDeletion> deleteAccount() async {
+  Future<AccountDeletion> deleteAccount({String? password}) async {
     final user = _safeCurrentUser;
     if (user == null || user.isAnonymous) return AccountDeletion.failed;
     if (!await ensureBackendSession()) return AccountDeletion.offline;
 
     final provider = _providerOf(user);
+    if (provider == AuthProviderKind.email) {
+      final address = user.email;
+      if (address == null || password == null || password.isEmpty) return AccountDeletion.wrongPassword;
+      try {
+        await user.reauthenticateWithCredential(EmailAuthProvider.credential(email: address, password: password));
+      } on FirebaseAuthException catch (e) {
+        if (wrongCredentialCodes.contains(e.code)) return AccountDeletion.wrongPassword;
+        if (e.code == 'network-request-failed') return AccountDeletion.offline;
+        AppLog.warn('Email re-authentication failed: ${e.code}');
+        return AccountDeletion.failed;
+      } on Object catch (e) {
+        AppLog.warn('Email re-authentication failed: $e');
+        return AccountDeletion.failed;
+      }
+    }
     if (provider == AuthProviderKind.apple) {
       try {
         final cred = await user.reauthenticateWithProvider(AppleAuthProvider());

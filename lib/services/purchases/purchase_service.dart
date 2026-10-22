@@ -127,7 +127,9 @@ class PurchaseService implements PurchasesPort {
   @override
   Future<PurchaseOutcome> buy(String productId) async {
     final bare = ProductIds.stripPrefix(productId);
-    if (!_user.canPurchase) return PurchaseOutcome.needsSignIn;
+    // Hard guard: no store sheet without a real account and a live session
+    // (the API refuses guest receipts). The UI gates first with a sign-in.
+    if (!await _accountReady()) return PurchaseOutcome.needsSignIn;
     if (!_available) return PurchaseOutcome.failed;
     var product = _products[bare];
     if (product == null) {
@@ -158,7 +160,7 @@ class PurchaseService implements PurchasesPort {
 
   @override
   Future<PurchaseOutcome> restore() async {
-    if (!_user.canPurchase) return PurchaseOutcome.needsSignIn;
+    if (!await _accountReady()) return PurchaseOutcome.needsSignIn;
     try {
       if (_available) {
         await _iap.restorePurchases();
@@ -172,6 +174,15 @@ class PurchaseService implements PurchasesPort {
       AppLog.warn('Restore failed: $e');
       return PurchaseOutcome.failed;
     }
+  }
+
+  /// Signed in (not a guest) with an API session, re-minting an expired
+  /// session once when the player is signed in.
+  Future<bool> _accountReady() async {
+    if (_user.canPurchase) return true;
+    if (_user.current.isGuest) return false;
+    await _user.ensureBackendSession(force: true);
+    return _user.canPurchase;
   }
 
   void _complete(String bareId, PurchaseOutcome outcome) {

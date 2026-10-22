@@ -11,8 +11,18 @@ abstract interface class AuthPort {
   Future<void> initialize();
   Future<bool> signInWithGoogle();
   Future<bool> signInWithApple();
+
+  /// Email/password: signs in, or with [create] makes the account. A guest's
+  /// anonymous identity is linked so its progress is kept.
+  Future<EmailAuthResult> signInWithEmail({required String email, required String password, bool create = false});
+
+  /// Sends Firebase's password reset email.
+  Future<EmailAuthResult> sendPasswordReset(String email);
+
   Future<void> signOut();
-  Future<AccountDeletion> deleteAccount();
+
+  /// [password] re-confirms an email/password account before deletion.
+  Future<AccountDeletion> deleteAccount({String? password});
 
   /// What the sign-in just completed pulled or saved (null when the API
   /// could not be reached). Read once by the screen that started it.
@@ -36,9 +46,26 @@ enum AccountDeletion {
 
   /// The server refused or failed: nothing was deleted.
   failed,
+
+  /// Email account: the password did not match, nothing was deleted.
+  wrongPassword,
 }
 
-enum AuthProviderKind { guest, google, apple }
+/// How an email/password request ended. [code] is the
+/// FirebaseAuthException code on failure (the sheet words it).
+final class EmailAuthResult extends Equatable {
+  const EmailAuthResult.success() : ok = true, code = null;
+  const EmailAuthResult.failure([this.code]) : ok = false;
+
+  final bool ok;
+  final String? code;
+
+  @override
+  List<Object?> get props => [ok, code];
+}
+
+/// `email` = Firebase's `password` provider.
+enum AuthProviderKind { guest, google, apple, email }
 
 enum AuthStatus { initial, loading, guest, signedIn, error }
 
@@ -100,8 +127,17 @@ class AuthCubit extends Cubit<AuthState> {
     return ok;
   }
 
+  Future<EmailAuthResult> signInWithEmail({required String email, required String password, bool create = false}) async {
+    emit(state.copyWith(status: AuthStatus.loading));
+    final r = await _port.signInWithEmail(email: email, password: password, create: create);
+    if (!r.ok && !isClosed) emit(_port.current);
+    return r;
+  }
+
+  Future<EmailAuthResult> sendPasswordReset(String email) => _port.sendPasswordReset(email);
+
   Future<void> signOut() => _port.signOut();
-  Future<AccountDeletion> deleteAccount() => _port.deleteAccount();
+  Future<AccountDeletion> deleteAccount({String? password}) => _port.deleteAccount(password: password);
   SyncReport? takeSignInReport() => _port.takeSignInReport();
 }
 
@@ -118,9 +154,14 @@ final class GuestAuth implements AuthPort {
   @override
   Future<bool> signInWithApple() async => false;
   @override
+  Future<EmailAuthResult> signInWithEmail({required String email, required String password, bool create = false}) async =>
+      const EmailAuthResult.failure();
+  @override
+  Future<EmailAuthResult> sendPasswordReset(String email) async => const EmailAuthResult.failure();
+  @override
   Future<void> signOut() async {}
   @override
-  Future<AccountDeletion> deleteAccount() async => AccountDeletion.failed;
+  Future<AccountDeletion> deleteAccount({String? password}) async => AccountDeletion.failed;
   @override
   SyncReport? takeSignInReport() => null;
 }

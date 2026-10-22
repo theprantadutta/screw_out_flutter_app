@@ -24,9 +24,14 @@ class _SignedIn implements AuthPort {
   @override
   Future<bool> signInWithApple() async => true;
   @override
+  Future<EmailAuthResult> signInWithEmail({required String email, required String password, bool create = false}) async =>
+      const EmailAuthResult.success();
+  @override
+  Future<EmailAuthResult> sendPasswordReset(String email) async => const EmailAuthResult.success();
+  @override
   Future<void> signOut() async {}
   @override
-  Future<AccountDeletion> deleteAccount() async => AccountDeletion.deleted;
+  Future<AccountDeletion> deleteAccount({String? password}) async => AccountDeletion.deleted;
   @override
   SyncReport? takeSignInReport() => null;
 }

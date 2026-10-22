@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -10,6 +9,7 @@ import '../../services/leaderboard_service.dart';
 import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
+import '../../widgets/sign_in_buttons.dart';
 import '../../widgets/sync_notices.dart';
 
 /// Leaderboards: SHEETS · DAILY · STREAK. Kept deliberately simple - one
@@ -347,32 +347,20 @@ class _MeBar extends StatelessWidget {
     );
     if (guest) {
       final auth = context.read<AuthCubit>();
-      // Guideline 4.8: Apple must be offered wherever Google is.
-      final apple = defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS;
-      Future<void> signIn(Future<bool> Function() f) async {
-        final ok = await f();
-        if (context.mounted) showSignInResult(context, auth, ok);
-      }
-
       return shell(
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(l.boardGuest, style: BpType.monoBody.copyWith(color: BpColor.textSecondary)),
             const SizedBox(height: 10),
-            BpPrimaryButton(
+            // Google, Apple (iOS / macOS, Guideline 4.8) and email.
+            SignInButtons(
               height: 48,
-              onPressed: () => signIn(auth.signInWithGoogle),
-              child: Text(l.signInGoogle),
+              primaryGoogle: true,
+              onResult: (ok) {
+                if (context.mounted) showSignInResult(context, auth, ok);
+              },
             ),
-            if (apple) ...[
-              const SizedBox(height: 8),
-              BpOutlineButton(
-                height: 48,
-                onPressed: () => signIn(auth.signInWithApple),
-                child: Text(l.signInApple, style: BpType.body.copyWith(fontSize: 14, color: BpColor.line)),
-              ),
-            ],
           ],
         ),
       );

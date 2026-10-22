@@ -1491,6 +1491,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'One fresh drawing, same for everyone. No timer.'**
   String get reminderBody;
+
+  /// No description provided for @signInEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with email'**
+  String get signInEmail;
+
+  /// No description provided for @emailSignInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get emailSignInTitle;
+
+  /// No description provided for @emailCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get emailCreateTitle;
+
+  /// No description provided for @emailTabSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'SIGN IN'**
+  String get emailTabSignIn;
+
+  /// No description provided for @emailTabCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'CREATE ACCOUNT'**
+  String get emailTabCreate;
+
+  /// No description provided for @emailSheetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress on this device comes with you.'**
+  String get emailSheetBody;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'EMAIL'**
+  String get emailLabel;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PASSWORD'**
+  String get passwordLabel;
+
+  /// No description provided for @showPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
+  /// No description provided for @hidePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get hidePassword;
+
+  /// No description provided for @passwordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'At least {min} characters'**
+  String passwordHint(int min);
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email.'**
+  String get emailRequired;
+
+  /// No description provided for @emailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That email address doesn\'t look right.'**
+  String get emailInvalid;
+
+  /// No description provided for @passwordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password.'**
+  String get passwordRequired;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least {min} characters.'**
+  String passwordTooShort(int min);
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPassword;
+
+  /// No description provided for @forgotNeedsEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email above, then tap Forgot password.'**
+  String get forgotNeedsEmail;
+
+  /// No description provided for @resetSent.
+  ///
+  /// In en, this message translates to:
+  /// **'If {email} has an account, a reset link is on its way.'**
+  String resetSent(String email);
+
+  /// No description provided for @emailWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'One moment…'**
+  String get emailWorking;
+
+  /// No description provided for @authErrWrongCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong email or password.'**
+  String get authErrWrongCredentials;
+
+  /// No description provided for @authErrEmailInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'This email already has an account. Sign in instead.'**
+  String get authErrEmailInUse;
+
+  /// No description provided for @authErrWeakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a stronger password.'**
+  String get authErrWeakPassword;
+
+  /// No description provided for @authErrDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has been disabled.'**
+  String get authErrDisabled;
+
+  /// No description provided for @authErrNotEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Email sign-in isn\'t available right now.'**
+  String get authErrNotEnabled;
+
+  /// No description provided for @authErrTooMany.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many tries. Wait a moment and try again.'**
+  String get authErrTooMany;
+
+  /// No description provided for @authErrNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection. Check your internet and try again.'**
+  String get authErrNetwork;
+
+  /// No description provided for @authErrGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t sign in. Please try again.'**
+  String get authErrGeneric;
+
+  /// No description provided for @deletePasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to confirm it\'s you.'**
+  String get deletePasswordBody;
+
+  /// No description provided for @deleteWrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'That password doesn\'t match this account.'**
+  String get deleteWrongPassword;
+
+  /// No description provided for @purchaseGateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to buy'**
+  String get purchaseGateTitle;
+
+  /// No description provided for @purchaseGateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account or sign in to buy. Your purchases and progress stay with your account.'**
+  String get purchaseGateBody;
+
+  /// No description provided for @purchaseNeedsConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach the server. Check your connection and try again.'**
+  String get purchaseNeedsConnection;
 }
 
 class _AppLocalizationsDelegate
