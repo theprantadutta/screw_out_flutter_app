@@ -820,6 +820,39 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get signOutSheetTitle => 'Sign out?';
+
+  @override
+  String get signOutSheetBody =>
+      'Signing out clears your progress from this device. Everything already backed up comes back when you sign in again, but anything not synced yet (for example, sheets played offline) would be lost.';
+
+  @override
+  String get staySignedIn => 'Stay signed in';
+
+  @override
+  String get signOutConfirm => 'Sign out';
+
+  @override
+  String get rateApp => 'Rate Screw Out';
+
+  @override
+  String get sendFeedback => 'Send feedback';
+
+  @override
+  String get replayTutorial => 'Replay tutorial';
+
+  @override
+  String feedbackNoEmailApp(String email) {
+    return 'No email app found. Write to us at $email';
+  }
+
+  @override
+  String get updateChip => 'UPDATE';
+
+  @override
+  String get updateReadyRestart => 'Update downloaded. Restart to install it.';
+
+  @override
   String get deleteSheetTitle => 'Delete your account?';
 
   @override

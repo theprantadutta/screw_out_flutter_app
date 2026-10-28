@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_initializing_formals
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 
 import '../game/engine/engine.dart';
@@ -9,6 +11,7 @@ import '../presentation/bloc/progress/progress_cubit.dart';
 import '../presentation/bloc/settings/settings_cubit.dart';
 import 'ports.dart';
 import 'progress_service.dart';
+import 'review_service.dart';
 
 /// Real [GameHost]: Drift progress + wallet, Pro entitlement, rewarded ads,
 /// analytics.
@@ -20,7 +23,9 @@ class AppGameHost implements GameHost {
     required PremiumCubit premium,
     required AdsPort ads,
     required AnalyticsPort analytics,
+    ReviewService? review,
   }) : _progress = progress,
+       _review = review,
        _progressCubit = progressCubit,
        _premium = premium,
        _ads = ads,
@@ -31,6 +36,7 @@ class AppGameHost implements GameHost {
   final PremiumCubit _premium;
   final AdsPort _ads;
   final AnalyticsPort _analytics;
+  final ReviewService? _review;
 
   @override
   bool get isPro => _premium.state.isPro;
@@ -45,7 +51,17 @@ class AppGameHost implements GameHost {
   Future<void> clearProgress(int levelId) => _progress.clearGame(levelId);
 
   @override
-  Future<LevelReward> completeLevel(LevelResult result) => _progress.recordClear(result);
+  Future<LevelReward> completeLevel(LevelResult result) async {
+    final reward = await _progress.recordClear(result);
+    // A finished chapter or a new best is the moment to (maybe) ask for a
+    // review; the service gates it and waits for the celebration to end.
+    final trigger = reward.chapterCompleted != null
+        ? ReviewTrigger.chapterComplete
+        : (reward.newBest ? ReviewTrigger.newBest : null);
+    final review = _review;
+    if (trigger != null && review != null) unawaited(review.maybeRequestReview(trigger));
+    return reward;
+  }
 
   @override
   Future<bool> spendCoins(int amount, {required String reason}) => _progress.spend(amount, reason);

@@ -38,6 +38,7 @@ import 'services/ports.dart';
 import 'services/purchases/purchase_service.dart';
 import 'services/sync/sync_engine.dart';
 import 'services/user_service.dart';
+import 'services/update/in_app_update_service.dart';
 import 'widgets/bp/bp_buttons.dart';
 import 'widgets/bp/bp_screen.dart';
 import 'widgets/sync_notices.dart';
@@ -171,6 +172,8 @@ void _wireRouter(GoRouter router, Future<void> ready) {
       notifications.markAppReady();
       _PrimerTrigger(router, notifications).attach();
       _AccountNotices().attach();
+      // Play in-app update: once per launch, after Home has settled.
+      Future<void>.delayed(const Duration(seconds: 3), () => getIt<InAppUpdateService>().checkForUpdate());
       getIt<SettingsCubit>().stream.listen((_) => unawaited(_scheduleReminder()));
       getIt<ProgressCubit>().stream
           .map((p) => p.dailyDone.length)

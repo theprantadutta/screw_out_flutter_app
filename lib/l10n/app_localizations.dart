@@ -1336,6 +1336,66 @@ abstract class AppLocalizations {
   /// **'Account deleted. Pro is still billed until you cancel it in {store}.'**
   String accountDeletedProToast(String store);
 
+  /// No description provided for @signOutSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get signOutSheetTitle;
+
+  /// No description provided for @signOutSheetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing out clears your progress from this device. Everything already backed up comes back when you sign in again, but anything not synced yet (for example, sheets played offline) would be lost.'**
+  String get signOutSheetBody;
+
+  /// No description provided for @staySignedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay signed in'**
+  String get staySignedIn;
+
+  /// No description provided for @signOutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get signOutConfirm;
+
+  /// No description provided for @rateApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Screw Out'**
+  String get rateApp;
+
+  /// No description provided for @sendFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Send feedback'**
+  String get sendFeedback;
+
+  /// No description provided for @replayTutorial.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay tutorial'**
+  String get replayTutorial;
+
+  /// No description provided for @feedbackNoEmailApp.
+  ///
+  /// In en, this message translates to:
+  /// **'No email app found. Write to us at {email}'**
+  String feedbackNoEmailApp(String email);
+
+  /// No description provided for @updateChip.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATE'**
+  String get updateChip;
+
+  /// No description provided for @updateReadyRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Update downloaded. Restart to install it.'**
+  String get updateReadyRestart;
+
   /// No description provided for @deleteSheetTitle.
   ///
   /// In en, this message translates to:

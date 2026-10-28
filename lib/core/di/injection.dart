@@ -21,6 +21,8 @@ import '../../services/purchases/purchase_service.dart';
 import '../../services/storage_service.dart';
 import '../../services/sync/sync_engine.dart';
 import '../../services/user_service.dart';
+import '../../services/review_service.dart';
+import '../../services/update/in_app_update_service.dart';
 import '../network/api_service.dart';
 import '../network/connectivity_service.dart';
 
@@ -103,6 +105,20 @@ void configureDependencies({required bool firebase, AppDatabase? database}) {
     ..registerLazySingleton<SoundPort>(() => getIt<AudioService>())
     ..registerLazySingleton<NotificationService>(
       () => NotificationService(api: getIt<ApiService>(), user: getIt<UserService>()),
+    )
+    ..registerLazySingleton<InAppUpdateService>(() => InAppUpdateService(getIt<ApiService>()))
+    ..registerLazySingleton<ReviewService>(
+      () => ReviewService(
+        stats: () async {
+          final clears = (await getIt<ProgressService>().snapshot()).clears.values;
+          DateTime? first;
+          for (final c in clears) {
+            if (first == null || c.firstClearedAt.isBefore(first)) first = c.firstClearedAt;
+          }
+          return (sheetsCleared: clears.length, firstClearAt: first);
+        },
+      ),
+      dispose: (r) => r.dispose(),
     );
 }
 

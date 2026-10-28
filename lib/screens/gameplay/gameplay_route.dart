@@ -17,6 +17,8 @@ import '../../services/cosmetics.dart';
 import '../../services/level_repository.dart';
 import '../../services/ports.dart';
 import '../../services/progress_service.dart';
+import '../../services/review_service.dart';
+import '../../core/di/injection.dart';
 import '../../widgets/bp/bp_grid.dart';
 import 'gameplay_screen.dart';
 import 'widgets/tutorial_overlay.dart';
@@ -76,6 +78,7 @@ class _GameplayRouteState extends State<GameplayRoute> {
       premium: context.read<PremiumCubit>(),
       ads: context.read<AdsPort>(),
       analytics: analytics,
+      review: getIt.isRegistered<ReviewService>() ? getIt<ReviewService>() : null,
     );
     final level = widget.daily ? repo.daily(DateTime.now()) : (id == null ? null : repo.level(id));
     if (level == null) {

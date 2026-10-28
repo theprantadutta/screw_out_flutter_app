@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/di/injection.dart';
 import '../../core/theme/blueprint_tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
@@ -14,6 +17,7 @@ import '../../presentation/bloc/premium/premium_cubit.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
 import '../../router/routes.dart';
 import '../../services/ports.dart';
+import '../../services/review_service.dart';
 import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
@@ -21,10 +25,35 @@ import '../../widgets/purchase_gate.dart';
 import '../../widgets/sign_in_buttons.dart';
 import '../../widgets/sync_notices.dart';
 import 'delete_account_sheet.dart';
+import 'sign_out_sheet.dart';
 
 /// Hosted by privacy-project (Projects/screw_out); bundled copies live in
 /// assets/legal/.
 String legalUrl(String doc) => 'https://legal.pranta.dev/$doc/html?projectName=screw_out';
+
+/// Where "Send feedback" writes (the contact in the legal docs).
+const supportEmail = 'prantadutta1997@gmail.com';
+
+/// "Rate Screw Out": always the store page for a deliberate tap.
+void _rateApp() {
+  if (getIt.isRegistered<ReviewService>()) unawaited(getIt<ReviewService>().openStoreListing());
+}
+
+/// Opens the player's email app with the version and device pre-filled, so
+/// a bug report arrives with what we need to reproduce it.
+Future<void> _sendFeedback(BuildContext context) async {
+  final l = AppLocalizations.of(context);
+  final info = await PackageInfo.fromPlatform();
+  String q(String s) => Uri.encodeComponent(s);
+  final subject = 'Screw Out feedback (v${info.version} build ${info.buildNumber})';
+  // Room to write first; the details sit in a footer below.
+  final body =
+      '\n\n\n-- Details for the developer (please keep) --\n'
+      'App: ${info.version} (${info.buildNumber})\nPlatform: ${defaultTargetPlatform.name}';
+  final uri = Uri.parse('mailto:$supportEmail?subject=${q(subject)}&body=${q(body)}');
+  final opened = await launchUrl(uri, mode: LaunchMode.externalApplication).catchError((Object _) => false);
+  if (!opened && context.mounted) showBpToast(context, l.feedbackNoEmailApp(supportEmail));
+}
 
 /// 15 - Settings. Toggles persist immediately (no Save).
 class SettingsScreen extends StatelessWidget {
@@ -65,6 +94,16 @@ class SettingsScreen extends StatelessWidget {
           const _PurchasesBlock(),
           const SizedBox(height: 18),
           _Section(l.aboutSection),
+          _LinkRow(label: l.rateApp, icon: Symbols.open_in_new_sharp, onTap: _rateApp),
+          _LinkRow(label: l.sendFeedback, icon: Symbols.open_in_new_sharp, onTap: () => _sendFeedback(context)),
+          _LinkRow(
+            label: l.replayTutorial,
+            icon: Symbols.chevron_right_sharp,
+            onTap: () async {
+              await context.read<SettingsCubit>().setTutorialDone(false);
+              if (context.mounted) unawaited(context.push(AppRoutes.playPath(1)));
+            },
+          ),
           _LinkRow(
             label: l.privacyPolicy,
             icon: Symbols.open_in_new_sharp,
@@ -269,6 +308,7 @@ class _AccountBlock extends StatelessWidget {
             Expanded(
               child: BpOutlineButton(
                 onPressed: () async {
+                  if (!await confirmSignOut(context)) return;
                   await cubit.signOut();
                   if (context.mounted) showBpToast(context, l.signedOutToast);
                 },

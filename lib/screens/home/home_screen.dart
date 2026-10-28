@@ -20,6 +20,7 @@ import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_mini_board.dart';
 import '../../widgets/bp/bp_screen.dart';
+import '../../widgets/update_ready_chip.dart';
 
 /// 02 - Home. One primary action (Continue); secondary actions are quiet.
 class HomeScreen extends StatelessWidget {
@@ -64,6 +65,7 @@ class HomeScreen extends StatelessWidget {
                     child: Image.asset('assets/brand/logomark-512.png', width: 44, height: 44),
                   ),
                   const Spacer(),
+                  const UpdateReadyChip(),
                   BpIconButton(
                     size: 44,
                     iconSize: 22,
