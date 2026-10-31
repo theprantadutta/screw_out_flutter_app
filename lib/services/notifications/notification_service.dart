@@ -83,12 +83,18 @@ class NotificationService {
       final fm = FirebaseMessaging.instance;
       FirebaseMessaging.onMessage.listen(_onForegroundMessage);
       FirebaseMessaging.onMessageOpenedApp.listen((m) => _route(m.data));
+      // firebase_messaging 17 deprecates the token API in favour of
+      // register()/onRegistered, which yield an installation ID for the
+      // direct-send API. The backend sends to FCM tokens via the Admin SDK,
+      // so stay on tokens until the server moves to direct-send.
+      // ignore: deprecated_member_use
       fm.onTokenRefresh.listen((t) {
         _token = t;
         unawaited(registerToken());
       });
       final initial = await fm.getInitialMessage();
       if (initial != null) _route(initial.data);
+      // ignore: deprecated_member_use
       _token = await fm.getToken().timeout(const Duration(seconds: 10), onTimeout: () => null);
       final launch = await _local.getNotificationAppLaunchDetails();
       if (launch?.didNotificationLaunchApp == true) _routeFromPayload(launch?.notificationResponse?.payload);

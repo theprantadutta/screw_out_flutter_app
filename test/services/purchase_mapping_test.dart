@@ -16,6 +16,7 @@ void main() {
         purchaseToken: token,
         quantity: 1,
         store: IapStore.Google,
+        storeId: 'play',
         transactionDate: 0,
         transactionId: orderId,
         isAcknowledgedAndroid: false,
@@ -29,6 +30,7 @@ void main() {
     purchaseToken: jws,
     quantity: 1,
     store: IapStore.Apple,
+    storeId: 'apple',
     transactionDate: 0,
     transactionId: transactionId,
   );

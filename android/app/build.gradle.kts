@@ -61,7 +61,8 @@ gradle.taskGraph.whenReady {
 
 android {
     namespace = "com.pranta.screwout"
-    compileSdk = flutter.compileSdkVersion
+    // androidx.lifecycle 2.11 (pulled in by the upgraded plugins) needs 37+.
+    compileSdk = maxOf(flutter.compileSdkVersion, 37)
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -78,8 +79,6 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
-        // flutter_inapp_purchase (OpenIAP) ships one Android module per store.
-        missingDimensionStrategy("platform", "play")
     }
 
     signingConfigs {
