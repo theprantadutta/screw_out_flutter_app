@@ -25,12 +25,12 @@ class GameCubit extends Cubit<GameSessionState> {
     this.isDaily = false,
     Duration Function()? clock,
   }) : _host = host,
-       _engine = resume != null && resume.levelId == level.id
+       _engine = resume != null && resume.fits(level)
            ? GameEngine.restore(level, resume)
            : GameEngine(level),
        super(GameSessionState.initial(level, host.isPro)) {
     _clock = clock;
-    final meta = resume?.levelId == level.id ? resume!.meta : const {};
+    final meta = resume != null && resume.fits(level) ? resume.meta : const <String, Object?>{};
     _hintsLeft = (meta['hintsLeft'] as num?)?.toInt() ?? GameEconomy.hintsPerSession;
     _usedHint = meta['usedHint'] == true;
     _restarted = meta['restarted'] == true;

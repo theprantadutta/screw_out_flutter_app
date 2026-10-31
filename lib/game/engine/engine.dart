@@ -191,6 +191,18 @@ final class SavedGame {
   /// Session data owned by the caller (hints left, mastery flags, time…).
   final Map<String, Object?> meta;
 
+  /// Whether this save still describes [level]: same id, and every screw and
+  /// plate it mentions still exists. A sheet retuned in an update (screws
+  /// removed) makes an old save impossible to resume, so it starts fresh.
+  bool fits(Level level) {
+    if (levelId != level.id) return false;
+    final screws = {for (final s in level.screws) s.id};
+    final panels = {for (final p in level.panels) p.id};
+    return state.removed.every(screws.contains) &&
+        state.tray.every((id) => id == null || screws.contains(id)) &&
+        state.released.every(panels.contains);
+  }
+
   Map<String, Object?> toJson() => {
     'levelId': levelId,
     'state': state.toJson(),

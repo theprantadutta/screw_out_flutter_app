@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:screw_out/game/domain/board.dart';
+import 'package:screw_out/game/engine/engine.dart';
+import 'package:screw_out/game/engine/solver.dart';
 import 'package:screw_out/game/generator/curriculum.dart';
 import 'package:screw_out/game/generator/daily.dart';
 import 'package:screw_out/game/generator/generator.dart';
@@ -65,5 +68,33 @@ void main() {
       }
     }
   });
-}
 
+  // Chapter 1 should feel easy (owner's call). Sheet 12 once sat at 3.8%
+  // random-win and was where players kept filling the tray; keep a floor so
+  // a regeneration can't quietly bring a wall back.
+  test('chapter 1 stays gentle: 40%+ random-win (trap lesson and finale 15%+)', () {
+    final pack = LevelPack.fromJson(
+      (jsonDecode(File('assets/levels/ch01.json').readAsStringSync()) as Map).cast(),
+    );
+    for (final level in pack.levels) {
+      final a = Solver(Board(level), capacity: level.trayCapacity).analyze();
+      // 17 is the trap lesson and 20 the chapter finale: hard on purpose.
+      final floor = const {17, 20}.contains(level.id) ? 0.15 : 0.4;
+      expect(a.randomWinProbability, greaterThanOrEqualTo(floor - 1e-9), reason: '${level.code} ${level.title}');
+    }
+  });
+
+  test('a save that no longer fits its retuned sheet is not resumed', () {
+    final pack = LevelPack.fromJson(
+      (jsonDecode(File('assets/levels/ch01.json').readAsStringSync()) as Map).cast(),
+    );
+    final level = pack.levels.firstWhere((l) => l.id == 12);
+    final fresh = GameEngine(level).save();
+    expect(fresh.fits(level), isTrue);
+    final json = fresh.toJson();
+    final state = (json['state']! as Map).cast<String, Object?>();
+    state['removed'] = ['P0-2']; // a screw the 1.0.4 sheet no longer has
+    final stale = SavedGame.fromJson({...json, 'state': state});
+    expect(stale.fits(level), isFalse);
+  });
+}

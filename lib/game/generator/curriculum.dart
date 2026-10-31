@@ -206,8 +206,9 @@ final _chapterOne = <int, SheetPlan>{
     LevelSpec(layers: (2, 2), panels: (2, 3), screwsPerPanel: (1, 3), totalScrews: (4, 6), minTray: 3, maxTray: 3, extraTray: 0, minBlocked: 1, randomWin: (0.4, 0.85)),
     mechanics: ['tray', 'overlap'],
   ),
+  // Gentler since 1.0.4: players kept filling the tray here (was 40% random-win).
   8: const SheetPlan(
-    LevelSpec(layers: (2, 2), panels: (3, 3), screwsPerPanel: (1, 3), totalScrews: (6, 8), minTray: 3, maxTray: 3, extraTray: 0, minBlocked: 1, randomWin: (0.35, 0.8)),
+    LevelSpec(layers: (2, 2), panels: (3, 3), screwsPerPanel: (1, 3), totalScrews: (6, 8), minTray: 3, maxTray: 3, extraTray: 0, minBlocked: 1, randomWin: (0.65, 0.9)),
     mechanics: ['tray', 'overlap'],
   ),
   9: const SheetPlan(
