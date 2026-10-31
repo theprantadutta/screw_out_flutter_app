@@ -1,8 +1,8 @@
 # Privacy Policy for Screw Out
 
-**Policy Version: 1.0**  
-**Effective Date: October 16, 2026**  
-**Last Updated: October 16, 2026**
+**Policy Version: 1.1**  
+**Effective Date: October 31, 2026**  
+**Last Updated: October 31, 2026**
 
 ## Introduction
 
@@ -44,9 +44,27 @@ This data is always stored on your device. If you sign in, it is also synced to 
 - Gameplay events used to keep puzzles fair: sheet started/cleared/restarted, moves, time, hints, undos, blocked taps, times the tray filled up, and use of an extra slot
 - Session counts and length
 
+### 5. Analytics (Firebase Analytics)
+
+We use **Google Analytics for Firebase** to understand how the App is used as a whole, for example how many people play each day, which screens are opened and how far players get in the campaign. It records:
+- App events such as screens viewed, sheets started and cleared, and purchases started
+- An app-instance ID and, on devices that allow it, the advertising ID
+- Device model, OS version, app version, language and approximate (city-level) location derived from your IP address
+
+Analytics data is used in aggregate and is not used to identify you personally. If you sign in, analytics events are not linked to your email address or name.
+
+### 6. Crash reports (Firebase Crashlytics)
+
+If the App crashes or hits a serious error, **Firebase Crashlytics** sends us a crash report so we can find and fix the problem. A report contains:
+- The error and the technical trace of where it happened in the App's code
+- Device model, OS version, app version, orientation, free memory and disk space
+- A Crashlytics installation ID and the time of the crash
+
+Crash reports do not contain your email address, name, game progress details or payment information. They are kept by Firebase for 90 days.
+
 We do **not** collect precise location, contacts, photos, microphone or camera data.
 
-### 5. Notifications
+### 7. Notifications
 
 - A Firebase Cloud Messaging token, if you allow notifications, so we can send the optional daily-sheet reminder
 
@@ -56,6 +74,8 @@ We do **not** collect precise location, contacts, photos, microphone or camera d
 - **Sync and restore** your progress if you sign in
 - **Leaderboards:** show your generated username with your cleared sheets, daily result and streak
 - **Reminders:** at most one optional daily-sheet reminder, which you can turn off in Settings or your device settings
+- **Fix bugs and crashes:** crash reports show us what went wrong and on which devices
+- **Understand usage:** aggregated analytics show which features are used, so we know what to improve
 - **Improve fairness and difficulty:** aggregated level statistics (for example, how often a sheet is restarted) tell us which puzzles are too hard or confusing
 - **Keep the service secure** and prevent fraud (for example, duplicate purchase claims)
 
@@ -77,7 +97,9 @@ Google and its partners may use device identifiers and your advertising ID to sh
 
 | Service | Purpose | Privacy policy |
 |---|---|---|
-| Firebase Authentication, Cloud Messaging, Analytics (Google) | Optional sign-in, reminders, usage statistics | https://policies.google.com/privacy |
+| Firebase Authentication, Cloud Messaging (Google) | Optional sign-in, reminders | https://policies.google.com/privacy |
+| Google Analytics for Firebase | Aggregated usage statistics | https://policies.google.com/privacy |
+| Firebase Crashlytics (Google) | Crash and error reports | https://firebase.google.com/support/privacy |
 | Google AdMob | Advertising | https://policies.google.com/privacy |
 | Google Play Billing | Purchases on Android | https://policies.google.com/privacy |
 | Apple App Store / Sign in with Apple | Purchases and optional sign-in on iOS | https://www.apple.com/legal/privacy/ |
@@ -121,4 +143,5 @@ If we change this policy we will update the "Last Updated" date above and, for m
 **Email:** prantadutta1997@gmail.com
 
 ### Version History
+- **1.1 - October 31, 2026:** Describes Firebase Analytics and Firebase Crashlytics (crash reports) in more detail.
 - **1.0 - October 16, 2026:** Initial privacy policy.
