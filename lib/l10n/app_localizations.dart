@@ -1162,6 +1162,18 @@ abstract class AppLocalizations {
   /// **'STREAK'**
   String get boardStreak;
 
+  /// No description provided for @boardWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'WEEK'**
+  String get boardWeekly;
+
+  /// No description provided for @boardWeeklyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'SHEETS CLEARED THIS WEEK · RESETS MONDAY'**
+  String get boardWeeklyHint;
+
   /// No description provided for @boardSheetsHint.
   ///
   /// In en, this message translates to:

@@ -669,6 +669,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boardStreak => 'STREAK';
 
   @override
+  String get boardWeekly => 'WEEK';
+
+  @override
+  String get boardWeeklyHint => 'SHEETS CLEARED THIS WEEK · RESETS MONDAY';
+
+  @override
   String get boardSheetsHint => 'MOST SHEETS CLEARED';
 
   @override

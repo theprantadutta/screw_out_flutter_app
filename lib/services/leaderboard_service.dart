@@ -4,6 +4,9 @@ enum Board {
   /// Most sheets cleared (then most mastered).
   sheets('levels'),
 
+  /// Sheets first cleared this week (since Monday 00:00 UTC).
+  weekly('weekly'),
+
   /// Today's daily sheet: fewest moves, then fastest.
   daily('daily'),
 

@@ -80,7 +80,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             padding: const EdgeInsets.symmetric(horizontal: BpSpace.screen),
             child: _Tabs(
               selected: _board,
-              labels: {Board.sheets: l.boardSheets, Board.daily: l.boardDaily, Board.streak: l.boardStreak},
+              labels: {Board.sheets: l.boardSheets, Board.weekly: l.boardWeekly, Board.daily: l.boardDaily, Board.streak: l.boardStreak},
               onSelect: _select,
             ),
           ),
@@ -106,6 +106,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
   String _subtitle(AppLocalizations l) => switch (_board) {
     Board.sheets => l.boardSheetsHint,
+    Board.weekly => l.boardWeeklyHint,
     Board.daily => l.boardDailyHint,
     Board.streak => l.boardStreakHint,
   };
@@ -207,7 +208,7 @@ class _Row extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final (value, detail) = switch (board) {
-      Board.sheets => ('${entry.levelsCleared}', l.boardMastered(entry.mastered)),
+      Board.sheets || Board.weekly => ('${entry.levelsCleared}', l.boardMastered(entry.mastered)),
       Board.daily => ('${entry.moves}', l.boardMovesDetail(entry.moves, _time(entry.timeMs))),
       Board.streak => ('${entry.currentStreak}', l.boardDaysDetail(entry.currentStreak, entry.bestStreak)),
     };

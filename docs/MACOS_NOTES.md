@@ -36,7 +36,13 @@ iPad** from a Mac. Tick items off here as they are verified, with the date.
       (`sharePositionOrigin` = the Share button's rect) or `share_plus`
       throws. The code passes the button's rect; confirm on an iPad that it
       opens next to the button, in portrait and landscape.
-- [ ] iPhone: the share sheet opens and the text includes the App Store link.
+- [ ] iPhone: the share sheet opens; the text ends with https://screwout.pranta.dev (the marketing page, which should show the App Store button on iOS).
+
+### Goldens recorded on Windows (re-record on the Mac)
+- [ ] `test/golden/goldens/16-leaderboard*.png` were re-recorded on Windows
+      for the new WEEK tab (2026-10-31). Run
+      `flutter test --update-goldens test/golden/leaderboard_golden_test.dart`
+      on the Mac so the reference images are Mac renders again.
 
 ### 5 to 7. Streak rewards, weekly board, workshop record
 - [ ] Check the new UI on iPhone and iPad (fits, nothing clipped).

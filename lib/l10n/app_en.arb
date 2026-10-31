@@ -471,6 +471,8 @@
   "boardSheets": "SHEETS",
   "boardDaily": "DAILY",
   "boardStreak": "STREAK",
+  "boardWeekly": "WEEK",
+  "boardWeeklyHint": "SHEETS CLEARED THIS WEEK · RESETS MONDAY",
   "boardSheetsHint": "MOST SHEETS CLEARED",
   "boardDailyHint": "TODAY'S SHEET · FEWEST MOVES, THEN FASTEST",
   "boardStreakHint": "DAYS IN A ROW ON THE DAILY SHEET",
