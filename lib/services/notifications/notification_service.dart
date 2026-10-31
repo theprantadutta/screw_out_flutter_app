@@ -217,13 +217,18 @@ class NotificationService {
 
   // ------------------------------------------------- local daily reminder
 
-  /// Schedules (or cancels) the offline 19:00 reminder for today's sheet.
+  /// Schedules (or cancels) the 19:00 reminder for today's sheet.
+  ///
+  /// The device owns this reminder for every player, signed in or not: it
+  /// works offline and needs no server. (It used to be skipped whenever the
+  /// app had an API session, leaving it to a server push that never ran, so
+  /// nobody who allowed notifications got one.) The server only sends what
+  /// it alone knows: streak-at-risk, win-back and Pro coins.
   Future<void> scheduleDailyReminder({required bool enabled, required bool todayDone, String localeCode = 'en'}) async {
     if (!_initialized) return;
     try {
       await _local.cancel(id: _reminderId);
-      // Signed-in players get the server's push at their local 19:00.
-      if (!enabled || _api.isAuthenticated) return;
+      if (!enabled) return;
       final now = DateTime.now();
       var fire = DateTime(now.year, now.month, now.day, 19);
       if (todayDone || !fire.isAfter(now)) fire = fire.add(const Duration(days: 1));
