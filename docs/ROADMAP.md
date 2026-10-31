@@ -18,11 +18,11 @@ machine did not record them.
 
 ## 1. Notifications that actually reach players
 
-- [ ] **App:** always schedule the on-device 19:00 daily reminder. It was
+- [x] **App:** always schedule the on-device 19:00 daily reminder (dc0be64). It was
       skipped whenever the app had an API session (anyone who allowed
       notifications), on the assumption the server would send it; the server
       never did, so nobody got a reminder.
-- [ ] **API:** retire the server `daily-sheet-reminder` job (the device owns
+- [x] **API:** retire the server `daily-sheet-reminder` job (api e03beca) (the device owns
       that reminder now, so nobody gets two). Keep the server-only pushes:
       streak-at-risk (21:30), win-back (idle 7 to 90 days), Pro coins.
 - [ ] **Ops (owner, on the server):** in the production `.env`, delete
@@ -35,12 +35,12 @@ machine did not record them.
 
 ## 2. Ease the chapter-1 spikes (sheets 8 and 12)
 
-- [ ] Make sheets 8 and 12 gentler (the campaign should feel easy), keep
+- [x] Make sheets 8 and 12 gentler (4109767: sheet 12 random-win 3.8% to 77%, sheet 8 40% to 68%; old saves on those sheets restart fresh) (the campaign should feel easy), keep
       every sheet solver-valid (`dart run tool/validate_levels.dart`).
 
 ## 3. Golden tests that pass on every machine
 
-- [ ] Compare goldens with a small tolerance so the Mac (reference) and
+- [x] Compare goldens with a small tolerance (5% off the Mac, strict on the Mac; test/flutter_test_config.dart) so the Mac (reference) and
       Windows renders both pass; real layout changes still fail.
 
 ## 4. Share your daily result
