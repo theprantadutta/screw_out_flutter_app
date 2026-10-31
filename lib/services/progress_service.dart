@@ -16,6 +16,16 @@ abstract final class Rewards {
   static const masteryBonus = 5;
   static const chapterBonus = 200;
   static const daily = 50;
+
+  /// Bonus when today's daily extends a streak to a milestone: day 3, 7 and
+  /// 14, then every further 7 days. 0 on any other day. Coins only.
+  static int streakBonus(int streakDays) => switch (streakDays) {
+    3 => 25,
+    7 => 75,
+    14 => 150,
+    final d when d > 14 && d % 7 == 0 => 100,
+    _ => 0,
+  };
 }
 
 /// Everything the player has earned, as one immutable snapshot.
@@ -145,6 +155,8 @@ class ProgressService {
     var firstClear = false;
     var newBest = false;
     int? chapterCompleted;
+    var streakDays = 0;
+    var streakBonus = 0;
 
     if (r.isDaily) {
       final key = r.level.id;
@@ -165,6 +177,13 @@ class ProgressService {
           entityKey: '$key',
           payload: {'date': _dateString(key), 'moves': r.moves, 'time_ms': r.elapsed.inMilliseconds, 'completed_at': now.toIso8601String()},
         );
+        // Streak milestone: counted up to this daily's own date. Paid here
+        // only (the first clear of that date on this device); a daily pulled
+        // from another device is merged without rewards, so it never pays
+        // twice.
+        final days = {for (final d in await _db.select(_db.dailyCompletions).get()) d.dateKey};
+        streakDays = dailyStreak(days, DateTime(key ~/ 10000, key ~/ 100 % 100, key % 100));
+        streakBonus = Rewards.streakBonus(streakDays);
       }
     } else {
       final existing = await (_db.select(_db.levelClears)..where((c) => c.levelId.equals(r.level.id))).getSingleOrNull();
@@ -214,13 +233,16 @@ class ProgressService {
     }
 
     if (earned > 0) await _earn(earned, r.isDaily ? 'daily' : 'level_clear', r.level.id, now);
+    if (streakBonus > 0) await _earn(streakBonus, 'streak_bonus', r.level.id, now);
     return LevelReward(
-      coins: earned,
+      coins: earned + streakBonus,
       balanceBefore: before,
-      balanceAfter: before + earned,
+      balanceAfter: before + earned + streakBonus,
       firstClear: firstClear,
       chapterCompleted: chapterCompleted,
       newBest: newBest,
+      streakDays: streakDays,
+      streakBonus: streakBonus,
     );
   });
 

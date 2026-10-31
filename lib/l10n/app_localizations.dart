@@ -1336,6 +1336,12 @@ abstract class AppLocalizations {
   /// **'Account deleted. Pro is still billed until you cancel it in {store}.'**
   String accountDeletedProToast(String store);
 
+  /// No description provided for @streakBonusLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}-DAY STREAK · +{coins} BONUS'**
+  String streakBonusLine(int days, int coins);
+
   /// No description provided for @share.
   ///
   /// In en, this message translates to:

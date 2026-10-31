@@ -511,6 +511,8 @@
   "accountDeletedToast": "Your account and all its data were deleted.",
   "accountDeletedProToast": "Account deleted. Pro is still billed until you cancel it in {store}.",
   "@accountDeletedProToast": { "placeholders": { "store": { "type": "String" } } },
+  "streakBonusLine": "{days}-DAY STREAK · +{coins} BONUS",
+  "@streakBonusLine": { "placeholders": { "days": { "type": "int" }, "coins": { "type": "int" } } },
   "share": "SHARE",
   "shareResult": "Share result",
   "shareDailyTitle": "Screw Out · {code}",

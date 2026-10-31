@@ -820,6 +820,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String streakBonusLine(int days, int coins) {
+    return '$days-DAY STREAK · +$coins BONUS';
+  }
+
+  @override
   String get share => 'SHARE';
 
   @override

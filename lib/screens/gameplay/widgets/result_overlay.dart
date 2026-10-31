@@ -318,6 +318,19 @@ class _ResultCardState extends State<ResultCard> {
               ),
           ],
         ),
+        if (reward != null && reward.streakBonus > 0)
+          Row(
+            children: [
+              const Icon(Symbols.local_fire_department_sharp, size: 18, color: BpColor.action),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l.streakBonusLine(reward.streakDays, reward.streakBonus),
+                  style: BpType.label.copyWith(letterSpacing: 1, color: BpColor.action),
+                ),
+              ),
+            ],
+          ),
         BpPrimaryButton(
           height: 56,
           onPressed: widget.onNext,

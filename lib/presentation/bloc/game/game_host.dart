@@ -64,6 +64,8 @@ final class LevelReward {
     required this.firstClear,
     this.chapterCompleted,
     this.newBest = false,
+    this.streakDays = 0,
+    this.streakBonus = 0,
   });
 
   final int coins;
@@ -77,6 +79,12 @@ final class LevelReward {
   /// A replay beat the sheet's best moves or earned its first ◆ - the
   /// "high score" moment (kept rare on purpose; first clears don't count).
   final bool newBest;
+
+  /// Daily sheets: the streak this clear reached (0 for campaign sheets).
+  final int streakDays;
+
+  /// Coins for reaching a streak milestone, included in [coins].
+  final int streakBonus;
 }
 
 /// Economy constants shared by gameplay and sheets.
