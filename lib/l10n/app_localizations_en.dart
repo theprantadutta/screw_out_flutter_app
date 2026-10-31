@@ -831,6 +831,91 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get workshopRecord => 'Workshop record';
+
+  @override
+  String workshopRecordButton(int earned, int total) {
+    return 'Workshop record · $earned/$total';
+  }
+
+  @override
+  String get recordCaption => 'MILESTONES';
+
+  @override
+  String recordEarned(int earned, int total) {
+    return '$earned OF $total EARNED';
+  }
+
+  @override
+  String get badgeEarnedLabel => 'EARNED';
+
+  @override
+  String badgeEarnedToast(String name) {
+    return 'Badge earned · $name';
+  }
+
+  @override
+  String get badgeFirstTurn => 'First Turn';
+
+  @override
+  String get badgeApprentice => 'Apprentice';
+
+  @override
+  String get badgeJourneyman => 'Journeyman';
+
+  @override
+  String get badgeCraftsman => 'Craftsman';
+
+  @override
+  String get badgeChiefEngineer => 'Chief Engineer';
+
+  @override
+  String get badgeCleanWork => 'Clean Work';
+
+  @override
+  String get badgePerfectionist => 'Perfectionist';
+
+  @override
+  String get badgeRegular => 'Regular';
+
+  @override
+  String get badgeOnARoll => 'On a Roll';
+
+  @override
+  String get badgeFullWeek => 'Full Week';
+
+  @override
+  String get badgeFortnight => 'Fortnight';
+
+  @override
+  String get badgeFirstDetail => 'Clear your first sheet';
+
+  @override
+  String badgeClearDetail(int n) {
+    return 'Clear $n sheets';
+  }
+
+  @override
+  String badgeChapterDetail(int n) {
+    return 'Finish chapter $n';
+  }
+
+  @override
+  String badgeMasterDetail(int n) {
+    return 'Earn ◆ on $n sheets';
+  }
+
+  @override
+  String badgeDailyDetail(int n) {
+    return 'Play $n daily sheets';
+  }
+
+  @override
+  String badgeStreakDetail(int n) {
+    return 'Reach a $n-day streak';
+  }
+
+  @override
   String get share => 'SHARE';
 
   @override

@@ -15,6 +15,7 @@ import '../screens/leaderboard/leaderboard_screen.dart';
 import '../services/leaderboard_service.dart';
 import '../screens/licenses/licenses_screen.dart';
 import '../screens/settings/settings_screen.dart';
+import '../screens/record/record_screen.dart';
 import '../screens/splash/splash_screen.dart';
 import '../screens/themes/themes_screen.dart';
 import '../services/level_repository.dart';
@@ -110,6 +111,11 @@ GoRouter createAppRouter({
       name: 'leaderboard',
       pageBuilder: (context, state) =>
           _slide(state, LeaderboardScreen(initial: Board.fromName(state.uri.queryParameters['board']))),
+    ),
+    GoRoute(
+      path: AppRoutes.record,
+      name: 'record',
+      pageBuilder: (context, state) => _slide(state, const RecordScreen()),
     ),
     GoRoute(
       path: AppRoutes.debug,

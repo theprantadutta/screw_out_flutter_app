@@ -27,6 +27,7 @@ import 'presentation/bloc/settings/settings_cubit.dart';
 import 'router/app_router.dart';
 import 'screens/licenses/licenses_screen.dart';
 import 'services/audio/audio_service.dart';
+import 'services/badge_watcher.dart';
 import 'services/ads/ad_service.dart';
 import 'services/analytics/analytics.dart';
 import 'services/analytics/telemetry.dart';
@@ -227,6 +228,15 @@ class _AccountNotices {
   bool? _wasPro;
 
   void attach() {
+    // Workshop record: toast a badge the moment it is earned in play.
+    final progress = getIt<ProgressCubit>();
+    unawaited(
+      BadgeWatcher(progress.stream, (badge) {
+        final target = _target();
+        if (target == null) return;
+        showBpToastOn(target.$1, target.$2.badgeEarnedToast(badge.title(target.$2)), kind: BpToastKind.success, queue: true);
+      }).start(progress.state),
+    );
     getIt<SyncEngine>().reports.listen((report) {
       final target = _target();
       if (target == null) return;

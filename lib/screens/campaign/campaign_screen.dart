@@ -10,6 +10,7 @@ import '../../game/generator/curriculum.dart';
 import '../../l10n/app_localizations.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../router/routes.dart';
+import '../../services/badges.dart';
 import '../../services/level_repository.dart';
 import '../../services/progress_service.dart';
 import '../../widgets/bp/bp_buttons.dart';
@@ -115,6 +116,27 @@ class _CampaignScreenState extends State<CampaignScreen> {
                       kind: ok ? BpToastKind.success : BpToastKind.error,
                     );
                   },
+          ),
+          const SizedBox(height: 12),
+          Builder(
+            builder: (context) {
+              final badges = evaluateBadges(progress);
+              return BpOutlineButton(
+                height: 52,
+                onPressed: () => context.push(AppRoutes.record),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Symbols.military_tech_sharp, size: 20),
+                    const SizedBox(width: 8),
+                    Text(
+                      l.workshopRecordButton(badges.where((b) => b.earned).length, badges.length),
+                      style: BpType.body.copyWith(fontSize: 14, color: BpColor.line),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
           const SizedBox(height: 32),
           Text(l.campaignFooter, style: BpType.monoBody.copyWith(fontSize: 11, height: 1.6, color: BpColor.textMuted)),

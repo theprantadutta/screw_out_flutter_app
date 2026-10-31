@@ -1354,6 +1354,144 @@ abstract class AppLocalizations {
   /// **'{days}-DAY STREAK · +{coins} BONUS'**
   String streakBonusLine(int days, int coins);
 
+  /// No description provided for @workshopRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop record'**
+  String get workshopRecord;
+
+  /// No description provided for @workshopRecordButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop record · {earned}/{total}'**
+  String workshopRecordButton(int earned, int total);
+
+  /// No description provided for @recordCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'MILESTONES'**
+  String get recordCaption;
+
+  /// No description provided for @recordEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'{earned} OF {total} EARNED'**
+  String recordEarned(int earned, int total);
+
+  /// No description provided for @badgeEarnedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'EARNED'**
+  String get badgeEarnedLabel;
+
+  /// No description provided for @badgeEarnedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Badge earned · {name}'**
+  String badgeEarnedToast(String name);
+
+  /// No description provided for @badgeFirstTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'First Turn'**
+  String get badgeFirstTurn;
+
+  /// No description provided for @badgeApprentice.
+  ///
+  /// In en, this message translates to:
+  /// **'Apprentice'**
+  String get badgeApprentice;
+
+  /// No description provided for @badgeJourneyman.
+  ///
+  /// In en, this message translates to:
+  /// **'Journeyman'**
+  String get badgeJourneyman;
+
+  /// No description provided for @badgeCraftsman.
+  ///
+  /// In en, this message translates to:
+  /// **'Craftsman'**
+  String get badgeCraftsman;
+
+  /// No description provided for @badgeChiefEngineer.
+  ///
+  /// In en, this message translates to:
+  /// **'Chief Engineer'**
+  String get badgeChiefEngineer;
+
+  /// No description provided for @badgeCleanWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean Work'**
+  String get badgeCleanWork;
+
+  /// No description provided for @badgePerfectionist.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfectionist'**
+  String get badgePerfectionist;
+
+  /// No description provided for @badgeRegular.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular'**
+  String get badgeRegular;
+
+  /// No description provided for @badgeOnARoll.
+  ///
+  /// In en, this message translates to:
+  /// **'On a Roll'**
+  String get badgeOnARoll;
+
+  /// No description provided for @badgeFullWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Week'**
+  String get badgeFullWeek;
+
+  /// No description provided for @badgeFortnight.
+  ///
+  /// In en, this message translates to:
+  /// **'Fortnight'**
+  String get badgeFortnight;
+
+  /// No description provided for @badgeFirstDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear your first sheet'**
+  String get badgeFirstDetail;
+
+  /// No description provided for @badgeClearDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear {n} sheets'**
+  String badgeClearDetail(int n);
+
+  /// No description provided for @badgeChapterDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish chapter {n}'**
+  String badgeChapterDetail(int n);
+
+  /// No description provided for @badgeMasterDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn ◆ on {n} sheets'**
+  String badgeMasterDetail(int n);
+
+  /// No description provided for @badgeDailyDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Play {n} daily sheets'**
+  String badgeDailyDetail(int n);
+
+  /// No description provided for @badgeStreakDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Reach a {n}-day streak'**
+  String badgeStreakDetail(int n);
+
   /// No description provided for @share.
   ///
   /// In en, this message translates to:
