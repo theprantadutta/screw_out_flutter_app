@@ -14,6 +14,7 @@ import '../../router/routes.dart';
 import '../../services/cosmetics.dart';
 import '../../services/level_repository.dart';
 import '../../services/progress_service.dart';
+import '../../services/share_result.dart';
 import '../../widgets/bp/bp_buttons.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_mini_board.dart';
@@ -112,6 +113,38 @@ class DailyScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (done) ...[
+                  const SizedBox(height: 10),
+                  Builder(
+                    builder: (b) => BpOutlineButton(
+                      height: 50,
+                      onPressed: () async {
+                        final origin = shareOriginOf(b);
+                        final result = await context.read<ProgressService>().dailyResult(key);
+                        if (result == null) return;
+                        await shareText(
+                          dailyShareText(
+                            l,
+                            code: level.code,
+                            moves: result.moves,
+                            time: result.time,
+                            mastered: false,
+                            streak: streak,
+                          ),
+                          origin: origin,
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Symbols.ios_share_sharp, size: 18),
+                          const SizedBox(width: 8),
+                          Text(l.shareResult, style: BpType.body.copyWith(fontSize: 14, color: BpColor.line)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

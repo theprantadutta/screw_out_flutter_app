@@ -8,6 +8,7 @@ import '../../../core/theme/blueprint_tokens.dart';
 import '../../../game/generator/rng.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../presentation/bloc/game/game_host.dart';
+import '../../../services/share_result.dart';
 import '../../../widgets/bp/bp_buttons.dart';
 import '../../../widgets/bp/bp_grid.dart';
 import '../../../widgets/bp/bp_sheet.dart';
@@ -161,6 +162,7 @@ class ResultCard extends StatefulWidget {
     required this.onSheets,
     this.secondaryLabel,
     this.onCoinsCounted,
+    this.onShare,
   });
 
   final LevelResult result;
@@ -176,6 +178,10 @@ class ResultCard extends StatefulWidget {
 
   /// Fired once when the counter finishes (header balance updates then).
   final VoidCallback? onCoinsCounted;
+
+  /// Daily sheets only: share the result. Receives the button's global rect
+  /// (the iPad share popover's anchor).
+  final void Function(Rect? origin)? onShare;
 
   @override
   State<ResultCard> createState() => _ResultCardState();
@@ -326,6 +332,24 @@ class _ResultCardState extends State<ResultCard> {
           children: [
             Expanded(child: BpOutlineButton(onPressed: widget.onReplay, child: Text(l.replay, style: BpType.monoSmallButton))),
             const SizedBox(width: 8),
+            if (widget.onShare != null) ...[
+              Expanded(
+                child: Builder(
+                  builder: (b) => BpOutlineButton(
+                    onPressed: () => widget.onShare!(shareOriginOf(b)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Symbols.ios_share_sharp, size: 16),
+                        const SizedBox(width: 6),
+                        Text(l.share, style: BpType.monoSmallButton),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+            ],
             Expanded(child: BpOutlineButton(onPressed: widget.onSheets, child: Text(widget.secondaryLabel ?? l.sheets, style: BpType.monoSmallButton))),
           ],
         ),

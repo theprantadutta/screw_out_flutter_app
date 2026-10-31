@@ -1336,6 +1336,36 @@ abstract class AppLocalizations {
   /// **'Account deleted. Pro is still billed until you cancel it in {store}.'**
   String accountDeletedProToast(String store);
 
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'SHARE'**
+  String get share;
+
+  /// No description provided for @shareResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Share result'**
+  String get shareResult;
+
+  /// No description provided for @shareDailyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Screw Out · {code}'**
+  String shareDailyTitle(String code);
+
+  /// No description provided for @shareDailyMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'{moves, plural, =1{1 move} other{{moves} moves}} · {time}'**
+  String shareDailyMoves(int moves, String time);
+
+  /// No description provided for @shareDailyStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}-day streak'**
+  String shareDailyStreak(int days);
+
   /// No description provided for @signOutSheetTitle.
   ///
   /// In en, this message translates to:

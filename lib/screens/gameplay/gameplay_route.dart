@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/theme/blueprint_tokens.dart';
 import '../../game/domain/level.dart';
+import '../../game/generator/daily.dart';
 import '../../l10n/app_localizations.dart';
 import '../../presentation/bloc/game/game_cubit.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
@@ -18,6 +19,7 @@ import '../../services/level_repository.dart';
 import '../../services/ports.dart';
 import '../../services/progress_service.dart';
 import '../../services/review_service.dart';
+import '../../services/share_result.dart';
 import '../../core/di/injection.dart';
 import '../../widgets/bp/bp_grid.dart';
 import 'gameplay_screen.dart';
@@ -142,6 +144,24 @@ class _GameplayRouteState extends State<GameplayRoute> {
         afterResult();
         unawaited(_start(level.id, resume: false));
       },
+      onShare: widget.daily
+          ? (result, origin) {
+              final done = {...progress.dailyDone, DailySheets.dateKey(DateTime.now())};
+              unawaited(
+                shareText(
+                  dailyShareText(
+                    l,
+                    code: result.level.code,
+                    moves: result.moves,
+                    time: result.elapsed,
+                    mastered: result.mastered,
+                    streak: dailyStreak(done, DateTime.now()),
+                  ),
+                  origin: origin,
+                ),
+              );
+            }
+          : null,
       onNext: (reward) {
         afterResult();
         if (widget.daily) {

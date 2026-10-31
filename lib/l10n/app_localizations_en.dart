@@ -820,6 +820,33 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get share => 'SHARE';
+
+  @override
+  String get shareResult => 'Share result';
+
+  @override
+  String shareDailyTitle(String code) {
+    return 'Screw Out · $code';
+  }
+
+  @override
+  String shareDailyMoves(int moves, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      moves,
+      locale: localeName,
+      other: '$moves moves',
+      one: '1 move',
+    );
+    return '$_temp0 · $time';
+  }
+
+  @override
+  String shareDailyStreak(int days) {
+    return '$days-day streak';
+  }
+
+  @override
   String get signOutSheetTitle => 'Sign out?';
 
   @override

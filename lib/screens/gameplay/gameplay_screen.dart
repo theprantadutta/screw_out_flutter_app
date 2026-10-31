@@ -32,6 +32,7 @@ final class GameplayCallbacks {
     required this.nextLabel,
     this.secondaryLabel,
     this.onSecondary,
+    this.onShare,
   });
 
   /// Pause → EXIT TO SHEETS, result → SHEETS.
@@ -41,6 +42,9 @@ final class GameplayCallbacks {
   final String nextLabel;
   final String? secondaryLabel;
   final VoidCallback? onSecondary;
+
+  /// Daily sheets: share the result (the rect anchors the iPad popover).
+  final void Function(LevelResult result, Rect? origin)? onShare;
 }
 
 /// 07 Gameplay (+ 08 feedback states, 09 pause, 10 stuck, 11 complete,
@@ -503,6 +507,7 @@ class _GameplayScreenState extends State<GameplayScreen>
           onNext: () => widget.callbacks.onNext(s.reward),
           onReplay: widget.callbacks.onReplay,
           onSheets: widget.callbacks.onSecondary ?? widget.callbacks.onExit,
+          onShare: widget.callbacks.onShare == null ? null : (origin) => widget.callbacks.onShare!(result, origin),
           onCoinsCounted: () {
             widget.feedback.coins();
             if (mounted) setState(() => _coinsCounted = true);

@@ -114,6 +114,13 @@ class ProgressService {
       .watch()
       .asyncMap((_) => snapshot());
 
+  /// Moves and time of the daily sheet finished on [dateKey] (yyyymmdd), or
+  /// null when that day was not played.
+  Future<({int moves, Duration time})?> dailyResult(int dateKey) async {
+    final row = await (_db.select(_db.dailyCompletions)..where((d) => d.dateKey.equals(dateKey))).getSingleOrNull();
+    return row == null ? null : (moves: row.moves, time: Duration(milliseconds: row.timeMs));
+  }
+
   Future<ProgressSnapshot> snapshot() async {
     final clears = await _db.select(_db.levelClears).get();
     final profile = await (_db.select(_db.playerProfile)..where((p) => p.id.equals(1))).getSingleOrNull();
