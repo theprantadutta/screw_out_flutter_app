@@ -45,34 +45,37 @@ machine did not record them.
 
 ## 4. Share your daily result
 
-- [ ] "Share" on the daily result card and on the Daily screen once done:
+- [x] (c67510a) "Share" on the daily result card and on the Daily screen once done:
       `Screw Out · D-289 · 11 moves ◆` plus the store link. Uses the system
       share sheet (`share_plus`). **iPad needs a popover anchor**
       (`sharePositionOrigin`) or it crashes: see MACOS_NOTES.
 
 ## 5. Streak rewards
 
-- [ ] Coins when today's daily extends a streak to 3, 7 or 14 days (then
+- [x] (0bfee33) Coins when today's daily extends a streak to 3, 7 or 14 days (then
       every 7 days). Shown on the daily result card. Coins only, no real
       money. Awarded once per milestone day (idempotent ledger key), so a
       second device pulling the same daily never pays twice.
 
 ## 6. Weekly leaderboard
 
-- [ ] **API:** new board `weekly`: sheets first cleared since Monday 00:00
+- [x] (api f6a892d) **API:** new board `weekly`: sheets first cleared since Monday 00:00
       UTC (replays don't count).
-- [ ] **App:** a WEEK tab next to SHEETS / DAILY / STREAK, so new players
+- [x] (c77927b) **App:** a WEEK tab next to SHEETS / DAILY / STREAK, so new players
       have a board they can top. Check the four tabs fit a 360 dp phone.
 
 ## 7. Workshop record (milestones)
 
-- [ ] A "Workshop record" page with badges earned from progress already on
+- [x] (a9d1470) A "Workshop record" page with badges earned from progress already on
       the device (chapters finished, sheets cleared, ◆ count, best streak,
       dailies played), plus a toast the moment one is earned. Entry from the
       campaign screen. No server needed (all derived from synced data).
 
 ## Later
 
+- Sheet timer: an idle app left open on a sheet keeps counting (a tablet on
+  the charger showed 137 minutes on the tutorial). Consider pausing after
+  ~2 minutes without a tap, or starting the clock at the first move.
 - Accessibility pass (screen-reader labels on screws and plates, contrast).
 - Crash reporting (Firebase Crashlytics) now that both stores are live.
 - Update the six plugins behind the "Kotlin Gradle Plugin" build warning
