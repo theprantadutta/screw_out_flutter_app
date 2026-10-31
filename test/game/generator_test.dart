@@ -93,7 +93,7 @@ void main() {
     expect(fresh.fits(level), isTrue);
     final json = fresh.toJson();
     final state = (json['state']! as Map).cast<String, Object?>();
-    state['removed'] = ['P0-2']; // a screw the 1.0.4 sheet no longer has
+    state['removed'] = ['P0-2']; // a screw the 1.1.0 sheet no longer has
     final stale = SavedGame.fromJson({...json, 'state': state});
     expect(stale.fits(level), isFalse);
   });
