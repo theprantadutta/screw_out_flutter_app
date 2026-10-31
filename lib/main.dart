@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -86,12 +87,31 @@ Future<bool> _preBoot() async {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     firebase = true;
+    await _setUpCrashlytics();
   } on Object catch (e) {
     AppLog.warn('Firebase unavailable - accounts, push and analytics off: $e');
   }
   registerFontLicenses();
   await InstallIdentity.load();
   return firebase;
+}
+
+/// Crash reporting (Firebase Crashlytics), release builds only: debug runs
+/// keep Flutter's own console errors and never pollute the dashboard.
+/// Uncaught Flutter and platform errors are reported as crashes; handled
+/// ones logged through [AppLog.error] as non-fatal issues. Nothing personal
+/// is attached (no user id, no emails): stack traces, device and version.
+Future<void> _setUpCrashlytics() async {
+  final crashlytics = FirebaseCrashlytics.instance;
+  await crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
+  if (kDebugMode) return;
+  FlutterError.onError = crashlytics.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    unawaited(crashlytics.recordError(error, stack, fatal: true));
+    return true;
+  };
+  AppLog.onError = (message, error, stack) =>
+      unawaited(crashlytics.recordError(error ?? message, stack, reason: message));
 }
 
 /// Async start-up the splash waits on. Local state (levels, settings,

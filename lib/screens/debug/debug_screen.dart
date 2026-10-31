@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,6 +48,15 @@ class DebugScreen extends StatelessWidget {
             await s.setTutorialDone(false);
           }),
           button('RESET ALL PROGRESS', () => progress.debugReset()),
+          // Proves Crashlytics end to end: debug builds have collection off,
+          // so switch it on for this one report and send it now.
+          button('SEND TEST CRASH REPORT', () async {
+            final c = FirebaseCrashlytics.instance;
+            await c.setCrashlyticsCollectionEnabled(true);
+            await c.recordError(StateError('QA test report from the debug panel'), StackTrace.current, reason: 'QA test (not a real crash)');
+            await c.sendUnsentReports();
+            await c.setCrashlyticsCollectionEnabled(false);
+          }),
         ],
       ),
     );
