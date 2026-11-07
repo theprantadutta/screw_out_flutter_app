@@ -4,6 +4,97 @@ The Windows machine can build and run Android only. Everything below was
 written (or changed) there and still needs a check on an iPhone **and an
 iPad** from a Mac. Tick items off here as they are verified, with the date.
 
+## Start here: iOS status (2026-11-08)
+
+**iOS is not on sale, and the next build will likely be rejected until the
+blocker below is fixed.** Android is live with all six products and the trials.
+
+### Blocker: Apple rejected 1.0.2 under Guideline 5.1.1(v)
+
+Rejected 2026-11-05 (build 1.0.2 (4), reviewed on an iPad Air 11-inch M3). The
+app forces guests to register before buying, and Apple requires registration
+to be optional, for subscriptions too. It may explain the benefit of an
+account, but it cannot require one.
+
+**Not fixed yet.** The gate is still in 1.3.0:
+
+| Where | What |
+|---|---|
+| `lib/widgets/purchase_gate.dart` | `ensureAccountForPurchase` shows the sign-in sheet to guests |
+| `lib/services/user_service.dart` | `canPurchase` is false for guests |
+| `lib/services/purchases/purchase_service.dart` | `_accountReady` stops `buy` and `restore` |
+| Backend `VerifyPurchase.cs` | refuses guests with `ANONYMOUS_ACCOUNT_PURCHASE_BLOCKED` |
+| App Store Connect review notes, `STORE.md` | both say purchases require an account |
+
+Proposed fix, **waiting on Pranta's approval**: guests buy on their anonymous
+account on both platforms, the app offers an optional "sign in to keep your
+purchases on all your devices", and Restore Purchases covers reinstalls. The
+hard part is the backend, which assumes a real account owns each purchase: when
+a guest signs in later, the purchase has to move to that account or Pro gets
+stranded on the guest. Purchases are keyed by store transaction, so a second
+account restoring the same receipt is the case to design for.
+
+### What App Store Connect has
+
+App id `6825659147`, subscription group `22503171` ("Screw Out Pro").
+
+| Item | Id | State |
+|---|---|---|
+| Pro Monthly | `6825698367` | Ready for Review, 3-day free intro offer, Nov 8 2026, no end date, 175 regions |
+| Pro Yearly | `6825696999` | Ready for Review, 1-week free intro offer, Nov 8 2026, no end date, 175 regions |
+| Remove Ads, Coins Small / Medium / Large | | Ready for Review |
+| iOS version | 1.0.2 (4) | Rejected, submission `1e853d9a-7e4e-4075-8df7-0e1a4fb23a9f` |
+
+Every purchase sits inside that rejected submission, so none of them ship until
+a version is accepted.
+
+### Next steps, in order
+
+1. [ ] Agree and build the guest purchase fix (above), on the app and backend.
+2. [ ] Set up this machine (see below).
+3. [ ] Run the trial checks and the sandbox checks further down.
+4. [ ] App Store Connect: create version 1.3.0 (or later) and upload the build.
+       The repo is at `1.3.0+9`; the store still shows 1.0.2.
+5. [ ] Reword the review notes on both subscriptions: drop "Purchases require
+       an account", and mention the free trials. Update `STORE.md` to match.
+6. [ ] Reply to App Review saying what changed, then resubmit with the
+       purchases attached.
+
+### Setting up the Mac
+
+- Flutter 3.47.9 or newer: `pubspec.yaml` needs Dart `^3.13.5`.
+- `dart run build_runner build --delete-conflicting-outputs`: the `*.g.dart`
+  files are gitignored, and the app and tests will not compile without them.
+- `lib/firebase_options.dart`, `ios/Runner/GoogleService-Info.plist` and `.env`
+  are gitignored too, so copy them over or regenerate them.
+
+### Free trial checks (added 2026-11-07, never run on iOS)
+
+Tested only by unit and widget tests so far: no iOS device or sandbox run, and
+no real purchase on either platform.
+
+- [ ] **Settings shows the trial:** a new sandbox account sees "3 DAYS FREE /
+      THEN $2.99" and "7 DAYS FREE / THEN $19.99", plus the renewal terms.
+      Check the taller buttons (68 instead of 52) on iPhone and iPad. Goldens
+      use a store with no trial, so they do not cover this layout.
+- [ ] **Eligibility:** `_loadIntroEligibility` calls
+      `isEligibleForIntroOfferIOS` with the subscription group id, and plugin
+      11.3.0 sends that value under a key named `productId`. Confirm it answers
+      correctly. If it fails, the app shows no trial (safe) while StoreKit
+      still applies it at checkout, so the player gets a trial they were not
+      told about in the app.
+- [ ] **Already used a trial:** a sandbox account that had one sees plain
+      prices. On iOS, one intro offer per subscription group.
+- [ ] **No coins at trial start:** Pro unlocks at once and no 1,000 coins
+      arrive. The backend reads `offerDiscountType` = `FREE_TRIAL` from the JWS.
+- [ ] **Coins at conversion:** when the sandbox trial converts, 1,000 coins
+      arrive once. **This depends on App Store Server Notifications V2** (the
+      checkbox further down): during a trial no billing period is stored, and
+      there is no Apple reconcile job, so without DID_RENEW the coins never
+      come. Check that URL is set before testing this.
+- [ ] **Cancelled trial:** cancel during the trial. Pro ends at the trial's
+      end and no coins are ever paid.
+
 ## Always
 
 - [ ] **iPad layout:** every screen goes through `BpTabletScale` (design
@@ -75,8 +166,9 @@ Product ids (all prefixed `com.pranta.screwout.`): consumables
 
 ### Sandbox purchase checks (Settings > App Store > Sandbox Account)
 Sign in to the game with a throwaway account first: purchases on a guest
-account are blocked on purpose (`needsSignIn`, server code
-`ANONYMOUS_ACCOUNT_PURCHASE_BLOCKED`).
+account are blocked for now (`needsSignIn`, server code
+`ANONYMOUS_ACCOUNT_PURCHASE_BLOCKED`). This block is what Apple rejected, see
+"Start here". Once it is removed, run these as a guest too.
 - [ ] **Coins:** buy `coins_small`. The balance goes up once, the toast
       shows, and buying the same pack again works (the transaction was
       finished as a consumable). Kill the app mid-purchase once: on
