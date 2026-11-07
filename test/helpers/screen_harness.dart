@@ -147,6 +147,8 @@ final class FakePurchases implements PurchasesPort {
     _ => null,
   };
   @override
+  int? trialDaysOf(String productId) => null;
+  @override
   Future<PurchaseOutcome> buy(String productId) async => PurchaseOutcome.granted;
   @override
   Future<PurchaseOutcome> restore() async => PurchaseOutcome.granted;

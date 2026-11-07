@@ -533,6 +533,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proYearly => 'YEARLY';
 
   @override
+  String proTrialDays(int days) {
+    return '$days DAYS FREE';
+  }
+
+  @override
+  String proThenPrice(String price) {
+    return 'THEN $price';
+  }
+
+  @override
+  String get proTrialTerms =>
+      'Renews automatically after the free trial unless you cancel. Monthly coins start with your first payment.';
+
+  @override
   String get proActive => 'PRO · ACTIVE';
 
   @override

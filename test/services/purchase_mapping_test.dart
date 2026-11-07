@@ -128,6 +128,26 @@ void main() {
       expect(trialDaysFromOffer(trial), 7);
     });
 
+    test('the offered trial lengths read from what Play sends', () {
+      SubscriptionOffer trialOf(String period) => offer(
+        id: 'free-trial',
+        phases: [
+          phase(micros: '0', period: period, recurrence: 2, cycles: 1, formatted: 'Free'),
+          phase(micros: '2990000', formatted: r'$2.99'),
+        ],
+      );
+
+      expect(trialDaysFromOffers([base, trialOf('P3D')]), 3);
+      expect(trialDaysFromOffers([base, trialOf('P7D')]), 7);
+      expect(trialDaysFromOffers([base, trialOf('P1W')]), 7);
+    });
+
+    test('no trial offer means no trial, as for a player who already used it', () {
+      expect(trialDaysFromOffers([base, promo]), isNull);
+      expect(trialDaysFromOffers(const []), isNull);
+      expect(trialDaysFromOffers(null), isNull);
+    });
+
     test('display price skips the free trial phase', () {
       expect(recurringPriceFromOffers([trial]), r'$2.99');
       expect(recurringPriceFromOffers([promo, base]), r'$2.99');

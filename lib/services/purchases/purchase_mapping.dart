@@ -240,6 +240,25 @@ String? recurringPriceFromOffers(List<SubscriptionOffer>? offers) {
   return null;
 }
 
+/// Days of free trial a subscription advertises, or null when it has none.
+/// Play only returns offers the player qualifies for. StoreKit lists the
+/// introductory offer for everyone, so iOS callers must check eligibility too.
+int? trialDaysFor(ProductCommon product) => switch (product) {
+  ProductSubscriptionAndroid p => trialDaysFromOffers(p.subscriptionOffers),
+  ProductSubscriptionIOS p => trialDaysFromOffers(p.subscriptionOffers?.where((o) => o.type == DiscountOfferType.Introductory)),
+  _ => null,
+};
+
+/// The first free trial among [offers], in days.
+int? trialDaysFromOffers(Iterable<SubscriptionOffer>? offers) {
+  if (offers == null) return null;
+  for (final offer in offers) {
+    final days = trialDaysFromOffer(offer);
+    if (days != null) return days;
+  }
+  return null;
+}
+
 /// Days of free trial one offer carries, or null when it is not a trial.
 /// Android: a zero-priced phase that does not recur forever. iOS: a
 /// free-trial payment mode with a period.

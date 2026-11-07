@@ -922,6 +922,24 @@ abstract class AppLocalizations {
   /// **'YEARLY'**
   String get proYearly;
 
+  /// No description provided for @proTrialDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} DAYS FREE'**
+  String proTrialDays(int days);
+
+  /// No description provided for @proThenPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'THEN {price}'**
+  String proThenPrice(String price);
+
+  /// No description provided for @proTrialTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Renews automatically after the free trial unless you cancel. Monthly coins start with your first payment.'**
+  String get proTrialTerms;
+
   /// No description provided for @proActive.
   ///
   /// In en, this message translates to:

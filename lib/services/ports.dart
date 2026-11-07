@@ -36,6 +36,10 @@ abstract interface class AnalyticsPort {
 abstract interface class PurchasesPort {
   /// Localised price string ("$2.99") or null before products load.
   String? priceOf(String productId);
+
+  /// Days of free trial this player would get on [productId], or null when
+  /// there is none or they do not qualify.
+  int? trialDaysOf(String productId);
   Future<PurchaseOutcome> buy(String productId);
   Future<PurchaseOutcome> restore();
 }
@@ -128,6 +132,8 @@ final class NoPurchases implements PurchasesPort {
   const NoPurchases();
   @override
   String? priceOf(String productId) => null;
+  @override
+  int? trialDaysOf(String productId) => null;
   @override
   Future<PurchaseOutcome> buy(String productId) async => PurchaseOutcome.failed;
   @override

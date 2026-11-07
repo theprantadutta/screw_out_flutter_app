@@ -382,6 +382,21 @@ class _PurchasesBlock extends StatelessWidget {
     }
 
     final mono = BpType.monoSmallButton;
+    final monthlyTrial = store.trialDaysOf(Products.proMonthly);
+    final yearlyTrial = store.trialDaysOf(Products.proYearly);
+    final hasTrial = monthlyTrial != null || yearlyTrial != null;
+
+    // A trial reads "3 DAYS FREE / THEN $2.99", so the price is never hidden.
+    _PriceLabel planLabel(String plan, String productId, int? trial, {bool ink = false}) {
+      final price = store.priceOf(productId);
+      return _PriceLabel(
+        top: plan,
+        note: trial == null ? null : l.proTrialDays(trial),
+        bottom: trial == null || price == null ? price : l.proThenPrice(price),
+        ink: ink,
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -412,22 +427,26 @@ class _PurchasesBlock extends StatelessWidget {
                   children: [
                     Expanded(
                       child: BpOutlineButton(
-                        height: 52,
+                        height: hasTrial ? 68 : 52,
                         onPressed: () => buy(Products.proMonthly),
-                        child: _PriceLabel(top: l.proMonthly, bottom: store.priceOf(Products.proMonthly)),
+                        child: planLabel(l.proMonthly, Products.proMonthly, monthlyTrial),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: BpPrimaryButton(
-                        height: 52,
+                        height: hasTrial ? 68 : 52,
                         shadow: 0,
                         onPressed: () => buy(Products.proYearly),
-                        child: _PriceLabel(top: l.proYearly, bottom: store.priceOf(Products.proYearly), ink: true),
+                        child: planLabel(l.proYearly, Products.proYearly, yearlyTrial, ink: true),
                       ),
                     ),
                   ],
                 ),
+                if (hasTrial) ...[
+                  const SizedBox(height: 8),
+                  Text(l.proTrialTerms, style: BpType.caption.copyWith(letterSpacing: .4, height: 1.5, color: BpColor.textSecondary)),
+                ],
               ],
             ),
           ),
@@ -501,9 +520,12 @@ class _PurchasesBlock extends StatelessWidget {
 }
 
 class _PriceLabel extends StatelessWidget {
-  const _PriceLabel({required this.top, this.bottom, this.ink = false});
+  const _PriceLabel({required this.top, this.note, this.bottom, this.ink = false});
 
   final String top;
+
+  /// Free trial line, between the plan and its price.
+  final String? note;
   final String? bottom;
   final bool ink;
 
@@ -514,6 +536,7 @@ class _PriceLabel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(top, style: BpType.monoSmallButton.copyWith(color: c)),
+        if (note != null) Text(note!, style: BpType.caption.copyWith(letterSpacing: .4, color: c)),
         if (bottom != null) Text(bottom!, style: BpType.caption.copyWith(letterSpacing: .4, color: ink ? BpColor.ink : BpColor.textMuted)),
       ],
     );

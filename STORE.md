@@ -36,8 +36,20 @@ Yearly is 44% less than twelve months of monthly. Both sit in the same group
 no banner, interstitial or app-open ads; unlimited hints; every theme; free
 stuck rescues; 1,000 coins every month.
 
-No free trial is configured. If one is added later, add it in the store only;
-the app reads offers from the store.
+**Free trials:** `pro_monthly` has 3 days, `pro_yearly` has 7 days.
+
+| Product | Google Play base plan | Google Play offer ID | Length |
+|---|---|---|---|
+| `pro_monthly` | `monthly` | `free-trial-3d` | 3 days |
+| `pro_yearly` | `yearly` | `free-trial-7d` | 7 days |
+
+Play eligibility is New customer acquisition, "Never had any subscription", so
+one player gets one trial across both plans. On the App Store, add an
+introductory offer (Free, same lengths) to each subscription.
+
+The app reads trials from the store and shows them in Settings only to players
+who qualify, so changing a length needs no app release. A trial grants Pro at
+once, but the 1,000 monthly coins start with the first payment.
 
 ### Remove Ads (non-consumable)
 
@@ -107,8 +119,11 @@ this is harmless today, but align the two before selling theme packs.
 
 Same six products with the same IDs and prices. Subscriptions: one
 subscription per product ID with a base plan (`monthly` / `yearly`,
-auto-renewing). Coins are consumable one-time products; Remove Ads is a
-non-consumable one-time product.
+auto-renewing) and its free trial offer. Coins are consumable one-time
+products; Remove Ads is a non-consumable one-time product.
+
+Set the price currency to USD before typing: the Set prices dialog defaults to
+the account's local currency (BDT).
 
 ## Review note (paste into each product)
 

@@ -24,10 +24,14 @@ void main() {
     );
   });
 
-  Future<(FakeAuth, RecordingPurchases)> pumpSettings(WidgetTester tester, {bool signedIn = false}) async {
+  Future<(FakeAuth, RecordingPurchases)> pumpSettings(
+    WidgetTester tester, {
+    bool signedIn = false,
+    Map<String, int> trials = const {},
+  }) async {
     useDesignFrame(tester);
     final auth = FakeAuth(signedIn: signedIn);
-    final store = RecordingPurchases();
+    final store = RecordingPurchases(trials: trials);
     final env = (await tester.runAsync(() => ScreenEnv.create(auth: auth)))!;
     env.purchases = store;
     addTearDown(() => tester.runAsync(env.dispose));
@@ -54,6 +58,25 @@ void main() {
       await tester.pump(const Duration(seconds: 4));
     }
   }
+
+  testWidgets('Pro shows each plan\'s free trial, its later price and the renewal terms', (tester) async {
+    await pumpSettings(tester, trials: const {Products.proMonthly: 3, Products.proYearly: 7});
+    await reveal(tester, find.text('3 DAYS FREE'));
+
+    expect(find.text('3 DAYS FREE'), findsOneWidget);
+    expect(find.text('7 DAYS FREE'), findsOneWidget);
+    expect(find.text(r'THEN $0.99'), findsNWidgets(2));
+    expect(find.textContaining('Renews automatically after the free trial'), findsOneWidget);
+  });
+
+  testWidgets('a player with no trial sees plain prices and no trial terms', (tester) async {
+    await pumpSettings(tester);
+    await reveal(tester, find.text('MONTHLY'));
+
+    expect(find.textContaining('DAYS FREE'), findsNothing);
+    expect(find.textContaining('THEN'), findsNothing);
+    expect(find.textContaining('Renews automatically'), findsNothing);
+  });
 
   testWidgets('a guest tapping a purchase gets the sign-in sheet, not the store', (tester) async {
     final (_, store) = await pumpSettings(tester);

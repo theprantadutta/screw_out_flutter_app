@@ -376,6 +376,23 @@
   },
   "proMonthly": "MONTHLY",
   "proYearly": "YEARLY",
+  "proTrialDays": "{days} DAYS FREE",
+  "@proTrialDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "proThenPrice": "THEN {price}",
+  "@proThenPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "proTrialTerms": "Renews automatically after the free trial unless you cancel. Monthly coins start with your first payment.",
   "proActive": "PRO · ACTIVE",
   "adsRemoved": "ADS REMOVED",
   "coinPacks": "COIN PACKS",

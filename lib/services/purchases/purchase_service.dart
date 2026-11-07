@@ -67,6 +67,9 @@ class PurchaseService implements PurchasesPort {
   bool _initialized = false;
   bool _reconciling = false;
   final Map<String, ProductCommon> _products = {};
+
+  /// iOS subscription groups whose introductory offer this player can use.
+  final Set<String> _introEligibleGroups = {};
   final Map<String, Completer<PurchaseOutcome>> _waiting = {};
   final Set<String> _delivered = {};
   final Set<String> _fulfilling = {};
@@ -110,8 +113,27 @@ class PurchaseService implements PurchasesPort {
       _products
         ..clear()
         ..addEntries([...oneTime, ...subs].map((p) => MapEntry(ProductIds.stripPrefix(p.id), p)));
+      await _loadIntroEligibility(subs);
     } on Object catch (e) {
       AppLog.warn('Loading products failed: $e');
+    }
+  }
+
+  /// StoreKit does not filter offers by player, so ask once per group. A
+  /// group that cannot be checked shows no trial: never promise one the
+  /// store may not honour.
+  Future<void> _loadIntroEligibility(Iterable<ProductCommon> subs) async {
+    _introEligibleGroups.clear();
+    final groups = {
+      for (final p in subs)
+        if (p is ProductSubscriptionIOS && p.subscriptionGroupIdIOS != null) p.subscriptionGroupIdIOS!,
+    };
+    for (final group in groups) {
+      try {
+        if (await _iap.isEligibleForIntroOfferIOS(group)) _introEligibleGroups.add(group);
+      } on Object catch (e) {
+        AppLog.warn('Intro offer eligibility check failed: $e');
+      }
     }
   }
 
@@ -122,6 +144,14 @@ class PurchaseService implements PurchasesPort {
     final p = _products[ProductIds.stripPrefix(productId)];
     if (p == null) return null;
     return displayPriceFor(p);
+  }
+
+  @override
+  int? trialDaysOf(String productId) {
+    final p = _products[ProductIds.stripPrefix(productId)];
+    if (p == null) return null;
+    if (p is ProductSubscriptionIOS && !_introEligibleGroups.contains(p.subscriptionGroupIdIOS)) return null;
+    return trialDaysFor(p);
   }
 
   @override

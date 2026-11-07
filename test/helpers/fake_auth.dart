@@ -67,11 +67,17 @@ final class FakeAuth implements AuthPort {
 
 /// [PurchasesPort] that records what was bought / restored.
 final class RecordingPurchases implements PurchasesPort {
+  RecordingPurchases({this.trials = const {}});
+
+  /// Bare product id → free trial days this player qualifies for.
+  final Map<String, int> trials;
   final bought = <String>[];
   int restores = 0;
 
   @override
   String? priceOf(String productId) => r'$0.99';
+  @override
+  int? trialDaysOf(String productId) => trials[productId];
   @override
   Future<PurchaseOutcome> buy(String productId) async {
     bought.add(productId);
