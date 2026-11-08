@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/theme/blueprint_tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../presentation/bloc/auth/auth_cubit.dart';
+import '../services/ports.dart';
 import 'bp/bp_buttons.dart';
+import 'bp/bp_screen.dart';
 import 'bp/bp_sheet.dart';
 import 'sign_in_buttons.dart';
 import 'sync_notices.dart';
@@ -28,6 +30,32 @@ Future<bool> ensureAccountForPurchase(BuildContext context) async {
   if (ok != true || !context.mounted) return false;
   showSignInResult(context, cubit, true);
   return !cubit.state.isGuest;
+}
+
+/// Buys [productId] the way every store button does: guests sign in first,
+/// then the store sheet, then one toast for the outcome (nothing on cancel).
+Future<PurchaseOutcome?> buyWithFeedback(BuildContext context, String productId) async {
+  final l = AppLocalizations.of(context);
+  if (!await ensureAccountForPurchase(context) || !context.mounted) return null;
+  final outcome = await context.read<PurchasesPort>().buy(productId);
+  if (!context.mounted) return outcome;
+  final (msg, kind) = switch (outcome) {
+    PurchaseOutcome.granted => (l.purchaseThanks, BpToastKind.success),
+    PurchaseOutcome.pending => (l.purchasePending, BpToastKind.info),
+    PurchaseOutcome.failed => (l.purchaseFailed, BpToastKind.error),
+    PurchaseOutcome.needsSignIn => (purchaseNeedsAccountMessage(context), BpToastKind.info),
+    PurchaseOutcome.cancelled => (null, BpToastKind.info),
+  };
+  if (outcome == PurchaseOutcome.granted) context.read<SoundPort>().play(Sfx.purchase);
+  if (msg != null) showBpToast(context, msg, kind: kind);
+  return outcome;
+}
+
+/// Signed in but the API session could not be re-minted: not a sign-in
+/// problem, so don't ask for one.
+String purchaseNeedsAccountMessage(BuildContext context) {
+  final l = AppLocalizations.of(context);
+  return context.read<AuthCubit>().state.isGuest ? l.signInToPurchase : l.purchaseNeedsConnection;
 }
 
 /// "Sign in to buy": Google, Apple (iOS / macOS), email, or not now.

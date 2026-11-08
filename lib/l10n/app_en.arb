@@ -606,6 +606,24 @@
   "@chapterDownloadedToast": { "placeholders": { "chapter": { "type": "String" } } },
   "signInFailed": "Sign-in didn't complete.",
   "themePurchased": "Theme unlocked.",
+  "themeBuyStore": "OR BUY · {price}",
+  "@themeBuyStore": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "themesBundleTitle": "All themes",
+  "themesBundleBody": "Every paid theme, yours to keep. Pro includes them too.",
+  "themesBundleBuy": "BUY · {price}",
+  "@themesBundleBuy": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
   "proPerYear": "/ YEAR",
   "proPerMonth": "/ MONTH",
   "sheetsTotal": "{count} SHEETS",

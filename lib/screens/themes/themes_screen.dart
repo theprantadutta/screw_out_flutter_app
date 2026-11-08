@@ -15,9 +15,11 @@ import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_mini_board.dart';
 import '../../widgets/bp/bp_screen.dart';
 import '../../widgets/bp/bp_sheet.dart';
+import '../../widgets/purchase_gate.dart';
 import '../chapter_complete/chapter_complete_screen.dart';
 
-/// 14 - Themes. Cosmetic only; tap a card → preview sheet → Equip / Buy.
+/// 14 - Themes. Cosmetic only; tap a card → preview sheet → Equip / Buy
+/// (coins, or the theme's store pack). The All themes bundle sits on top.
 class ThemesScreen extends StatefulWidget {
   const ThemesScreen({super.key});
 
@@ -34,6 +36,8 @@ class _ThemesScreenState extends State<ThemesScreen> {
     final progress = context.watch<ProgressCubit>().state;
     final isPro = context.watch<PremiumCubit>().state.isPro;
     bool owned(BoardTheme t) => isPro || progress.unlocked.contains(t.id);
+    final bundlePrice = context.read<PurchasesPort>().priceOf(Products.themesBundle);
+    final showBundle = bundlePrice != null && !Cosmetics.themesForProduct(Products.themesBundle).every(progress.unlocked.contains) && !isPro;
 
     return Stack(
       children: [
@@ -41,41 +45,52 @@ class _ThemesScreenState extends State<ThemesScreen> {
           caption: l.themesCaption,
           title: l.themesTitle,
           trailing: BpCoinChip(coins: progress.coins, height: 40),
-          body: GridView.builder(
-            padding: EdgeInsets.fromLTRB(BpSpace.screen, 16, BpSpace.screen, bpBottom(context)),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 14,
-              crossAxisSpacing: 14,
-              mainAxisExtent: 96 + 78 * math.max(1.0, MediaQuery.textScalerOf(context).scale(1)),
-            ),
-            itemCount: Cosmetics.themes.length,
-            itemBuilder: (context, i) {
-              final t = Cosmetics.themes[i];
-              final equipped = progress.equippedTheme == t.id;
-              final String status;
-              final Color statusColor;
-              if (equipped) {
-                status = l.equipped;
-                statusColor = BpColor.action;
-              } else if (progress.unlocked.contains(t.id)) {
-                status = l.owned;
-                statusColor = BpColor.textSecondary;
-              } else if (isPro) {
-                status = l.proIncluded;
-                statusColor = BpColor.textSecondary;
-              } else {
-                status = t.price == null ? '-' : l.priceCoins(t.price!);
-                statusColor = BpColor.textSecondary;
-              }
-              return _ThemeCard(
-                theme: t,
-                equipped: equipped,
-                status: status,
-                statusColor: statusColor,
-                onTap: () => setState(() => _preview = t),
-              );
-            },
+          body: CustomScrollView(
+            slivers: [
+              if (showBundle)
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(BpSpace.screen, 16, BpSpace.screen, 0),
+                  sliver: SliverToBoxAdapter(child: _BundleCard(price: bundlePrice)),
+                ),
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(BpSpace.screen, 16, BpSpace.screen, bpBottom(context)),
+                sliver: SliverGrid.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 14,
+                    crossAxisSpacing: 14,
+                    mainAxisExtent: 96 + 78 * math.max(1.0, MediaQuery.textScalerOf(context).scale(1)),
+                  ),
+                  itemCount: Cosmetics.themes.length,
+                  itemBuilder: (context, i) {
+                    final t = Cosmetics.themes[i];
+                    final equipped = progress.equippedTheme == t.id;
+                    final String status;
+                    final Color statusColor;
+                    if (equipped) {
+                      status = l.equipped;
+                      statusColor = BpColor.action;
+                    } else if (progress.unlocked.contains(t.id)) {
+                      status = l.owned;
+                      statusColor = BpColor.textSecondary;
+                    } else if (isPro) {
+                      status = l.proIncluded;
+                      statusColor = BpColor.textSecondary;
+                    } else {
+                      status = t.price == null ? '-' : l.priceCoins(t.price!);
+                      statusColor = BpColor.textSecondary;
+                    }
+                    return _ThemeCard(
+                      theme: t,
+                      equipped: equipped,
+                      status: status,
+                      statusColor: statusColor,
+                      onTap: () => setState(() => _preview = t),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
         Positioned.fill(
@@ -94,6 +109,36 @@ class _ThemesScreenState extends State<ThemesScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// "All themes" store bundle: every paid theme for one real-money price.
+class _BundleCard extends StatelessWidget {
+  const _BundleCard({required this.price});
+
+  final String price;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    return BpOutlined(
+      color: BpColor.action,
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(l.themesBundleTitle, style: BpType.button.copyWith(fontSize: 15, color: BpColor.action)),
+          const SizedBox(height: 4),
+          Text(l.themesBundleBody, style: BpType.caption.copyWith(color: BpColor.textSecondary, height: 1.4)),
+          const SizedBox(height: 10),
+          BpPrimaryButton(
+            height: 46,
+            onPressed: () => buyWithFeedback(context, Products.themesBundle),
+            child: Text(l.themesBundleBuy(price), style: BpType.monoButtonBold.copyWith(color: BpColor.ink)),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -209,6 +254,8 @@ class _PreviewSheet extends StatelessWidget {
     final progress = context.read<ProgressCubit>();
     final level = repo.level(math.min(progress.state.currentLevel, repo.totalLevels)) ?? repo.level(1)!;
     final price = theme.price;
+    final packId = theme.storeProductId;
+    final packPrice = owned || packId == null ? null : context.read<PurchasesPort>().priceOf(packId);
     return BpSheetCard(
       children: [
         Row(
@@ -266,6 +313,17 @@ class _PreviewSheet extends StatelessWidget {
             ),
           ],
         ),
+        if (packPrice != null)
+          BpOutlineButton(
+            height: 46,
+            onPressed: () async {
+              final outcome = await buyWithFeedback(context, packId!);
+              if (outcome != PurchaseOutcome.granted || !context.mounted) return;
+              await progress.equipTheme(theme.id);
+              onClose();
+            },
+            child: Text(l.themeBuyStore(packPrice), style: BpType.monoSmallButton),
+          ),
       ],
     );
   }

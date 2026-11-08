@@ -1059,6 +1059,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themePurchased => 'Theme unlocked.';
 
   @override
+  String themeBuyStore(String price) {
+    return 'OR BUY · $price';
+  }
+
+  @override
+  String get themesBundleTitle => 'All themes';
+
+  @override
+  String get themesBundleBody =>
+      'Every paid theme, yours to keep. Pro includes them too.';
+
+  @override
+  String themesBundleBuy(String price) {
+    return 'BUY · $price';
+  }
+
+  @override
   String get proPerYear => '/ YEAR';
 
   @override

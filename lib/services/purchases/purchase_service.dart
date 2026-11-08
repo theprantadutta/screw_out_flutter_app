@@ -143,7 +143,10 @@ class PurchaseService implements PurchasesPort {
   String? priceOf(String productId) {
     final p = _products[ProductIds.stripPrefix(productId)];
     if (p == null) return null;
-    return displayPriceFor(p);
+    // Play can list a product it isn't serving yet (just created, or not in
+    // this region) with no price: treat that as not for sale.
+    final price = displayPriceFor(p);
+    return price.trim().isEmpty ? null : price;
   }
 
   @override

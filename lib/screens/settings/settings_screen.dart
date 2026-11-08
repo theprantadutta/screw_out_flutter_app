@@ -360,26 +360,9 @@ class _PurchasesBlock extends StatelessWidget {
     final premium = context.watch<PremiumCubit>().state;
     final store = context.read<PurchasesPort>();
 
-    // Signed in but the API session could not be re-minted: not a sign-in
-    // problem, so don't ask for one.
-    String needsAccount() => context.read<AuthCubit>().state.isGuest ? l.signInToPurchase : l.purchaseNeedsConnection;
+    String needsAccount() => purchaseNeedsAccountMessage(context);
 
-    Future<void> buy(String id) async {
-      // Guests sign in (or create an account) first, then the purchase
-      // they tapped continues.
-      if (!await ensureAccountForPurchase(context) || !context.mounted) return;
-      final outcome = await store.buy(id);
-      if (!context.mounted) return;
-      final (msg, kind) = switch (outcome) {
-        PurchaseOutcome.granted => (l.purchaseThanks, BpToastKind.success),
-        PurchaseOutcome.pending => (l.purchasePending, BpToastKind.info),
-        PurchaseOutcome.failed => (l.purchaseFailed, BpToastKind.error),
-        PurchaseOutcome.needsSignIn => (needsAccount(), BpToastKind.info),
-        PurchaseOutcome.cancelled => (null, BpToastKind.info),
-      };
-      if (outcome == PurchaseOutcome.granted) context.read<SoundPort>().play(Sfx.purchase);
-      if (msg != null) showBpToast(context, msg, kind: kind);
-    }
+    Future<void> buy(String id) => buyWithFeedback(context, id);
 
     final mono = BpType.monoSmallButton;
     final monthlyTrial = store.trialDaysOf(Products.proMonthly);

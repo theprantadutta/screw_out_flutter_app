@@ -1714,6 +1714,30 @@ abstract class AppLocalizations {
   /// **'Theme unlocked.'**
   String get themePurchased;
 
+  /// No description provided for @themeBuyStore.
+  ///
+  /// In en, this message translates to:
+  /// **'OR BUY · {price}'**
+  String themeBuyStore(String price);
+
+  /// No description provided for @themesBundleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All themes'**
+  String get themesBundleTitle;
+
+  /// No description provided for @themesBundleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every paid theme, yours to keep. Pro includes them too.'**
+  String get themesBundleBody;
+
+  /// No description provided for @themesBundleBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'BUY · {price}'**
+  String themesBundleBuy(String price);
+
   /// No description provided for @proPerYear.
   ///
   /// In en, this message translates to:

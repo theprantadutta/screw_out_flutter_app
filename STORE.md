@@ -15,10 +15,11 @@ All product IDs use the `com.pranta.screwout.` prefix.
 
 ---
 
-## Products to create (6)
+## Products to create (10)
 
-These are the only products the app sells for money today. All of them are
-offered in **Settings > Purchases**.
+Everything the app sells for money. Pro, Remove Ads and the coin packs are
+offered in **Settings > Purchases**; the theme packs and the bundle on the
+**Themes** screen.
 
 ### Subscriptions (auto-renewable): group "Screw Out Pro"
 
@@ -80,23 +81,33 @@ What coins buy: themes (300 to 800 coins) and the stuck rescue extra slot
 
 ---
 
-## In code but NOT sold (do not create yet)
+### Theme packs and bundle (non-consumable)
 
-These IDs exist in `Products` and the backend catalog, but no screen offers
-them for money (themes are bought with coins on the Themes screen). Creating
-them in App Store Connect without a way to buy them in the app gets the
-submission rejected under Guideline 2.1.
+| Product ID | Reference name | Display name | Unlocks | Price (USD) |
+|---|---|---|---|---|
+| `com.pranta.screwout.theme_pack_workshop` | Theme Walnut | Walnut Workshop Theme | Walnut Workshop | $0.99 |
+| `com.pranta.screwout.theme_pack_ocean` | Theme Ocean | Ocean Teal Theme | Ocean Teal | $0.99 |
+| `com.pranta.screwout.theme_pack_midnight` | Theme Midnight | Midnight Workshop Theme | Midnight Workshop | $1.49 |
+| `com.pranta.screwout.themes_bundle` | All Themes | All Themes | Every paid theme (5) | $2.99 |
 
-| Product ID | Would unlock |
-|---|---|
-| `com.pranta.screwout.theme_pack_workshop` | Walnut Workshop theme |
-| `com.pranta.screwout.theme_pack_ocean` | Ocean Teal theme |
-| `com.pranta.screwout.theme_pack_midnight` | Midnight Workshop theme |
-| `com.pranta.screwout.themes_bundle` | Every premium theme |
+**Descriptions (App Store, 45 char limit):**
+- workshop: `Warm wood board theme, yours to keep` [36]
+- ocean: `Sea-green board theme, yours to keep` [36]
+- midnight: `Dark slate board theme, yours to keep` [37]
+- bundle: `Every paid board theme, yours to keep` [37]
 
-Note: the backend grants theme id `workshop` for `theme_pack_workshop`, while
-the app's theme id is `walnut`. The app maps purchases to themes locally, so
-this is harmless today, but align the two before selling theme packs.
+Where they are sold: a theme's preview sheet on the Themes screen shows
+"OR BUY · price" under the coin price (Walnut, Ocean and Midnight only), and
+an "All themes" card sits on top of the Themes screen until every paid theme
+is owned. Both are hidden for Pro, which already includes every theme. Warm
+Copper and Pastel Studio have no pack of their own: coins, chapter rewards,
+Pro or the bundle.
+
+Every theme can still be bought with coins (300 to 800) or earned by
+finishing a chapter, so the packs are a shortcut, never a paywall.
+
+The backend calls the Walnut theme `workshop`; the app maps it to `walnut`
+(`lib/services/sync/wire_ids.dart`).
 
 ---
 
@@ -107,17 +118,19 @@ this is harmless today, but align the two before selling theme packs.
 2. Add `pro_yearly` (level 1) and `pro_monthly` (level 2): duration, price,
    English (U.S.) display name and description, review screenshot (Settings
    purchases section), review note.
-3. **In-App Purchases > Create**: `remove_ads` (non-consumable) and the three
-   coin packs (consumable), each with price, display name, description,
+3. **In-App Purchases > Create**: `remove_ads`, the three theme packs and
+   `themes_bundle` (non-consumable) and the three coin packs (consumable), each with price, display name, description,
    review screenshot and review note.
-4. On the app version page, attach all six under "In-App Purchases and
+4. On the app version page, attach all ten under "In-App Purchases and
    Subscriptions" so they are reviewed with the build.
 5. Agreements: the Paid Applications agreement, tax and banking must be active
    or products stay in "Missing Metadata".
 
 ## Google Play Console checklist
 
-Same six products with the same IDs and prices. Subscriptions: one
+Same ten products with the same IDs and prices (theme packs and the bundle
+are non-consumable one-time products, purchase option id `buy`; created on
+Play 2026-11-08). Subscriptions: one
 subscription per product ID with a base plan (`monthly` / `yearly`,
 auto-renewing) and its free trial offer. Coins are consumable one-time
 products; Remove Ads is a non-consumable one-time product.
