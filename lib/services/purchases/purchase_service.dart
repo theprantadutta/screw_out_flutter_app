@@ -160,8 +160,8 @@ class PurchaseService implements PurchasesPort {
   @override
   Future<PurchaseOutcome> buy(String productId) async {
     final bare = ProductIds.stripPrefix(productId);
-    // Hard guard: no store sheet without a real account and a live session
-    // (the API refuses guest receipts). The UI gates first with a sign-in.
+    // No store sheet without an API session to verify the receipt with. A
+    // guest gets an anonymous one here: registration is optional.
     if (!await _accountReady()) return PurchaseOutcome.needsSignIn;
     if (!_available) return PurchaseOutcome.failed;
     var product = _products[bare];
@@ -209,12 +209,16 @@ class PurchaseService implements PurchasesPort {
     }
   }
 
-  /// Signed in (not a guest) with an API session, re-minting an expired
-  /// session once when the player is signed in.
+  /// An API session to verify against: a guest gets an anonymous identity,
+  /// an expired session is re-minted once. False only when the server (or
+  /// Firebase) can't be reached.
   Future<bool> _accountReady() async {
     if (_user.canPurchase) return true;
-    if (_user.current.isGuest) return false;
-    await _user.ensureBackendSession(force: true);
+    if (_user.hasBackendIdentity) {
+      await _user.ensureBackendSession(force: true);
+    } else {
+      await _user.ensureBackendIdentity();
+    }
     return _user.canPurchase;
   }
 

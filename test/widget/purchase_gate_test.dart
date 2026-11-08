@@ -24,6 +24,8 @@ void main() {
     );
   });
 
+  setUp(resetPurchaseSaveOffer);
+
   Future<(FakeAuth, RecordingPurchases)> pumpSettings(
     WidgetTester tester, {
     bool signedIn = false,
@@ -78,35 +80,53 @@ void main() {
     expect(find.textContaining('Renews automatically'), findsNothing);
   });
 
-  testWidgets('a guest tapping a purchase gets the sign-in sheet, not the store', (tester) async {
-    final (_, store) = await pumpSettings(tester);
+  testWidgets('a guest buys straight from the store, no account needed (5.1.1(v))', (tester) async {
+    final (auth, store) = await pumpSettings(tester);
     await tapRemoveAds(tester);
 
+    expect(store.bought, [Products.removeAds], reason: 'the store opens before any sign-in');
+    expect(auth.current.isGuest, isTrue);
+    // Afterwards, an OPTIONAL offer to keep the purchase on every device.
     expect(find.byType(PurchaseSignInSheet), findsOneWidget);
-    expect(find.textContaining('Create an account or sign in to buy'), findsOneWidget);
+    expect(find.textContaining('Optional: sign in to keep your purchases'), findsOneWidget);
     expect(find.descendant(of: find.byType(PurchaseSignInSheet), matching: find.text('Sign in with Google')), findsOneWidget);
     expect(find.descendant(of: find.byType(PurchaseSignInSheet), matching: find.text('Continue with email')), findsOneWidget);
-    expect(store.bought, isEmpty);
 
     await tester.tap(find.text('NOT NOW'));
     await tester.pumpAndSettle();
     expect(find.byType(PurchaseSignInSheet), findsNothing);
-    expect(store.bought, isEmpty, reason: 'cancel returns quietly');
+    expect(auth.current.isGuest, isTrue, reason: 'declining is fine; the purchase stands');
+    await drainToasts(tester);
   });
 
-  testWidgets('signing in from the sheet continues the purchase that was tapped', (tester) async {
+  testWidgets('the sign-in offer shows once per run, not after every purchase', (tester) async {
+    final (_, store) = await pumpSettings(tester);
+    await tapRemoveAds(tester);
+    await tester.tap(find.text('NOT NOW'));
+    await tester.pumpAndSettle();
+    await drainToasts(tester);
+
+    await reveal(tester, find.text('Remove ads'));
+    await tester.tap(find.text('Remove ads'));
+    await tester.pumpAndSettle();
+    expect(store.bought, [Products.removeAds, Products.removeAds]);
+    expect(find.byType(PurchaseSignInSheet), findsNothing);
+    await drainToasts(tester);
+  });
+
+  testWidgets('a guest can accept the offer and sign in after buying', (tester) async {
     final (auth, store) = await pumpSettings(tester);
     await tapRemoveAds(tester);
     await tester.tap(find.descendant(of: find.byType(PurchaseSignInSheet), matching: find.text('Sign in with Google')));
     await tester.pumpAndSettle();
 
+    expect(store.bought, [Products.removeAds]);
     expect(auth.current.isGuest, isFalse);
     expect(find.byType(PurchaseSignInSheet), findsNothing);
-    expect(store.bought, [Products.removeAds]);
     await drainToasts(tester);
   });
 
-  testWidgets('email sign-in from the purchase sheet also continues the purchase', (tester) async {
+  testWidgets('email sign-in works from the offer too', (tester) async {
     final (auth, store) = await pumpSettings(tester);
     await tapRemoveAds(tester);
     await tester.tap(find.descendant(of: find.byType(PurchaseSignInSheet), matching: find.text('Continue with email')));
@@ -125,18 +145,17 @@ void main() {
     await drainToasts(tester);
   });
 
-  testWidgets('a guest tapping Restore is asked to sign in first', (tester) async {
+  testWidgets('a guest can Restore without signing in', (tester) async {
     final (_, store) = await pumpSettings(tester);
     await reveal(tester, find.text('RESTORE'));
     await tester.tap(find.text('RESTORE'));
     await tester.pumpAndSettle();
-    expect(find.byType(PurchaseSignInSheet), findsOneWidget);
-    await tester.tap(find.text('NOT NOW'));
-    await tester.pumpAndSettle();
-    expect(store.restores, 0);
+    expect(find.byType(PurchaseSignInSheet), findsNothing);
+    expect(store.restores, 1);
+    await drainToasts(tester);
   });
 
-  testWidgets('a signed-in player goes straight to the store', (tester) async {
+  testWidgets('a signed-in player buys with no sheet at all', (tester) async {
     final (_, store) = await pumpSettings(tester, signedIn: true);
     await tapRemoveAds(tester);
     expect(find.byType(PurchaseSignInSheet), findsNothing);

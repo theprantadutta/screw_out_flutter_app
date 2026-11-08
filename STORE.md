@@ -140,5 +140,13 @@ the account's local currency (BDT).
 
 ## Review note (paste into each product)
 
-> Sold in Settings > Purchases. Purchases require signing in (Sign in with
-> Apple is on the same screen). Restore Purchases is next to Remove Ads.
+> Sold in Settings > Purchases (theme packs and the All themes bundle on the
+> Themes screen). No account is needed to buy or restore: a guest buys
+> directly, and is then offered an optional sign-in to keep purchases on all
+> their devices. Restore Purchases is next to Remove Ads. Pro Monthly has a
+> 3 day free trial and Pro Yearly a 1 week free trial for new subscribers.
+
+Registration is optional because App Store Guideline 5.1.1(v) requires it (1.0.2
+was rejected on 2026-11-05 for requiring sign-in). A guest's purchases belong
+to its anonymous account; when it signs in, or reinstalls and taps Restore,
+the server moves them to the new account (`GuestPurchaseTransfer`).

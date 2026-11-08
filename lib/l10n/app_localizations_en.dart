@@ -611,9 +611,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get purchaseFailed => 'Purchase didn\'t go through.';
 
   @override
-  String get signInToPurchase => 'Sign in first so your purchase follows you.';
-
-  @override
   String get restored => 'Purchases restored.';
 
   @override
@@ -1198,11 +1195,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'That password doesn\'t match this account.';
 
   @override
-  String get purchaseGateTitle => 'Sign in to buy';
+  String get purchaseSaveTitle => 'Keep your purchase';
 
   @override
-  String get purchaseGateBody =>
-      'Create an account or sign in to buy. Your purchases and progress stay with your account.';
+  String get purchaseSaveBody =>
+      'Optional: sign in to keep your purchases and progress on all your devices. Your purchase already works on this one.';
 
   @override
   String get purchaseNeedsConnection =>

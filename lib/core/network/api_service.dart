@@ -38,10 +38,16 @@ class ApiService {
   @visibleForTesting
   static String? baseUrlOverride;
 
+  static const _defineUrl = String.fromEnvironment('API_BACKEND_URL');
+
   static String get baseUrl {
     if (baseUrlOverride != null) return baseUrlOverride!;
     final String backend;
-    if (kDebugMode) {
+    if (_defineUrl.isNotEmpty) {
+      // flutter run --dart-define=API_BACKEND_URL=https://... (e.g. a debug
+      // build against production) wins over .env.
+      backend = _defineUrl;
+    } else if (kDebugMode) {
       backend = dotenv.maybeGet('DEV_API_BACKEND_URL') ?? dotenv.maybeGet('PROD_API_BACKEND_URL') ?? _prodFallback;
     } else {
       backend = dotenv.maybeGet('PROD_API_BACKEND_URL') ?? _prodFallback;

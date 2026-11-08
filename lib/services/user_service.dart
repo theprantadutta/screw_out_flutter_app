@@ -72,8 +72,11 @@ class UserService implements AuthPort {
   @override
   AuthState get current => _state;
 
-  /// Non-anonymous account with a live API session - required to purchase.
-  bool get canPurchase => !_state.isGuest && _api.isAuthenticated;
+  /// A live API session (a guest's anonymous one counts): what the server
+  /// needs to verify a purchase. Registration is optional for purchases
+  /// (App Store Guideline 5.1.1(v)); a guest's purchases follow it to an
+  /// account it signs into later.
+  bool get canPurchase => _api.isAuthenticated;
 
   /// A Firebase user exists (guest-anonymous or real).
   bool get hasBackendIdentity => _firebaseAvailable && _safeCurrentUser != null;
@@ -228,6 +231,10 @@ class UserService implements AuthPort {
       // Cache only.
     }
   }
+
+  /// Gives a guest a Firebase anonymous identity and an API session so
+  /// pushes, sync and purchases reach them. No-op when one exists.
+  Future<bool> ensureBackendIdentity() => ensureBackendIdentityForPush();
 
   /// Gives a guest a Firebase anonymous identity so pushes and sync reach
   /// them (called when notifications are allowed). No-op when one exists.

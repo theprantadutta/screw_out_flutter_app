@@ -16,7 +16,13 @@ app forces guests to register before buying, and Apple requires registration
 to be optional, for subscriptions too. It may explain the benefit of an
 account, but it cannot require one.
 
-**Not fixed yet.** The gate is still in 1.3.0:
+**Fixed 2026-11-08 in 1.3.0 (10)** (approved by Pranta). Guests buy and
+restore with no account, and get an optional "Keep your purchase" sign-in
+after buying (once per run). The server accepts guest receipts and, when
+another account presents a guest's receipt (sign-in to an existing account,
+or reinstall plus Restore), moves the guest's purchases, subscription ids,
+billing period and unclaimed coins to it (`GuestPurchaseTransfer.cs`).
+Receipts owned by a real account never move. What used to block guests:
 
 | Where | What |
 |---|---|
@@ -50,7 +56,8 @@ a version is accepted.
 
 ### Next steps, in order
 
-1. [ ] Agree and build the guest purchase fix (above), on the app and backend.
+1. [x] Agree and build the guest purchase fix (above), on the app and backend.
+       (2026-11-08; backend deploy needed before the review)
 2. [ ] Set up this machine (see below).
 3. [ ] Run the trial checks and the sandbox checks further down.
 4. [ ] App Store Connect: create version 1.3.0 (or later) and upload the build.
@@ -165,10 +172,9 @@ Product ids (all prefixed `com.pranta.screwout.`): consumables
 `pro_yearly`.
 
 ### Sandbox purchase checks (Settings > App Store > Sandbox Account)
-Sign in to the game with a throwaway account first: purchases on a guest
-account are blocked for now (`needsSignIn`, server code
-`ANONYMOUS_ACCOUNT_PURCHASE_BLOCKED`). This block is what Apple rejected, see
-"Start here". Once it is removed, run these as a guest too.
+Run these as a guest (no account) and again signed in: guests can buy since
+2026-11-08 (see "Start here"). Also check a guest who buys, then signs into an
+EXISTING account: the purchase must follow to that account.
 - [ ] **Coins:** buy `coins_small`. The balance goes up once, the toast
       shows, and buying the same pack again works (the transaction was
       finished as a consumable). Kill the app mid-purchase once: on

@@ -1060,12 +1060,6 @@ abstract class AppLocalizations {
   /// **'Purchase didn\'t go through.'**
   String get purchaseFailed;
 
-  /// No description provided for @signInToPurchase.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in first so your purchase follows you.'**
-  String get signInToPurchase;
-
   /// No description provided for @restored.
   ///
   /// In en, this message translates to:
@@ -1954,17 +1948,17 @@ abstract class AppLocalizations {
   /// **'That password doesn\'t match this account.'**
   String get deleteWrongPassword;
 
-  /// No description provided for @purchaseGateTitle.
+  /// No description provided for @purchaseSaveTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sign in to buy'**
-  String get purchaseGateTitle;
+  /// **'Keep your purchase'**
+  String get purchaseSaveTitle;
 
-  /// No description provided for @purchaseGateBody.
+  /// No description provided for @purchaseSaveBody.
   ///
   /// In en, this message translates to:
-  /// **'Create an account or sign in to buy. Your purchases and progress stay with your account.'**
-  String get purchaseGateBody;
+  /// **'Optional: sign in to keep your purchases and progress on all your devices. Your purchase already works on this one.'**
+  String get purchaseSaveBody;
 
   /// No description provided for @purchaseNeedsConnection.
   ///

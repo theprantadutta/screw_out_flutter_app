@@ -221,8 +221,8 @@ void main() {
     });
   });
 
-  group('purchases need an account', () {
-    test('a guest (even with an anonymous API session) never reaches the store', () async {
+  group('purchases do not need an account', () {
+    test('a guest with an anonymous API session passes the account check', () async {
       auth.user = _User(auth, isAnonymous: true);
       final store = PurchaseService(
         api: api,
@@ -233,9 +233,10 @@ void main() {
         analytics: const NoAnalytics(),
       );
       expect(api.isAuthenticated, isTrue);
-      expect(await store.buy(Products.removeAds), PurchaseOutcome.needsSignIn);
-      expect(await store.buy(Products.proYearly), PurchaseOutcome.needsSignIn);
-      expect(await store.restore(), PurchaseOutcome.needsSignIn);
+      expect(service.canPurchase, isTrue);
+      // No store in tests: past the account check, buy fails on the store.
+      expect(await store.buy(Products.removeAds), PurchaseOutcome.failed);
+      expect(await store.buy(Products.proYearly), PurchaseOutcome.failed);
     });
   });
 }

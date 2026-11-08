@@ -423,7 +423,6 @@
   "purchaseThanks": "Thank you! Purchase applied.",
   "purchasePending": "Purchase pending. It will apply once confirmed.",
   "purchaseFailed": "Purchase didn't go through.",
-  "signInToPurchase": "Sign in first so your purchase follows you.",
   "restored": "Purchases restored.",
   "finishChapterFirst": "Finish Chapter {chapter} first.",
   "@finishChapterFirst": {
@@ -679,7 +678,7 @@
   "authErrGeneric": "Couldn't sign in. Please try again.",
   "deletePasswordBody": "Enter your password to confirm it's you.",
   "deleteWrongPassword": "That password doesn't match this account.",
-  "purchaseGateTitle": "Sign in to buy",
-  "purchaseGateBody": "Create an account or sign in to buy. Your purchases and progress stay with your account.",
+  "purchaseSaveTitle": "Keep your purchase",
+  "purchaseSaveBody": "Optional: sign in to keep your purchases and progress on all your devices. Your purchase already works on this one.",
   "purchaseNeedsConnection": "Couldn't reach the server. Check your connection and try again."
 }

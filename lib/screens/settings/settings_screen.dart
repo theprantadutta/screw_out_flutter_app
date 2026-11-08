@@ -360,7 +360,6 @@ class _PurchasesBlock extends StatelessWidget {
     final premium = context.watch<PremiumCubit>().state;
     final store = context.read<PurchasesPort>();
 
-    String needsAccount() => purchaseNeedsAccountMessage(context);
 
     Future<void> buy(String id) => buyWithFeedback(context, id);
 
@@ -464,12 +463,11 @@ class _PurchasesBlock extends StatelessWidget {
               child: BpOutlineButton(
                 height: 50,
                 onPressed: () async {
-                  if (!await ensureAccountForPurchase(context) || !context.mounted) return;
                   final o = await store.restore();
                   if (!context.mounted) return;
                   final (msg, kind) = switch (o) {
                     PurchaseOutcome.granted => (l.restored, BpToastKind.success),
-                    PurchaseOutcome.needsSignIn => (needsAccount(), BpToastKind.info),
+                    PurchaseOutcome.needsSignIn => (l.purchaseNeedsConnection, BpToastKind.info),
                     PurchaseOutcome.cancelled => (null, BpToastKind.info),
                     _ => (l.restoreNothing, BpToastKind.info),
                   };

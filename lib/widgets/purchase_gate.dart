@@ -11,14 +11,40 @@ import 'bp/bp_sheet.dart';
 import 'sign_in_buttons.dart';
 import 'sync_notices.dart';
 
-/// Real-money purchases (and restores) need an account: the API refuses
-/// guest receipts. Signed-in players pass straight through; a guest gets a
-/// sign-in sheet first. Resolves true when the purchase may go ahead (the
-/// sign-in toast is queued so the purchase result follows it), false when
-/// the guest backed out.
-Future<bool> ensureAccountForPurchase(BuildContext context) async {
+/// Offered at most once per app run, so a guest buying several coin packs
+/// isn't asked every time.
+bool _saveOfferShown = false;
+
+@visibleForTesting
+void resetPurchaseSaveOffer() => _saveOfferShown = false;
+
+/// Buys [productId] the way every store button does: the store sheet, then
+/// one toast for the outcome (nothing on cancel). No account is needed (App
+/// Store Guideline 5.1.1(v)); a guest who just bought is OFFERED a sign-in so
+/// the purchase also reaches their other devices, and may decline.
+Future<PurchaseOutcome?> buyWithFeedback(BuildContext context, String productId) async {
+  final l = AppLocalizations.of(context);
+  final outcome = await context.read<PurchasesPort>().buy(productId);
+  if (!context.mounted) return outcome;
+  final (msg, kind) = switch (outcome) {
+    PurchaseOutcome.granted => (l.purchaseThanks, BpToastKind.success),
+    PurchaseOutcome.pending => (l.purchasePending, BpToastKind.info),
+    PurchaseOutcome.failed => (l.purchaseFailed, BpToastKind.error),
+    PurchaseOutcome.needsSignIn => (l.purchaseNeedsConnection, BpToastKind.info),
+    PurchaseOutcome.cancelled => (null, BpToastKind.info),
+  };
+  if (outcome == PurchaseOutcome.granted) context.read<SoundPort>().play(Sfx.purchase);
+  if (msg != null) showBpToast(context, msg, kind: kind);
+  if (outcome == PurchaseOutcome.granted) await offerSignInAfterPurchase(context);
+  return outcome;
+}
+
+/// The optional "keep your purchase on every device" sign-in, for guests
+/// only. Resolves true when the player signed in.
+Future<bool> offerSignInAfterPurchase(BuildContext context) async {
   final cubit = context.read<AuthCubit>();
-  if (!cubit.state.isGuest) return true;
+  if (!cubit.state.isGuest || _saveOfferShown) return false;
+  _saveOfferShown = true;
   final ok = await showModalBottomSheet<bool>(
     context: context,
     backgroundColor: BpColor.transparent,
@@ -29,37 +55,11 @@ Future<bool> ensureAccountForPurchase(BuildContext context) async {
   );
   if (ok != true || !context.mounted) return false;
   showSignInResult(context, cubit, true);
-  return !cubit.state.isGuest;
+  return true;
 }
 
-/// Buys [productId] the way every store button does: guests sign in first,
-/// then the store sheet, then one toast for the outcome (nothing on cancel).
-Future<PurchaseOutcome?> buyWithFeedback(BuildContext context, String productId) async {
-  final l = AppLocalizations.of(context);
-  if (!await ensureAccountForPurchase(context) || !context.mounted) return null;
-  final outcome = await context.read<PurchasesPort>().buy(productId);
-  if (!context.mounted) return outcome;
-  final (msg, kind) = switch (outcome) {
-    PurchaseOutcome.granted => (l.purchaseThanks, BpToastKind.success),
-    PurchaseOutcome.pending => (l.purchasePending, BpToastKind.info),
-    PurchaseOutcome.failed => (l.purchaseFailed, BpToastKind.error),
-    PurchaseOutcome.needsSignIn => (purchaseNeedsAccountMessage(context), BpToastKind.info),
-    PurchaseOutcome.cancelled => (null, BpToastKind.info),
-  };
-  if (outcome == PurchaseOutcome.granted) context.read<SoundPort>().play(Sfx.purchase);
-  if (msg != null) showBpToast(context, msg, kind: kind);
-  return outcome;
-}
-
-/// Signed in but the API session could not be re-minted: not a sign-in
-/// problem, so don't ask for one.
-String purchaseNeedsAccountMessage(BuildContext context) {
-  final l = AppLocalizations.of(context);
-  return context.read<AuthCubit>().state.isGuest ? l.signInToPurchase : l.purchaseNeedsConnection;
-}
-
-/// "Sign in to buy": Google, Apple (iOS / macOS), email, or not now.
-/// Pops true once signed in.
+/// "Keep your purchase": Google, Apple (iOS / macOS), email, or not now.
+/// Optional, shown after a guest's purchase. Pops true once signed in.
 class PurchaseSignInSheet extends StatelessWidget {
   const PurchaseSignInSheet({super.key});
 
@@ -75,8 +75,8 @@ class PurchaseSignInSheet extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(BpSize.sheetInset, 0, BpSize.sheetInset, 14),
           child: BpSheetCard(
             children: [
-              Text(l.purchaseGateTitle, style: BpType.stuckTitle.copyWith(color: BpColor.line)),
-              Text(l.purchaseGateBody, style: BpType.monoBody.copyWith(color: BpColor.textSecondary, height: 1.5)),
+              Text(l.purchaseSaveTitle, style: BpType.stuckTitle.copyWith(color: BpColor.line)),
+              Text(l.purchaseSaveBody, style: BpType.monoBody.copyWith(color: BpColor.textSecondary, height: 1.5)),
               SignInButtons(
                 primaryGoogle: true,
                 onResult: (ok) {
