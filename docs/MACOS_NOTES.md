@@ -49,6 +49,7 @@ App id `6825659147`, subscription group `22503171` ("Screw Out Pro").
 | Pro Monthly | `6825698367` | Ready for Review, 3-day free intro offer, Nov 8 2026, no end date, 175 regions |
 | Pro Yearly | `6825696999` | Ready for Review, 1-week free intro offer, Nov 8 2026, no end date, 175 regions |
 | Remove Ads, Coins Small / Medium / Large | | Ready for Review |
+| Theme Walnut / Ocean / Midnight, All Themes | `6832207387` / `6832207864` / `6832208231` / `6832208705` | Created 2026-11-08: $0.99 / $0.99 / $1.49 / $2.99, 175 regions, review screenshots in `app-store-review/` |
 | iOS version | 1.0.2 (4) | Rejected, submission `1e853d9a-7e4e-4075-8df7-0e1a4fb23a9f` |
 
 Every purchase sits inside that rejected submission, so none of them ship until
