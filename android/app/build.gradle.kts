@@ -65,6 +65,12 @@ android {
     compileSdk = maxOf(flutter.compileSdkVersion, 37)
     ndkVersion = flutter.ndkVersion
 
+    // AGP 9 drops dot-files (".env") from release assets by default, so a
+    // release build would start without its config. Keep them.
+    androidResources {
+        ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~"
+    }
+
     compileOptions {
         // flutter_local_notifications needs core library desugaring.
         isCoreLibraryDesugaringEnabled = true
