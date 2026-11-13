@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:material_ui/material_ui.dart' as material_ui;
 
 import 'core/di/injection.dart';
 import 'core/theme/app_theme.dart';
@@ -59,10 +57,8 @@ class ScrewOutApp extends StatelessWidget {
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: const [
             AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            ...material_ui.GlobalMaterialLocalizations.delegates,
+            // Material, Cupertino and Widgets delegates (material_ui).
+            ...GlobalMaterialLocalizations.delegates,
           ],
           builder: (context, child) {
             // Text scale: honour the OS within a range the layout survives.
