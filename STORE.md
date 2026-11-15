@@ -15,6 +15,24 @@ All product IDs use the `com.pranta.screwout.` prefix.
 
 ---
 
+## Store listing (Google Play)
+
+**Short description** (80 max, currently 74):
+
+```
+Unscrew, untangle, release every plate. A calm blueprint puzzle of layers.
+```
+
+Avoid price or promotion words in the short description, including "free"
+even in another sense ("free every plate" was flagged), and counts like
+"100 sheets". Play warns that a flagged listing may not be promoted.
+
+**Promo video:** https://www.youtube.com/watch?v=DpQbuwtgizg
+(built from `store_listings/play-store-video/`; the description must keep
+the music credit from `music/CREDITS.md`)
+
+---
+
 ## Products to create (10)
 
 Everything the app sells for money. Pro, Remove Ads and the coin packs are
