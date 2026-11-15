@@ -1,0 +1,13 @@
+{"segments": [
+  {"src": "rec1.mp4", "a": 0.5,  "b": 4.0,  "chip": "BLUEPRINT PUZZLE", "color": "blue",   "title": "Take it apart, layer by layer", "sub": "A calm screw puzzle drawn like a technical blueprint."},
+  {"src": "rec1.mp4", "a": 5.5,  "b": 10.8, "chip": "100 SHEETS",       "color": "blue",   "title": "Five chapters to clear", "sub": "Each one adds a new idea: circles, tight trays, shared supports."},
+  {"src": "rec1.mp4", "a": 12.6, "b": 16.5, "chip": "UNSCREW",          "color": "yellow", "title": "Tap a screw to pull it out", "sub": "It drops into your tray."},
+  {"src": "rec1.mp4", "a": 16.5, "b": 22.0, "chip": "RELEASE",          "color": "yellow", "title": "Free every plate", "sub": "Pull a plate's last screw and it drops away."},
+  {"src": "rec1.mp4", "a": 30.0, "b": 35.5, "chip": "PLAN AHEAD",       "color": "yellow", "title": "Mind the tray", "sub": "Only a few slots. Pick the right order or get stuck."},
+  {"src": "rec1.mp4", "a": 35.5, "b": 40.8, "chip": "MASTERY",          "color": "green",  "title": "Fewer moves, more style", "sub": "Solve it efficiently to earn the mastery diamond."},
+  {"src": "rec1.mp4", "a": 46.8, "b": 51.5, "chip": "LAYERS",           "color": "yellow", "title": "Peel back the overlap", "sub": "Plates stack and hide each other. Work from the top down."},
+  {"src": "rec1.mp4", "a": 51.5, "b": 56.0, "chip": "CLEAR",            "color": "green",  "title": "Sheet approved", "sub": "Every clear gets stamped and logged."},
+  {"src": "rec1.mp4", "a": 66.8, "b": 71.5, "chip": "DAILY",            "color": "blue",   "title": "A fresh sheet every day", "sub": "The same puzzle for everyone. Keep your streak going."},
+  {"src": "rec1.mp4", "a": 74.0, "b": 82.5, "chip": "THEMES",           "color": "blue",   "title": "Make the board yours", "sub": "Walnut, ocean, copper and more. Purely cosmetic."},
+  {"src": "rec1.mp4", "a": 87.6, "b": 91.6, "chip": "RANKS",            "color": "blue",   "title": "Climb the leaderboards", "sub": "Sheets cleared, weekly, daily and streak boards."}
+]}
