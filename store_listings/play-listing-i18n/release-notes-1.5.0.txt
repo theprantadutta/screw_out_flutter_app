@@ -1,0 +1,45 @@
+<en-US>
+Screw Out now speaks 14 languages: pick yours in Settings. Plus smoother first days, fewer interruptions while you learn, and a gentle reminder if you've been away.
+</en-US>
+<es-419>
+Screw Out ahora habla 14 idiomas: elige el tuyo en Ajustes. Además, primeros días más tranquilos, menos interrupciones mientras aprendes y un recordatorio amable si llevas tiempo sin jugar.
+</es-419>
+<es-ES>
+Screw Out ahora habla 14 idiomas: elige el tuyo en Ajustes. Además, primeros días más tranquilos, menos interrupciones mientras aprendes y un recordatorio amable si llevas tiempo sin jugar.
+</es-ES>
+<pt-BR>
+Screw Out agora fala 14 idiomas: escolha o seu em Configurações. Além disso, primeiros dias mais tranquilos, menos interrupções enquanto você aprende e um lembrete gentil se ficar um tempo sem jogar.
+</pt-BR>
+<fr-FR>
+Screw Out parle désormais 14 langues : choisissez la vôtre dans les Réglages. Et aussi des premiers jours plus sereins, moins d'interruptions pendant l'apprentissage et un petit rappel si vous vous absentez.
+</fr-FR>
+<de-DE>
+Screw Out spricht jetzt 14 Sprachen: Wähle deine in den Einstellungen. Außerdem ruhigere erste Tage, weniger Unterbrechungen beim Lernen und eine sanfte Erinnerung, wenn du eine Weile weg warst.
+</de-DE>
+<ru-RU>
+Screw Out теперь говорит на 14 языках: выберите свой в настройках. А ещё спокойные первые дни, меньше отвлечений во время обучения и мягкое напоминание, если вы давно не играли.
+</ru-RU>
+<tr-TR>
+Screw Out artık 14 dilde: dilini Ayarlar'dan seç. Ayrıca daha sakin ilk günler, öğrenirken daha az kesinti ve bir süre uzak kaldığında nazik bir hatırlatma.
+</tr-TR>
+<id>
+Screw Out kini tersedia dalam 14 bahasa: pilih bahasamu di Pengaturan. Plus hari-hari pertama yang lebih tenang, lebih sedikit gangguan saat belajar, dan pengingat lembut jika kamu lama tidak bermain.
+</id>
+<hi-IN>
+Screw Out अब 14 भाषाओं में है: सेटिंग्स में अपनी भाषा चुनें। साथ ही शुरुआती दिन और आसान, सीखते समय कम रुकावटें, और कुछ समय दूर रहने पर एक हल्का रिमाइंडर।
+</hi-IN>
+<ar>
+أصبحت Screw Out متاحة بـ 14 لغة: اختر لغتك من الإعدادات. بالإضافة إلى أيام أولى أهدأ، وانقطاعات أقل أثناء التعلّم، وتذكير لطيف إذا غبت لفترة.
+</ar>
+<bn-BD>
+Screw Out এখন 14টি ভাষায়: সেটিংস থেকে আপনার ভাষা বেছে নিন। সাথে আরও সহজ প্রথম দিনগুলো, শেখার সময় কম বাধা, আর কিছুদিন না খেললে একটি মৃদু রিমাইন্ডার।
+</bn-BD>
+<ja-JP>
+Screw Outが14言語に対応しました。設定から言語を選べます。さらに、はじめの数日がより快適になり、慣れるまでの中断が減り、しばらく遊んでいないときにはやさしくお知らせします。
+</ja-JP>
+<ko-KR>
+Screw Out이 이제 14개 언어를 지원합니다. 설정에서 언어를 선택하세요. 또한 처음 며칠이 더 편안해지고, 익히는 동안 방해가 줄었으며, 한동안 플레이하지 않으면 부드럽게 알려 드립니다.
+</ko-KR>
+<zh-TW>
+Screw Out 現已支援 14 種語言，可在設定中選擇。另外，前幾天的體驗更順暢，學習時的干擾更少，久未遊玩時也會溫和提醒你。
+</zh-TW>
