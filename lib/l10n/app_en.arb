@@ -414,7 +414,7 @@
     }
   },
   "notificationPrimerTitle": "A nudge for the daily sheet?",
-  "notificationPrimerBody": "One quiet reminder in the evening when you haven't played. Never more.",
+  "notificationPrimerBody": "A quiet reminder when you haven't played. Never more than one a day.",
   "allow": "ALLOW",
   "notNow": "NOT NOW",
   "offline": "OFFLINE",
@@ -645,6 +645,8 @@
 
   "reminderTitle": "Today's sheet is ready",
   "reminderBody": "One fresh drawing, same for everyone. No timer.",
+  "comebackReminderTitle": "Your next sheet is on the bench",
+  "comebackReminderBody": "A few calm minutes, a few screws. Pick up where you left off.",
 
   "signInEmail": "Continue with email",
   "emailSignInTitle": "Sign in",

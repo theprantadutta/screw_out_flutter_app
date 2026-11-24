@@ -11,6 +11,10 @@ import '../../../l10n/app_localizations.dart';
 /// around the screw, pulsing yellow ring, leader line to the STEP 1 callout,
 /// a nudging finger, "↓ IT LANDS IN THE TRAY" and SKIP TUTORIAL.
 /// Only the spotlight lets taps through to the board.
+///
+/// Safety net: if the screw's hole cannot be measured on screen within
+/// [measureTimeout], the coach mark gives up ([onUnavailable]) rather than
+/// leave a scrim that swallows every tap.
 class TutorialOverlay extends StatefulWidget {
   const TutorialOverlay({
     super.key,
@@ -18,12 +22,18 @@ class TutorialOverlay extends StatefulWidget {
     required this.screwId,
     required this.onSkip,
     required this.reducedMotion,
+    this.onUnavailable,
   });
+
+  static const measureTimeout = Duration(milliseconds: 1500);
 
   final GameplayVisuals visuals;
   final String screwId;
   final VoidCallback onSkip;
   final bool reducedMotion;
+
+  /// The spotlight could not be placed in time. Defaults to [onSkip].
+  final VoidCallback? onUnavailable;
 
   @override
   State<TutorialOverlay> createState() => _TutorialOverlayState();
@@ -34,6 +44,8 @@ class _TutorialOverlayState extends State<TutorialOverlay> with TickerProviderSt
   late final AnimationController _pulse = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
   late final AnimationController _finger = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
   Timer? _pulseTimer;
+  Timer? _giveUp;
+  bool _gaveUp = false;
   Offset? _center;
   double? _trayTop;
 
@@ -46,18 +58,30 @@ class _TutorialOverlayState extends State<TutorialOverlay> with TickerProviderSt
       _finger.repeat(reverse: true);
     }
     WidgetsBinding.instance.addPostFrameCallback(_measure);
+    _giveUp = Timer(TutorialOverlay.measureTimeout, () {
+      if (!mounted || _center != null) return;
+      _gaveUp = true;
+      (widget.onUnavailable ?? widget.onSkip)();
+    });
   }
 
   void _measure(Duration _) {
-    if (!mounted) return;
+    if (!mounted || _gaveUp) return;
     final box = context.findRenderObject() as RenderBox?;
     final hole = widget.visuals.holeGlobal(widget.screwId);
     final slot = widget.visuals.slotGlobal(0);
     if (box == null || !box.hasSize || hole == null) {
       WidgetsBinding.instance.addPostFrameCallback(_measure);
+      WidgetsBinding.instance.scheduleFrame();
       return;
     }
     final c = box.globalToLocal(hole);
+    // A hole outside the overlay would leave nothing tappable.
+    if (!(Offset.zero & box.size).contains(c)) {
+      WidgetsBinding.instance.addPostFrameCallback(_measure);
+      WidgetsBinding.instance.scheduleFrame();
+      return;
+    }
     final t = slot == null ? null : box.globalToLocal(slot).dy - 21 - 30;
     if (c != _center || t != _trayTop) {
       setState(() {
@@ -72,6 +96,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with TickerProviderSt
   @override
   void dispose() {
     _pulseTimer?.cancel();
+    _giveUp?.cancel();
     _pulse.dispose();
     _finger.dispose();
     super.dispose();

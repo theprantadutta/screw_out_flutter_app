@@ -105,6 +105,7 @@ void main() {
       bool daily = false,
       int level = 20,
       int clears = 20,
+      int session = 2,
       int since = 5,
       int msLast = 1 << 30,
       int msAny = 1 << 30,
@@ -115,6 +116,7 @@ void main() {
       isDaily: daily,
       levelId: level,
       clearsThisInstall: clears,
+      sessionNumber: session,
       completionsSinceLastAd: since,
       msSinceLastInterstitial: msLast,
       msSinceAnyFullScreenAd: msAny,
@@ -129,6 +131,9 @@ void main() {
       expect(inter(level: 15), isFalse);
       expect(inter(level: 16), isTrue);
       expect(inter(clears: 14), isFalse);
+      // Never in the install's first session, however many sheets.
+      expect(inter(session: 1, clears: 40, level: 40), isFalse);
+      expect(inter(session: 2), isTrue);
       // At most every 6th completion.
       expect(inter(since: 4), isFalse);
       expect(inter(since: 5), isTrue);
@@ -138,6 +143,12 @@ void main() {
       // …and 3 minutes after any full-screen ad (incl. app-open).
       expect(inter(msAny: 2 * 60 * 1000), isFalse);
       expect(inter(msAny: 3 * 60 * 1000), isTrue);
+    });
+
+    test('a resume after 30 minutes away starts a new session', () {
+      expect(AdGate.startsNewSession(msAway: 29 * 60 * 1000), isFalse);
+      expect(AdGate.startsNewSession(msAway: 30 * 60 * 1000), isTrue);
+      expect(AdGate.firstAdSession, 2);
     });
 
     test('app open', () {

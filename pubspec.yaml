@@ -54,7 +54,9 @@ dependencies:
   http: ^1.6.0
   connectivity_plus: ^7.3.2
   flutter_inapp_purchase: 11.3.0
-  google_mobile_ads: ^9.1.0
+  google_mobile_ads: ^9.2.0
+  # Unity Ads bidding through AdMob mediation; built for google_mobile_ads 9.2.0.
+  gma_mediation_unity: ^1.12.0
   app_tracking_transparency: ^2.0.7
   url_launcher: ^6.3.3
   go_router: ^18.1.0

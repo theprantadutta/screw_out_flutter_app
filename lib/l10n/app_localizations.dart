@@ -1009,7 +1009,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationPrimerBody.
   ///
   /// In en, this message translates to:
-  /// **'One quiet reminder in the evening when you haven\'t played. Never more.'**
+  /// **'A quiet reminder when you haven\'t played. Never more than one a day.'**
   String get notificationPrimerBody;
 
   /// No description provided for @allow.
@@ -1773,6 +1773,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'One fresh drawing, same for everyone. No timer.'**
   String get reminderBody;
+
+  /// No description provided for @comebackReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your next sheet is on the bench'**
+  String get comebackReminderTitle;
+
+  /// No description provided for @comebackReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A few calm minutes, a few screws. Pick up where you left off.'**
+  String get comebackReminderBody;
 
   /// No description provided for @signInEmail.
   ///

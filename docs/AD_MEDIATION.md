@@ -6,7 +6,7 @@ with every ID, status and history, is
 `G:\Personal\MyProjects\snake-classic\snake_classic\docs\AD_MEDIATION_PARTNERS.md`
 (Snake Classic repo). Read its "Quick status" table before touching ads.
 
-Last updated: 2026-11-16.
+Last updated: 2026-11-24.
 
 ## This app in AdMob
 
@@ -15,7 +15,12 @@ Last updated: 2026-11-16.
 - Ad units in the shared mediation groups (added 2026-11-16): Android: banner, interstitial, rewarded, app open. iOS: banner, interstitial, rewarded, app open.
   Any new ad unit must be added to the matching group (`banner_ad`, `interestitial`,
   `rewarded_ad`, `app_open_ad`, or their `_ios` versions), or only AdMob bids on it.
-- Mediation adapters in this app: none yet.
+- Mediation adapters in this app: Unity Ads (`gma_mediation_unity ^1.12.0`, with `google_mobile_ads ^9.2.0`), added 2026-11-24.
+- Unity Ads (Android): project "Screw Out", Game ID 800450305, bidding placements
+  `BP_Banner_Android`, `BP_Interstitial_Android`, `BP_Rewarded_Android` (Unity has no App Open).
+  Mapped in AdMob > Mediation > Bidding sources > Unity Ads for this app's banner,
+  interstitial and rewarded units, and added to `banner_ad`, `interestitial` and `rewarded_ad`.
+  Child-directed: No (Play target audience 13+). iOS: not set up yet (needs a Mac build).
 
 ## Partners (whole account)
 
@@ -23,7 +28,7 @@ Last updated: 2026-11-16.
 |---|---|---|
 | AdMob Network | Live | No |
 | Open Bidding exchanges: Index Exchange, Magnite, OpenX, PubMatic, Verve, Smaato, InMobi Exchange, Media.net, Equativ | Applied 2026-11-16, approvals pending; they cover this app | **No** (they bid through Google's servers) |
-| Unity Ads | Live for Snake Classic only | **Yes**, see below |
+| Unity Ads | Live for Snake Classic; Screw Out Android set up 2026-11-24 | **Yes**, see below |
 | Liftoff Monetize | Live for Snake Classic only | **Yes**, see below |
 | AppLovin | Closed (account disabled, not reactivated) | Don't add |
 | Meta, Mintegral, Pangle | Planned after the 2026-11-20 revenue check | Yes, later |

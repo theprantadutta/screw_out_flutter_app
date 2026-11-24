@@ -583,7 +583,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationPrimerBody =>
-      'One quiet reminder in the evening when you haven\'t played. Never more.';
+      'A quiet reminder when you haven\'t played. Never more than one a day.';
 
   @override
   String get allow => 'ALLOW';
@@ -1096,6 +1096,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderBody => 'One fresh drawing, same for everyone. No timer.';
+
+  @override
+  String get comebackReminderTitle => 'Your next sheet is on the bench';
+
+  @override
+  String get comebackReminderBody =>
+      'A few calm minutes, a few screws. Pick up where you left off.';
 
   @override
   String get signInEmail => 'Continue with email';

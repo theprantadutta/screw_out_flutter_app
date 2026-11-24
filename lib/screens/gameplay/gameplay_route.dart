@@ -110,9 +110,10 @@ class _GameplayRouteState extends State<GameplayRoute> {
     await old?.close();
   }
 
-  void _endTutorial() {
+  void _endTutorial({String? reason}) {
+    if (!mounted) return;
     context.read<SettingsCubit>().markTutorialDone();
-    context.read<AnalyticsPort>().track('tutorial_completed');
+    context.read<AnalyticsPort>().track('tutorial_completed', {'reason': ?reason});
     if (mounted) setState(() => _tutorial = false);
   }
 
@@ -196,6 +197,7 @@ class _GameplayRouteState extends State<GameplayRoute> {
                   screwId: level.screws.first.id,
                   reducedMotion: reduced,
                   onSkip: _endTutorial,
+                  onUnavailable: () => _endTutorial(reason: 'spotlight_unavailable'),
                 )
               : null,
         ),
