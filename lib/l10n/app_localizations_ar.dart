@@ -526,7 +526,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String proTrialDays(int days) {
-    return '$days أيام مجانًا';
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days يوم مجانًا',
+      many: '$days يومًا مجانًا',
+      few: '$days أيام مجانًا',
+      two: 'يومان مجانًا',
+      one: 'يوم واحد مجانًا',
+    );
+    return '$_temp0';
   }
 
   @override

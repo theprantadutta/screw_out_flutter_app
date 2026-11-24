@@ -128,7 +128,7 @@
   "proPerks": "بلا إعلانات · تلميحات غير محدودة · كل السمات · إنقاذ مجاني · {coins} ¢ شهريًا",
   "proMonthly": "شهري",
   "proYearly": "سنوي",
-  "proTrialDays": "{days} أيام مجانًا",
+  "proTrialDays": "{days, plural, =1{يوم واحد مجانًا} =2{يومان مجانًا} few{{days} أيام مجانًا} many{{days} يومًا مجانًا} other{{days} يوم مجانًا}}",
   "proThenPrice": "ثم {price}",
   "proTrialTerms": "يتجدد تلقائيًا بعد الفترة التجريبية المجانية ما لم تلغِه. تبدأ العملات الشهرية مع أول دفعة.",
   "proActive": "PRO · مُفعّل",
