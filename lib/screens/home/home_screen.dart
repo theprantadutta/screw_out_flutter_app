@@ -94,7 +94,7 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Text('Screw\nOut.', style: BpType.hero.copyWith(color: BpColor.line)),
+                  child: Text('Screw\nOut.', textDirection: TextDirection.ltr, style: BpType.hero.copyWith(color: BpColor.line)),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 12),

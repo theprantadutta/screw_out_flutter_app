@@ -378,7 +378,7 @@ class _StartupFailureApp extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Screw Out.', style: BpType.screenTitle.copyWith(color: BpColor.line)),
+                Text('Screw Out.', textDirection: TextDirection.ltr, style: BpType.screenTitle.copyWith(color: BpColor.line)),
                 const SizedBox(height: BpSpace.s4),
                 Text(
                   AppLocalizations.of(context).startupFailed,
