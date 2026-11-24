@@ -103,6 +103,26 @@ no real purchase on either platform.
 - [ ] **Cancelled trial:** cancel during the trial. Pro ends at the trial's
       end and no coins are ever paid.
 
+## Localization and store listing (2026-11-24)
+
+- [ ] **App Store Connect: localize the listing the same way Play was done.**
+      The app ships in 14 languages (en plus es, pt-BR, fr, de, ru, tr, id,
+      hi, ar, bn, ja, ko, zh-Hant). Add each as a localization in App Store
+      Connect (Spanish as both es-MX and es-ES, Portuguese as pt-BR, Chinese
+      as zh-Hant). Use `store_listings/play-listing-i18n/listings.json` as the
+      source: its `title` is the App Store **name** (30 max), `short` fits the
+      **subtitle** only if cut to 30 (write a 30-char subtitle with the same
+      search keyword), `full` is the **description**, `whatsnew` the
+      **What's New**. Also fill **keywords** (100 chars, comma separated, no
+      spaces after commas) per language with that market's screw puzzle /
+      nuts and bolts search terms, and don't repeat words already in the name.
+      No price words ("free" and equivalents) in name or subtitle, no em or en
+      dashes. Theme and chapter names must match the in-app translations.
+- [ ] Check every language on an iPhone and iPad simulator: Arabic must lay
+      out right to left (the board itself does not mirror), and Bengali,
+      Hindi, Arabic, Japanese, Korean and Chinese must render with the
+      bundled Noto fallback fonts (no empty boxes).
+
 ## Always
 
 - [ ] **iPad layout:** every screen goes through `BpTabletScale` (design
