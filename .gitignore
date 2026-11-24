@@ -62,3 +62,6 @@ android/key.properties
 .idea/
 *.iml
 *.g.dart
+
+# Claude Code agent worktrees
+.claude/worktrees/

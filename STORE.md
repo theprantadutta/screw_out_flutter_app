@@ -17,6 +17,18 @@ All product IDs use the `com.pranta.screwout.` prefix.
 
 ## Store listing (Google Play)
 
+**App name** (30 max): `Screw Out: Screw Puzzle` (sent for review 2026-11-24).
+The search term ("screw puzzle") is in the title because Play search drives
+almost all organic installs; plain "Screw Out" didn't rank for it.
+
+**Full description, first line** (keywords: screw puzzle, nuts and bolts):
+
+```
+Screw Out is a calm screw puzzle game drawn like a technical blueprint: a nuts and bolts brain teaser where you unscrew every plate, layer by layer.
+```
+
+When editing the listing, keep the AI asset declaration on "Don't label assets".
+
 **Short description** (80 max, currently 74):
 
 ```
