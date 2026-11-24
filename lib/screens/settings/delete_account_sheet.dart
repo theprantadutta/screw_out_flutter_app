@@ -12,7 +12,7 @@ import '../../widgets/bp/bp_text_field.dart';
 bool get _apple => defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS;
 
 /// Where the player cancels Pro (deleting the account never does).
-String subscriptionStoreName() => _apple ? 'the App Store' : 'Google Play';
+String subscriptionStoreName(AppLocalizations l) => _apple ? l.storeAppStore : l.storeGooglePlay;
 
 Uri _manageSubscriptionsUri() => _apple
     ? Uri.parse('https://apps.apple.com/account/subscriptions')
@@ -101,7 +101,7 @@ class _DeleteAccountSheetState extends State<DeleteAccountSheet> {
                     decoration: BoxDecoration(
                       border: Border.all(color: BpColor.action, width: BpSize.stroke),
                     ),
-                    child: Text(l.deleteSheetPro(subscriptionStoreName()), style: BpType.monoBody.copyWith(color: BpColor.line, height: 1.5)),
+                    child: Text(l.deleteSheetPro(subscriptionStoreName(l)), style: BpType.monoBody.copyWith(color: BpColor.line, height: 1.5)),
                   ),
                   BpOutlineButton(
                     height: 46,

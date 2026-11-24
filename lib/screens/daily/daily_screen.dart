@@ -8,6 +8,8 @@ import '../../core/theme/blueprint_tokens.dart';
 import '../../game/domain/level.dart';
 import '../../game/generator/daily.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/app_locales.dart';
+import '../../l10n/content_l10n.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
 import '../../router/routes.dart';
@@ -16,6 +18,7 @@ import '../../services/level_repository.dart';
 import '../../services/progress_service.dart';
 import '../../services/share_result.dart';
 import '../../widgets/bp/bp_buttons.dart';
+import '../../widgets/bp/bp_directional.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_mini_board.dart';
 import '../../widgets/bp/bp_screen.dart';
@@ -30,7 +33,7 @@ class DailyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final locale = Localizations.localeOf(context).toLanguageTag();
+    final locale = intlLocaleName(Localizations.localeOf(context));
     final today = now ?? DateTime.now();
     final repo = context.read<LevelRepository>();
     final progress = context.watch<ProgressCubit>().state;
@@ -108,8 +111,15 @@ class DailyScreen extends StatelessWidget {
                   onPressed: () => context.push(AppRoutes.dailyPlay),
                   child: Row(
                     children: [
-                      Expanded(child: Text(done ? l.replayDaily : l.startDaily, style: BpType.button.copyWith(fontSize: 18, color: BpColor.ink))),
-                      const Icon(Symbols.arrow_forward_sharp, size: 26),
+                      Expanded(
+                        child: Text(
+                          done ? l.replayDaily : l.startDaily,
+                          style: BpType.button.copyWith(fontSize: 18, color: BpColor.ink),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const BpMirrorRtl(child: Icon(Symbols.arrow_forward_sharp, size: 26)),
                     ],
                   ),
                 ),
@@ -249,7 +259,7 @@ class _FramedState extends State<_Framed> with SingleTickerProviderStateMixin {
     final value = BpType.button.copyWith(fontSize: 14, color: BpColor.line, fontFeatures: const [FontFeature.tabularFigures()]);
     const line = BorderSide(color: BpColor.lineDefault, width: BpSize.stroke);
     Widget cell(String label, String v, {Color? color, bool right = true}) => Container(
-      decoration: BoxDecoration(border: right ? const Border(right: line) : null),
+      decoration: BoxDecoration(border: right ? const BorderDirectional(end: line) : null),
       padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,7 +293,7 @@ class _FramedState extends State<_Framed> with SingleTickerProviderStateMixin {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(flex: 14, child: cell(l.dailyTitle, level.title)),
+                  Expanded(flex: 14, child: cell(l.dailyTitle, l.levelTitle(level))),
                   Expanded(flex: 10, child: cell(l.dailyPlates, l.platesScrews(level.panels.length, level.screws.length))),
                   Expanded(flex: 10, child: cell(l.dailyReward, '+${Rewards.daily}\u00a0¢', color: BpColor.action, right: false)),
                 ],

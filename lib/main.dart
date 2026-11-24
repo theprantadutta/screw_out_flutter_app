@@ -20,6 +20,7 @@ import 'core/theme/blueprint_tokens.dart';
 import 'data/database/app_database.dart';
 import 'firebase_options.dart';
 import 'game/generator/daily.dart';
+import 'l10n/app_locales.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/bloc/display/display_cubit.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
@@ -231,7 +232,7 @@ Future<void> _scheduleReminder() async {
   await getIt<NotificationService>().scheduleDailyReminder(
     enabled: settings.dailyReminder,
     todayDone: done,
-    localeCode: settings.localeCode ?? 'en',
+    localeCode: settings.localeCode,
   );
 }
 
@@ -364,26 +365,31 @@ class _StartupFailureApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
+    localizationsDelegates: const [AppLocalizations.delegate, ...GlobalMaterialLocalizations.delegates],
+    supportedLocales: AppLocalizations.supportedLocales,
+    localeListResolutionCallback: appLocaleResolution,
     home: Scaffold(
       backgroundColor: BpColor.sheet,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(BpSpace.screen),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Screw Out.', style: BpType.screenTitle.copyWith(color: BpColor.line)),
-              const SizedBox(height: BpSpace.s4),
-              Text(
-                'SOMETHING WENT WRONG WHILE STARTING.\nCLOSE THE APP AND OPEN IT AGAIN.',
-                style: BpType.label.copyWith(color: BpColor.textSecondary),
-              ),
-              if (kDebugMode) ...[
+      body: Builder(
+        builder: (context) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(BpSpace.screen),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Screw Out.', style: BpType.screenTitle.copyWith(color: BpColor.line)),
                 const SizedBox(height: BpSpace.s4),
-                Text('$error', style: BpType.caption.copyWith(color: BpColor.blocked)),
+                Text(
+                  AppLocalizations.of(context).startupFailed,
+                  style: BpType.label.copyWith(color: BpColor.textSecondary),
+                ),
+                if (kDebugMode) ...[
+                  const SizedBox(height: BpSpace.s4),
+                  Text('$error', style: BpType.caption.copyWith(color: BpColor.blocked)),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

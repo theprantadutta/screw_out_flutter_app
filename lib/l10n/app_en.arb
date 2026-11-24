@@ -1,686 +1,2458 @@
 {
   "@@locale": "en",
   "appName": "Screw Out",
+  "@appName": {
+    "description": "App name (brand). Used as the accessibility label of the home wordmark. Usually left untranslated."
+  },
   "pause": "Pause",
+  "@pause": {
+    "description": "Accessibility label of the pause button in the gameplay header."
+  },
   "back": "Back",
+  "@back": {
+    "description": "Accessibility label of the back arrow button at the top left of every screen."
+  },
   "settings": "Settings",
-  "coinsBalance": "{coins} coins",
-  "@coinsBalance": {
-    "placeholders": {
-      "coins": {
-        "type": "int"
-      }
-    }
+  "@settings": {
+    "description": "Accessibility label of the gear button on the home screen."
   },
   "tray": "TRAY",
+  "@tray": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Header above the tray of collected screws during gameplay. Max ~12 characters."
+  },
   "trayFull": "TRAY FULL",
+  "@trayFull": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Tray header when every slot is taken (warning state). Max ~14 characters."
+  },
   "undo": "UNDO",
+  "@undo": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 10 characters max; longer text is scaled down). Undo button under the board during gameplay; also its accessibility label."
+  },
   "hintCount": "HINT · {count}",
   "@hintCount": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Hint button under the board, showing how many hints are left.",
     "placeholders": {
       "count": {
-        "type": "String"
+        "type": "String",
+        "description": "Hints left as text: a number, or the infinity sign for Pro players",
+        "example": "3"
       }
     }
   },
   "hintUnlimited": "∞",
+  "@hintUnlimited": {
+    "description": "Infinity sign shown instead of a number on the hint button for Pro players. Normally keep as is."
+  },
   "paused": "Paused",
+  "@paused": {
+    "description": "Title of the pause sheet during gameplay."
+  },
   "pausedMeta": "{code} · MOVE {moves}",
   "@pausedMeta": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption on the pause sheet: sheet code and move count.",
     "placeholders": {
       "code": {
-        "type": "String"
+        "type": "String",
+        "description": "the sheet code, for example \"DWG 024\" or \"D-288\" (do not translate the code)",
+        "example": "DWG 024"
       },
       "moves": {
-        "type": "int"
+        "type": "int",
+        "description": "Moves made so far",
+        "example": "12"
       }
     }
   },
   "resume": "Resume",
+  "@resume": {
+    "description": "Button/chip label: keep it short (about 20 characters max; longer text is scaled down). Main button on the pause sheet that returns to the game."
+  },
   "sound": "SOUND",
+  "@sound": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Toggle label on the pause sheet (sound on/off). Max ~14 characters."
+  },
   "haptics": "HAPTICS",
+  "@haptics": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Toggle label on the pause sheet (vibration feedback on/off). Max ~14 characters."
+  },
   "reducedMotion": "REDUCED MOTION",
+  "@reducedMotion": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Toggle label on the pause sheet (fewer animations). Max ~18 characters."
+  },
   "restart": "RESTART",
+  "@restart": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Button to restart the current sheet (pause sheet, stuck sheet, restart confirmation)."
+  },
   "exitToSheets": "EXIT TO SHEETS",
+  "@exitToSheets": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 16 characters max; longer text is scaled down). Pause sheet button that leaves the game and returns to the sheet list."
+  },
   "restartConfirmTitle": "Restart this sheet?",
+  "@restartConfirmTitle": {
+    "description": "Title of the confirmation sheet before restarting a sheet."
+  },
   "restartConfirmBody": "You'll lose {moves} moves of progress.",
   "@restartConfirmBody": {
+    "description": "Body of the restart confirmation sheet.",
     "placeholders": {
       "moves": {
-        "type": "int"
+        "type": "int",
+        "description": "Moves that will be lost",
+        "example": "12"
       }
     }
   },
   "cancel": "CANCEL",
+  "@cancel": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Cancel button on confirmation sheets."
+  },
   "stuckTitle": "No open slots left.",
-  "stuckRescueTitle": "OR BUY ONE EXTRA SLOT FOR THIS SHEET",
+  "@stuckTitle": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Title of the sheet shown when the tray is full and no move is possible."
+  },
   "stuckReasonHolding": "{plate} still holds {count, plural, =1{one screw} other{{count} screws}} on the board. Undo frees a slot.",
   "@stuckReasonHolding": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Explains why the player is stuck, naming the plate that still holds screws.",
     "placeholders": {
       "plate": {
-        "type": "String"
+        "type": "String",
+        "description": "Plate tag, for example \"PL-03\" (do not translate)",
+        "example": "PL-03"
       },
       "count": {
-        "type": "int"
+        "type": "int",
+        "description": "Screws still on that plate",
+        "example": "2"
       }
     }
   },
   "stuckReasonGeneric": "Every slot is taken and no plate can drop. Undo frees a slot.",
+  "@stuckReasonGeneric": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Generic explanation on the stuck sheet when no single plate is to blame."
+  },
   "undoLastMove": "Undo last move",
-  "hint": "HINT",
-  "rescueSlot": "EXTRA SLOT",
+  "@undoLastMove": {
+    "description": "Button/chip label: keep it short (about 22 characters max; longer text is scaled down). Main button on the stuck sheet that undoes the last move."
+  },
   "rescueSlotCoins": "EXTRA SLOT · {coins} ¢",
   "@rescueSlotCoins": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 22 characters max; longer text is scaled down). Stuck sheet button: buy one extra tray slot for coins. The cent sign stands for coins.",
     "placeholders": {
       "coins": {
-        "type": "int"
+        "type": "int",
+        "description": "Coin price",
+        "example": "50"
       }
     }
   },
   "rescueSlotAd": "EXTRA SLOT · VIDEO",
+  "@rescueSlotAd": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 22 characters max; longer text is scaled down). Stuck sheet button: get one extra tray slot by watching a video ad."
+  },
   "rescueSlotPro": "EXTRA SLOT · PRO",
+  "@rescueSlotPro": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 22 characters max; longer text is scaled down). Stuck sheet button: free extra tray slot for Pro subscribers."
+  },
   "outOfHintsTitle": "Want one more hint?",
+  "@outOfHintsTitle": {
+    "description": "Title of the sheet offering another hint when none are left."
+  },
   "hintsLeftZero": "HINTS · 0 LEFT",
+  "@hintsLeftZero": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption on the out-of-hints sheet."
+  },
   "outOfHintsBody": "A hint rings one useful next screw. It never solves the sheet.",
+  "@outOfHintsBody": {
+    "description": "Body of the out-of-hints sheet. \"Rings\" means the hint draws a ring around one screw."
+  },
   "watchVideo": "Watch a short video",
+  "@watchVideo": {
+    "description": "Option title on the out-of-hints sheet: watch a rewarded video ad for a hint."
+  },
   "watchVideoMeta": "OPTIONAL · ~30 S · +1 HINT",
+  "@watchVideoMeta": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption under \"Watch a short video\": optional, about 30 seconds, gives one hint. \"S\" = seconds."
+  },
   "useCoins": "Use {coins} coins",
   "@useCoins": {
+    "description": "Option title on the out-of-hints sheet: pay coins for a hint.",
     "placeholders": {
       "coins": {
-        "type": "int"
+        "type": "int",
+        "description": "Coin cost",
+        "example": "40"
       }
     }
   },
   "useCoinsMeta": "BALANCE {balance} ¢",
   "@useCoinsMeta": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption showing the coin balance. The cent sign stands for coins.",
     "placeholders": {
       "balance": {
-        "type": "int"
+        "type": "int",
+        "description": "Current coin balance",
+        "example": "860"
       }
     }
   },
   "keepThinking": "Keep thinking",
+  "@keepThinking": {
+    "description": "Button/chip label: keep it short (about 22 characters max; longer text is scaled down). Button that closes the out-of-hints sheet without buying."
+  },
   "notEnoughCoins": "Not enough coins yet.",
+  "@notEnoughCoins": {
+    "description": "Toast shown when the player cannot afford a hint or slot."
+  },
   "adUnavailable": "No video available right now.",
+  "@adUnavailable": {
+    "description": "Toast shown when no video ad can be loaded."
+  },
   "cleared": "{code} · CLEARED",
   "@cleared": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption on the result card after finishing a sheet.",
     "placeholders": {
       "code": {
-        "type": "String"
+        "type": "String",
+        "description": "the sheet code, for example \"DWG 024\" or \"D-288\" (do not translate the code)",
+        "example": "DWG 024"
       }
     }
   },
   "disassembled": "Disassembled.",
+  "@disassembled": {
+    "description": "Big title on the result card when a sheet is solved (everything taken apart). Keep it one short word if possible."
+  },
   "approved": "APPROVED",
+  "@approved": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Rubber stamp text on the result card, like an approval stamp on a technical drawing. Max ~10 characters."
+  },
   "statMoves": "MOVES",
+  "@statMoves": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Stat label on the result card. Max ~10 characters."
+  },
   "statTime": "TIME",
+  "@statTime": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Stat label on the result card. Max ~10 characters."
+  },
   "statMastery": "MASTERY",
+  "@statMastery": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Stat label on the result card: whether the sheet was cleared without hints or restarts. Max ~10 characters."
+  },
   "nextSheet": "Next sheet · {code}",
   "@nextSheet": {
+    "description": "Button/chip label: keep it short (about 26 characters max; longer text is scaled down). Main button on the result card that opens the next sheet.",
     "placeholders": {
       "code": {
-        "type": "String"
+        "type": "String",
+        "description": "the sheet code, for example \"DWG 024\" or \"D-288\" (do not translate the code)",
+        "example": "DWG 025"
       }
     }
   },
   "replay": "REPLAY",
+  "@replay": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 10 characters max; longer text is scaled down). Result card button that replays the same sheet."
+  },
   "sheets": "SHEETS",
-  "home": "HOME",
-  "dailyDone": "Daily sheet done",
+  "@sheets": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 10 characters max; longer text is scaled down). Button that returns to the list of sheets (result card, chapter complete)."
+  },
   "backHome": "Back home",
+  "@backHome": {
+    "description": "Button/chip label: keep it short (about 22 characters max; longer text is scaled down). Main button on the daily sheet result card, returns to the home screen."
+  },
   "chapterComplete": "CHAPTER {chapter} · COMPLETE",
   "@chapterComplete": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption at the top of the chapter complete screen.",
     "placeholders": {
       "chapter": {
-        "type": "String"
+        "type": "String",
+        "description": "the chapter number, zero-padded, for example \"02\"",
+        "example": "02"
       }
     }
   },
-  "chapterSheetsMastered": "{done} / {total} SHEETS · {mastered} MASTERED ◆",
-  "@chapterSheetsMastered": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      },
-      "mastered": {
-        "type": "int"
-      }
-    }
-  },
-  "rewardCoins": "COINS",
   "themeUnlocked": "THEME UNLOCKED",
+  "@themeUnlocked": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption on the chapter complete screen above a newly unlocked board theme."
+  },
   "nextChapter": "NEXT · CHAPTER {chapter}",
   "@nextChapter": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption on the chapter complete screen introducing the next chapter.",
     "placeholders": {
       "chapter": {
-        "type": "String"
+        "type": "String",
+        "description": "the chapter number, zero-padded, for example \"02\"",
+        "example": "03"
       }
     }
   },
   "startChapter": "Start Chapter {chapter}",
   "@startChapter": {
+    "description": "Button/chip label: keep it short (about 24 characters max; longer text is scaled down). Main button on the chapter complete screen.",
     "placeholders": {
       "chapter": {
-        "type": "String"
+        "type": "String",
+        "description": "the chapter number, zero-padded, for example \"02\"",
+        "example": "03"
       }
     }
   },
   "equipTheme": "EQUIP {name}",
   "@equipTheme": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 24 characters max; longer text is scaled down). Chapter complete button that equips the theme just unlocked.",
     "placeholders": {
       "name": {
-        "type": "String"
+        "type": "String",
+        "description": "Theme name, already uppercased",
+        "example": "WALNUT WORKSHOP"
       }
     }
   },
   "tutorialStep1": "STEP 1 · TAP THE SCREW",
+  "@tutorialStep1": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Tutorial callout on the very first sheet, pointing at the only screw."
+  },
   "tutorialLands": "↓ IT LANDS IN THE TRAY",
+  "@tutorialLands": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Tutorial callout pointing down at the tray. Keep the down arrow."
+  },
   "skipTutorial": "SKIP TUTORIAL",
+  "@skipTutorial": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 16 characters max; longer text is scaled down). Link at the bottom of the tutorial."
+  },
   "splashTagline": "A PUZZLE OF LAYERS",
+  "@splashTagline": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Tagline under the logo on the splash screen."
+  },
   "splashFooter": "REV 1.0 · SHEET 001",
+  "@splashFooter": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Decorative footer on the splash screen, styled like a drawing title block (revision and sheet number)."
+  },
   "homeFigure": "FIG. 1\nEXPLODED VIEW\n{plates, plural, =1{1 PLATE} other{{plates} PLATES}} · {screws}\n{screws, plural, =1{FASTENER} other{FASTENERS}}",
   "@homeFigure": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Decorative figure caption on the home screen next to the exploded drawing, four short lines. Keep the line breaks.",
     "placeholders": {
       "plates": {
-        "type": "int"
+        "type": "int",
+        "description": "Number of plates in the drawing",
+        "example": "5"
       },
       "screws": {
-        "type": "int"
+        "type": "int",
+        "description": "Number of screws (fasteners)",
+        "example": "12"
       }
     }
   },
   "chapterOf": "CHAPTER {chapter}/{total}",
   "@chapterOf": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Dimension-line label on the home screen.",
     "placeholders": {
       "chapter": {
-        "type": "String"
+        "type": "String",
+        "description": "the chapter number, zero-padded, for example \"02\"",
+        "example": "02"
       },
       "total": {
-        "type": "String"
+        "type": "String",
+        "description": "Number of chapters, zero-padded",
+        "example": "05"
       }
     }
   },
   "fastenerCount": "×{count} {count, plural, =1{FASTENER} other{FASTENERS}}",
   "@fastenerCount": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small callout next to a plate in the home drawing: how many screws hold it.",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "int",
+        "description": "Number of screws",
+        "example": "3"
       }
     }
   },
   "nextSheetLabel": "NEXT SHEET",
+  "@nextSheetLabel": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption on the home screen card for the next sheet."
+  },
   "chapterLabel": "CHAPTER {chapter}",
   "@chapterLabel": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption above a chapter name (home, chapter map).",
     "placeholders": {
       "chapter": {
-        "type": "String"
+        "type": "String",
+        "description": "the chapter number, zero-padded, for example \"02\"",
+        "example": "02"
       }
     }
   },
   "campaign": "CAMPAIGN",
+  "@campaign": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption on the home screen progress bar."
+  },
   "campaignProgress": "{done} / {total}",
   "@campaignProgress": {
+    "description": "Progress count on the home screen, sheets done of total. Usually only reorder if needed.",
     "placeholders": {
       "done": {
-        "type": "int"
+        "type": "int",
+        "description": "Sheets cleared",
+        "example": "23"
       },
       "total": {
-        "type": "int"
+        "type": "int",
+        "description": "Total sheets",
+        "example": "100"
       }
     }
   },
   "continueSheet": "Continue · {code}",
   "@continueSheet": {
+    "description": "Button/chip label: keep it short (about 24 characters max; longer text is scaled down). Main home screen button that opens the current sheet.",
     "placeholders": {
       "code": {
-        "type": "String"
+        "type": "String",
+        "description": "the sheet code, for example \"DWG 024\" or \"D-288\" (do not translate the code)",
+        "example": "DWG 024"
       }
     }
   },
   "daily": "DAILY",
+  "@daily": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 10 characters max; longer text is scaled down). Home screen button that opens the daily sheet."
+  },
   "themes": "THEMES",
+  "@themes": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 10 characters max; longer text is scaled down). Home screen button that opens the board themes."
+  },
   "allCleared": "All sheets cleared",
+  "@allCleared": {
+    "description": "Shown on the home screen instead of the next sheet when every sheet is cleared."
+  },
   "sheetsCount": "{done} / {total} SHEETS",
   "@sheetsCount": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption with sheets cleared of total (campaign, chapter map, chapter complete).",
     "placeholders": {
       "done": {
-        "type": "int"
+        "type": "int",
+        "description": "Sheets cleared",
+        "example": "23"
       },
       "total": {
-        "type": "int"
+        "type": "int",
+        "description": "Total sheets",
+        "example": "100"
       }
     }
   },
   "fiveChapters": "Five chapters",
+  "@fiveChapters": {
+    "description": "Title of the campaign screen when exactly five chapters exist."
+  },
   "chaptersTitle": "Chapters",
-  "masteryNote": "◆ MASTERY = CLEARED WITHOUT A HINT OR RESTART. PURELY COSMETIC, NEVER NEEDED TO PROGRESS.",
+  "@chaptersTitle": {
+    "description": "Title of the campaign screen when more chapters were downloaded."
+  },
   "chapterProgress": "{done}/{total}",
   "@chapterProgress": {
+    "description": "Compact progress on a chapter card, cleared of total.",
     "placeholders": {
       "done": {
-        "type": "int"
+        "type": "int",
+        "description": "Sheets cleared in the chapter",
+        "example": "7"
       },
       "total": {
-        "type": "int"
+        "type": "int",
+        "description": "Sheets in the chapter",
+        "example": "20"
       }
     }
   },
   "lockedChapter": "LOCKED",
+  "@lockedChapter": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Status on a locked chapter card. Max ~10 characters."
+  },
   "downloadChapter": "DOWNLOAD",
+  "@downloadChapter": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Button that downloads a new chapter."
+  },
   "downloading": "DOWNLOADING…",
+  "@downloading": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 14 characters max; longer text is scaled down). Download button while a chapter downloads."
+  },
   "comingSoon": "MORE SHEETS SOON",
+  "@comingSoon": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption on the \"More sheets\" card when nothing new is available yet."
+  },
   "newMechanic": "NEW: {mechanic}",
   "@newMechanic": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Tag on the chapter map preview when a sheet introduces a new idea.",
     "placeholders": {
       "mechanic": {
-        "type": "String"
+        "type": "String",
+        "description": "Mechanic name, already uppercased (see the mechanic* keys)",
+        "example": "CIRCLES"
       }
     }
   },
   "sheetMeta": "{plates, plural, =1{1 plate} other{{plates} plates}} · {layers, plural, =1{1 layer} other{{layers} layers}} · tray {tray}",
   "@sheetMeta": {
+    "description": "Details line under a sheet title on the chapter map: plates, layers and tray size.",
     "placeholders": {
       "plates": {
-        "type": "int"
+        "type": "int",
+        "description": "Number of plates",
+        "example": "5"
       },
       "layers": {
-        "type": "int"
+        "type": "int",
+        "description": "Number of stacked layers",
+        "example": "3"
       },
       "tray": {
-        "type": "int"
+        "type": "int",
+        "description": "Tray slots",
+        "example": "4"
       }
     }
   },
   "theCampaign": "THE CAMPAIGN",
+  "@theCampaign": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption above the campaign screen title."
+  },
   "campaignFooter": "Chapters unlock by finishing the one before. Mastery marks are optional. Hints never block progress.",
+  "@campaignFooter": {
+    "description": "Footer text on the campaign screen."
+  },
   "chapterBonus": "CHAPTER BONUS",
-  "play": "Play",
+  "@chapterBonus": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption above the coin reward on the chapter complete screen."
+  },
   "dailySheet": "DAILY SHEET",
+  "@dailySheet": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption at the top of the daily screen."
+  },
   "dailyTitle": "TITLE",
+  "@dailyTitle": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Cell label in the daily sheet title block: the sheet name. Max ~8 characters."
+  },
   "dailyPlates": "PLATES",
+  "@dailyPlates": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Cell label in the daily sheet title block: plates and screws. Max ~8 characters."
+  },
   "dailyReward": "REWARD",
+  "@dailyReward": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Cell label in the daily sheet title block: coin reward. Max ~8 characters."
+  },
   "dailyBody": "Same sheet for everyone today. No timer. {streak, plural, =0{Start a streak.} =1{1-day streak.} other{{streak}-day streak.}} Missing a day costs nothing.",
   "@dailyBody": {
+    "description": "Body text on the daily screen.",
     "placeholders": {
       "streak": {
-        "type": "int"
+        "type": "int",
+        "description": "Current daily streak in days",
+        "example": "4"
       }
     }
   },
   "startDaily": "Start today's sheet",
+  "@startDaily": {
+    "description": "Button/chip label: keep it short (about 26 characters max; longer text is scaled down). Main button on the daily screen."
+  },
   "dailyCompleted": "Done for today · back tomorrow",
+  "@dailyCompleted": {
+    "description": "Line on the daily screen after today's sheet is done."
+  },
   "replayDaily": "Replay today's sheet",
+  "@replayDaily": {
+    "description": "Button/chip label: keep it short (about 26 characters max; longer text is scaled down). Main daily screen button after today's sheet is done."
+  },
   "themesTitle": "Themes",
+  "@themesTitle": {
+    "description": "Title of the board themes screen."
+  },
   "themesCaption": "COSMETIC · NEVER CHANGES RULES",
+  "@themesCaption": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption on the themes screen: themes only change colours, never the rules."
+  },
   "equipped": "EQUIPPED",
+  "@equipped": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Status/button on the theme currently in use. Max ~10 characters."
+  },
   "owned": "OWNED",
+  "@owned": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Status on a theme card the player owns. Max ~10 characters."
+  },
   "priceCoins": "{coins} ¢",
   "@priceCoins": {
+    "description": "Coin price on a theme card. The cent sign stands for coins; keep the no-break space.",
     "placeholders": {
       "coins": {
-        "type": "int"
+        "type": "int",
+        "description": "Price in coins",
+        "example": "300"
       }
     }
   },
   "proIncluded": "PRO",
+  "@proIncluded": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Status on a theme card included with Pro. Usually left as \"PRO\"."
+  },
   "previewOnly": "PREVIEW",
+  "@previewOnly": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption on the theme preview sheet for a theme not owned yet. Max ~10 characters."
+  },
   "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Title of the settings screen."
+  },
   "feedbackSection": "FEEDBACK",
+  "@feedbackSection": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Settings section header for sound, music and vibration."
+  },
   "soundEffects": "Sound effects",
+  "@soundEffects": {
+    "description": "Settings toggle row."
+  },
   "music": "Music",
+  "@music": {
+    "description": "Settings toggle row."
+  },
   "hapticsRow": "Haptics",
+  "@hapticsRow": {
+    "description": "Settings toggle row: vibration feedback."
+  },
   "reducedMotionRow": "Reduced motion",
+  "@reducedMotionRow": {
+    "description": "Settings toggle row: fewer animations."
+  },
   "reducedMotionCaption": "Fades instead of travel",
+  "@reducedMotionCaption": {
+    "description": "Caption under the reduced motion toggle: pieces fade instead of flying across the screen."
+  },
   "generalSection": "GENERAL",
+  "@generalSection": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Settings section header."
+  },
   "highRefreshRate": "High refresh rate",
+  "@highRefreshRate": {
+    "description": "Settings toggle row: use the screen's higher refresh rate (90/120 Hz)."
+  },
   "highRefreshRateOn": "Smoother motion · up to {hz} Hz · uses more battery",
-  "@highRefreshRateOn": { "placeholders": { "hz": { "type": "int" } } },
+  "@highRefreshRateOn": {
+    "description": "Caption under the high refresh rate toggle.",
+    "placeholders": {
+      "hz": {
+        "type": "int",
+        "description": "Maximum refresh rate of the screen",
+        "example": "120"
+      }
+    }
+  },
   "highRefreshRateOff": "Smoother motion · uses more battery",
+  "@highRefreshRateOff": {
+    "description": "Caption under the high refresh rate toggle when the maximum rate is unknown."
+  },
   "highRefreshRateUnsupported": "This screen runs at a single rate",
+  "@highRefreshRateUnsupported": {
+    "description": "Caption under the high refresh rate toggle when the screen has one rate only."
+  },
   "highRefreshRateBattery": "Limited by battery saver right now",
+  "@highRefreshRateBattery": {
+    "description": "Caption under the high refresh rate toggle while battery saver caps it."
+  },
   "highRefreshRateHeat": "Limited while the phone is warm",
+  "@highRefreshRateHeat": {
+    "description": "Caption under the high refresh rate toggle while the phone is too warm."
+  },
   "highRefreshRateNow": "Now {hz} Hz",
-  "@highRefreshRateNow": { "placeholders": { "hz": { "type": "int" } } },
+  "@highRefreshRateNow": {
+    "description": "Appended to the refresh rate caption: the current rate.",
+    "placeholders": {
+      "hz": {
+        "type": "int",
+        "description": "Current refresh rate",
+        "example": "60"
+      }
+    }
+  },
   "language": "Language",
+  "@language": {
+    "description": "Settings row that opens the language picker; also the picker title."
+  },
   "notifications": "Daily reminder",
+  "@notifications": {
+    "description": "Settings toggle row: the daily reminder notification."
+  },
   "notificationsCaption": "One nudge when a new sheet is up",
+  "@notificationsCaption": {
+    "description": "Caption under the daily reminder toggle."
+  },
   "accountSection": "ACCOUNT",
+  "@accountSection": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Settings section header."
+  },
   "signInGoogle": "Sign in with Google",
+  "@signInGoogle": {
+    "description": "Sign-in button (follow Google's official wording for your language if it exists)."
+  },
   "signInApple": "Sign in with Apple",
+  "@signInApple": {
+    "description": "Sign-in button (follow Apple's official \"Sign in with Apple\" wording for your language)."
+  },
   "signedInAs": "Signed in · {name}",
   "@signedInAs": {
+    "description": "Settings row showing the signed-in player.",
     "placeholders": {
       "name": {
-        "type": "String"
+        "type": "String",
+        "description": "Player name or email",
+        "example": "Pranta"
       }
     }
   },
   "guestCaption": "PLAYING AS GUEST · SIGN IN TO SAVE PROGRESS",
+  "@guestCaption": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Settings caption for players who are not signed in."
+  },
   "signOut": "SIGN OUT",
+  "@signOut": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 14 characters max; longer text is scaled down). Settings button."
+  },
   "deleteAccount": "DELETE ACCOUNT",
+  "@deleteAccount": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 18 characters max; longer text is scaled down). Settings button that opens the delete account sheet."
+  },
   "purchasesSection": "PURCHASES",
+  "@purchasesSection": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Settings section header."
+  },
   "removeAds": "Remove ads",
+  "@removeAds": {
+    "description": "Settings purchase row title (one-time purchase that removes ads)."
+  },
   "restore": "RESTORE",
+  "@restore": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Settings button that restores earlier purchases."
+  },
   "proTitle": "Screw Out Pro",
+  "@proTitle": {
+    "description": "Name of the subscription. \"Pro\" is normally kept as is."
+  },
   "proPerks": "NO ADS · UNLIMITED HINTS · ALL THEMES · FREE RESCUES · {coins} ¢ MONTHLY",
   "@proPerks": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small caption listing the Pro benefits. The cent sign stands for coins.",
     "placeholders": {
       "coins": {
-        "type": "int"
+        "type": "int",
+        "description": "Coins granted each month",
+        "example": "500"
       }
     }
   },
   "proMonthly": "MONTHLY",
+  "@proMonthly": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 10 characters max; longer text is scaled down). Monthly plan button label."
+  },
   "proYearly": "YEARLY",
+  "@proYearly": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 10 characters max; longer text is scaled down). Yearly plan button label."
+  },
   "proTrialDays": "{days} DAYS FREE",
   "@proTrialDays": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Small note on a plan button about the free trial.",
     "placeholders": {
       "days": {
-        "type": "int"
+        "type": "int",
+        "description": "Length of the free trial in days",
+        "example": "7"
       }
     }
   },
   "proThenPrice": "THEN {price}",
   "@proThenPrice": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Price line on a plan button after the free trial.",
     "placeholders": {
       "price": {
-        "type": "String"
+        "type": "String",
+        "description": "Store price with currency, already formatted",
+        "example": "$24.99"
       }
     }
   },
   "proTrialTerms": "Renews automatically after the free trial unless you cancel. Monthly coins start with your first payment.",
+  "@proTrialTerms": {
+    "description": "Legal note under the Pro plans."
+  },
   "proActive": "PRO · ACTIVE",
+  "@proActive": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Status shown when Pro is active."
+  },
   "adsRemoved": "ADS REMOVED",
+  "@adsRemoved": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Status on the Remove ads row once bought."
+  },
   "coinPacks": "COIN PACKS",
+  "@coinPacks": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Settings caption above the coin pack buttons."
+  },
   "aboutSection": "ABOUT",
+  "@aboutSection": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Settings section header."
+  },
   "privacyPolicy": "Privacy policy",
+  "@privacyPolicy": {
+    "description": "Settings link row."
+  },
   "termsOfUse": "Terms of use",
+  "@termsOfUse": {
+    "description": "Settings link row."
+  },
   "refundPolicy": "Refund policy",
+  "@refundPolicy": {
+    "description": "Settings link row."
+  },
   "privacyChoices": "Privacy choices",
+  "@privacyChoices": {
+    "description": "Settings link row that opens the ad consent options."
+  },
   "licenses": "Licenses & credits",
+  "@licenses": {
+    "description": "Settings link row that opens the open-source licenses."
+  },
   "versionFooter": "SCREW OUT · REV {version} ({build})",
   "@versionFooter": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Version footer at the bottom of settings. \"REV\" means revision (drawing style).",
     "placeholders": {
       "version": {
-        "type": "String"
+        "type": "String",
+        "description": "App version",
+        "example": "1.4.0"
       },
       "build": {
-        "type": "String"
+        "type": "String",
+        "description": "Build number",
+        "example": "12"
       }
     }
   },
   "notificationPrimerTitle": "A nudge for the daily sheet?",
+  "@notificationPrimerTitle": {
+    "description": "Title of the sheet asking whether the player wants the daily reminder."
+  },
   "notificationPrimerBody": "A quiet reminder when you haven't played. Never more than one a day.",
+  "@notificationPrimerBody": {
+    "description": "Body of the notification permission sheet."
+  },
   "allow": "ALLOW",
+  "@allow": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Button on the notification permission sheet."
+  },
   "notNow": "NOT NOW",
-  "offline": "OFFLINE",
+  "@notNow": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Button that dismisses a sheet without acting."
+  },
   "somethingWentWrong": "Something went wrong.",
-  "tryAgain": "Try again",
+  "@somethingWentWrong": {
+    "description": "Generic error toast."
+  },
   "purchaseThanks": "Thank you! Purchase applied.",
+  "@purchaseThanks": {
+    "description": "Toast after a successful purchase."
+  },
   "purchasePending": "Purchase pending. It will apply once confirmed.",
+  "@purchasePending": {
+    "description": "Toast when a purchase is waiting for the store (for example cash payments)."
+  },
   "purchaseFailed": "Purchase didn't go through.",
+  "@purchaseFailed": {
+    "description": "Toast when a purchase fails or is cancelled."
+  },
   "restored": "Purchases restored.",
+  "@restored": {
+    "description": "Toast after purchases are restored."
+  },
   "finishChapterFirst": "Finish Chapter {chapter} first.",
   "@finishChapterFirst": {
+    "description": "Toast when the player taps a locked chapter.",
     "placeholders": {
       "chapter": {
-        "type": "String"
+        "type": "String",
+        "description": "the chapter number, zero-padded, for example \"02\"",
+        "example": "02"
       }
     }
   },
   "moreSheetsTitle": "More sheets",
+  "@moreSheetsTitle": {
+    "description": "Title of the card at the end of the campaign list where new chapters appear."
+  },
   "moreSheetsCaption": "New drawing sets arrive here",
-  "languageEnglish": "English",
+  "@moreSheetsCaption": {
+    "description": "Caption on the \"More sheets\" card when a new chapter can be downloaded."
+  },
   "equip": "EQUIP",
+  "@equip": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Button on the theme preview sheet."
+  },
   "buyFor": "BUY · {coins} ¢",
   "@buyFor": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 16 characters max; longer text is scaled down). Button that buys a theme for coins. The cent sign stands for coins.",
     "placeholders": {
       "coins": {
-        "type": "int"
+        "type": "int",
+        "description": "Price in coins",
+        "example": "300"
       }
     }
   },
   "close": "CLOSE",
+  "@close": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Button that closes a sheet."
+  },
   "coinPackAmount": "+{coins} ¢",
   "@coinPackAmount": {
+    "description": "Coins in a coin pack on its buy button. Usually left as is.",
     "placeholders": {
       "coins": {
-        "type": "int"
+        "type": "int",
+        "description": "Coins in the pack",
+        "example": "1000"
       }
     }
   },
   "licensesTitle": "Licenses",
+  "@licensesTitle": {
+    "description": "Title of the licenses screen."
+  },
   "licensesCaption": "OPEN-SOURCE NOTICES",
+  "@licensesCaption": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption above the licenses screen title."
+  },
   "playLevel": "Play {code}",
   "@playLevel": {
+    "description": "Accessibility label of the play button on the chapter map.",
     "placeholders": {
       "code": {
-        "type": "String"
+        "type": "String",
+        "description": "the sheet code, for example \"DWG 024\" or \"D-288\" (do not translate the code)",
+        "example": "DWG 024"
       }
     }
   },
   "lockedLevel": "Sheet {number}, locked",
   "@lockedLevel": {
+    "description": "Accessibility label of a locked sheet on the chapter map.",
     "placeholders": {
       "number": {
-        "type": "int"
+        "type": "int",
+        "description": "Sheet number",
+        "example": "24"
       }
     }
   },
   "platesScrews": "{plates} · {screws}",
   "@platesScrews": {
+    "description": "Value in the daily title block: plates and screws. Usually left as is.",
     "placeholders": {
       "plates": {
-        "type": "int"
+        "type": "int",
+        "description": "Number of plates",
+        "example": "6"
       },
       "screws": {
-        "type": "int"
+        "type": "int",
+        "description": "Number of screws",
+        "example": "14"
       }
     }
   },
   "leaderboardTitle": "Leaderboards",
+  "@leaderboardTitle": {
+    "description": "Title of the leaderboard screen; also the accessibility label of its home button."
+  },
   "leaderboardCaption": "SIGNED-IN PLAYERS · LIVE",
+  "@leaderboardCaption": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption above the leaderboard title."
+  },
   "boardSheets": "SHEETS",
+  "@boardSheets": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 8 characters max; longer text is scaled down). Leaderboard tab: most sheets cleared. Four tabs share one row."
+  },
   "boardDaily": "DAILY",
+  "@boardDaily": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 8 characters max; longer text is scaled down). Leaderboard tab: today's daily sheet. Four tabs share one row."
+  },
   "boardStreak": "STREAK",
+  "@boardStreak": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 8 characters max; longer text is scaled down). Leaderboard tab: daily streaks. Four tabs share one row."
+  },
   "boardWeekly": "WEEK",
+  "@boardWeekly": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 8 characters max; longer text is scaled down). Leaderboard tab: this week. Four tabs share one row."
+  },
   "boardWeeklyHint": "SHEETS CLEARED THIS WEEK · RESETS MONDAY",
+  "@boardWeeklyHint": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption explaining the weekly leaderboard."
+  },
   "boardSheetsHint": "MOST SHEETS CLEARED",
+  "@boardSheetsHint": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption explaining the sheets leaderboard."
+  },
   "boardDailyHint": "TODAY'S SHEET · FEWEST MOVES, THEN FASTEST",
+  "@boardDailyHint": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption explaining the daily leaderboard ranking."
+  },
   "boardStreakHint": "DAYS IN A ROW ON THE DAILY SHEET",
+  "@boardStreakHint": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption explaining the streak leaderboard."
+  },
   "boardMastered": "{count} ◆",
-  "@boardMastered": { "placeholders": { "count": { "type": "int" } } },
+  "@boardMastered": {
+    "description": "Leaderboard row detail: sheets mastered, with the diamond mastery mark. Usually left as is.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Sheets mastered",
+        "example": "40"
+      }
+    }
+  },
   "boardMovesDetail": "{count, plural, =1{MOVE} other{MOVES}} · {time}",
-  "@boardMovesDetail": { "placeholders": { "count": { "type": "int" }, "time": { "type": "String" } } },
+  "@boardMovesDetail": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Leaderboard row detail on the daily board, after the move count.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Moves (the number is shown separately)",
+        "example": "14"
+      },
+      "time": {
+        "type": "String",
+        "description": "Time as m:ss",
+        "example": "0:52"
+      }
+    }
+  },
   "boardDaysDetail": "{count, plural, =1{DAY} other{DAYS}} · BEST {best}",
-  "@boardDaysDetail": { "placeholders": { "count": { "type": "int" }, "best": { "type": "int" } } },
+  "@boardDaysDetail": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Leaderboard row detail on the streak board, after the day count.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Current streak in days (shown separately)",
+        "example": "21"
+      },
+      "best": {
+        "type": "int",
+        "description": "Best streak in days",
+        "example": "30"
+      }
+    }
+  },
   "boardYou": "YOU",
+  "@boardYou": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Tiny tag on the player's own leaderboard row. Max ~5 characters."
+  },
   "boardYourRank": "YOUR RANK",
+  "@boardYourRank": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Label of the player's rank bar at the bottom of the leaderboard."
+  },
   "boardNotRanked": "Not ranked yet",
+  "@boardNotRanked": {
+    "description": "Shown in the rank bar when the player has no rank yet."
+  },
   "boardOfPlayers": "OF {count}",
-  "@boardOfPlayers": { "placeholders": { "count": { "type": "int", "format": "decimalPattern" } } },
+  "@boardOfPlayers": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. After the player's rank: out of how many players.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern",
+        "description": "Total ranked players",
+        "example": "1234"
+      }
+    }
+  },
   "boardGuest": "Sign in to put your name on the board. Your progress comes with you.",
+  "@boardGuest": {
+    "description": "Leaderboard message for players who are not signed in."
+  },
   "boardEmpty": "No one here yet. Be the first.",
+  "@boardEmpty": {
+    "description": "Leaderboard message when nobody is ranked yet."
+  },
   "boardOffline": "Can't reach the leaderboard right now.",
+  "@boardOffline": {
+    "description": "Leaderboard message when it cannot load."
+  },
   "tryAgainCaps": "TRY AGAIN",
+  "@tryAgainCaps": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 12 characters max; longer text is scaled down). Retry button on the leaderboard."
+  },
   "todaysBoard": "TODAY'S BOARD",
+  "@todaysBoard": {
+    "description": "Accessibility label of the leaderboard button on the daily screen."
+  },
   "signedOutToast": "Signed out · this device was cleared. Sign in again to get your progress back.",
+  "@signedOutToast": {
+    "description": "Toast after signing out."
+  },
   "welcomeBack": "Welcome back",
+  "@welcomeBack": {
+    "description": "Greeting used at the start of sync toasts when the name is unknown."
+  },
   "welcomeBackName": "Welcome back, {name}",
-  "@welcomeBackName": { "placeholders": { "name": { "type": "String" } } },
+  "@welcomeBackName": {
+    "description": "Greeting used at the start of sync toasts.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Player name",
+        "example": "Pranta"
+      }
+    }
+  },
   "syncRestored": "{who} · {sheets, plural, =1{1 sheet} other{{sheets} sheets}} and {coins} coins restored",
-  "@syncRestored": { "placeholders": { "who": { "type": "String" }, "sheets": { "type": "int" }, "coins": { "type": "int" } } },
+  "@syncRestored": {
+    "description": "Toast after sign-in restored saved progress.",
+    "placeholders": {
+      "who": {
+        "type": "String",
+        "description": "The greeting from welcomeBack or welcomeBackName",
+        "example": "Welcome back, Pranta"
+      },
+      "sheets": {
+        "type": "int",
+        "description": "Sheets restored",
+        "example": "23"
+      },
+      "coins": {
+        "type": "int",
+        "description": "Coins restored",
+        "example": "860"
+      }
+    }
+  },
   "syncRestoredEmpty": "{who} · you're signed in and progress is backed up",
-  "@syncRestoredEmpty": { "placeholders": { "who": { "type": "String" } } },
+  "@syncRestoredEmpty": {
+    "description": "Toast after sign-in when there was nothing to restore.",
+    "placeholders": {
+      "who": {
+        "type": "String",
+        "description": "The greeting from welcomeBack or welcomeBackName",
+        "example": "Welcome back"
+      }
+    }
+  },
   "syncCombined": "{who} · this device's progress was added to your account: {sheets, plural, =1{1 sheet} other{{sheets} sheets}}, {coins} coins",
-  "@syncCombined": { "placeholders": { "who": { "type": "String" }, "sheets": { "type": "int" }, "coins": { "type": "int" } } },
+  "@syncCombined": {
+    "description": "Toast after sign-in merged this device's progress into the account.",
+    "placeholders": {
+      "who": {
+        "type": "String",
+        "description": "The greeting from welcomeBack or welcomeBackName",
+        "example": "Welcome back"
+      },
+      "sheets": {
+        "type": "int",
+        "description": "Sheets added",
+        "example": "5"
+      },
+      "coins": {
+        "type": "int",
+        "description": "Coins added",
+        "example": "120"
+      }
+    }
+  },
   "syncSavedNew": "Signed in as {name} · your progress is now saved to your account",
-  "@syncSavedNew": { "placeholders": { "name": { "type": "String" } } },
+  "@syncSavedNew": {
+    "description": "Toast after the first sign-in on a new account.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Player name",
+        "example": "Pranta"
+      }
+    }
+  },
   "syncSavedNewPlain": "Signed in · your progress is now saved to your account",
+  "@syncSavedNewPlain": {
+    "description": "Toast after the first sign-in when the name is unknown."
+  },
   "syncFromOtherDevice": "Synced from your other device · {sheets, plural, =0{progress updated} =1{1 new sheet} other{{sheets} new sheets}}",
-  "@syncFromOtherDevice": { "placeholders": { "sheets": { "type": "int" } } },
+  "@syncFromOtherDevice": {
+    "description": "Toast when progress from another device arrives.",
+    "placeholders": {
+      "sheets": {
+        "type": "int",
+        "description": "New sheets synced",
+        "example": "3"
+      }
+    }
+  },
   "syncRestoreFailed": "Couldn't load your saved progress yet · it will sync automatically when the connection is back",
+  "@syncRestoreFailed": {
+    "description": "Toast when saved progress could not be loaded yet."
+  },
   "signedInOffline": "Signed in · your progress will sync when you're back online",
+  "@signedInOffline": {
+    "description": "Toast after signing in without a connection."
+  },
   "proActivated": "Pro is active · no ads, every theme and unlimited hints",
+  "@proActivated": {
+    "description": "Toast when a Pro subscription becomes active (after buying or restoring)."
+  },
   "accountDeletedToast": "Your account and all its data were deleted.",
+  "@accountDeletedToast": {
+    "description": "Toast after the account is deleted."
+  },
   "accountDeletedProToast": "Account deleted. Pro is still billed until you cancel it in {store}.",
-  "@accountDeletedProToast": { "placeholders": { "store": { "type": "String" } } },
+  "@accountDeletedProToast": {
+    "description": "Toast after the account is deleted while a Pro subscription is still running.",
+    "placeholders": {
+      "store": {
+        "type": "String",
+        "description": "Store name from storeAppStore or storeGooglePlay",
+        "example": "Google Play"
+      }
+    }
+  },
   "streakBonusLine": "{days}-DAY STREAK · +{coins} BONUS",
-  "@streakBonusLine": { "placeholders": { "days": { "type": "int" }, "coins": { "type": "int" } } },
+  "@streakBonusLine": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Line on the daily result card about the streak bonus.",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "description": "Streak length in days",
+        "example": "4"
+      },
+      "coins": {
+        "type": "int",
+        "description": "Bonus coins",
+        "example": "20"
+      }
+    }
+  },
   "workshopRecord": "Workshop record",
+  "@workshopRecord": {
+    "description": "Title of the achievements (badges) screen."
+  },
   "workshopRecordButton": "Workshop record · {earned}/{total}",
-  "@workshopRecordButton": { "placeholders": { "earned": { "type": "int" }, "total": { "type": "int" } } },
+  "@workshopRecordButton": {
+    "description": "Button on the campaign screen that opens the achievements screen.",
+    "placeholders": {
+      "earned": {
+        "type": "int",
+        "description": "Badges earned",
+        "example": "4"
+      },
+      "total": {
+        "type": "int",
+        "description": "Total badges",
+        "example": "16"
+      }
+    }
+  },
   "recordCaption": "MILESTONES",
+  "@recordCaption": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption above the achievements screen title."
+  },
   "recordEarned": "{earned} OF {total} EARNED",
-  "@recordEarned": { "placeholders": { "earned": { "type": "int" }, "total": { "type": "int" } } },
+  "@recordEarned": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Progress line on the achievements screen.",
+    "placeholders": {
+      "earned": {
+        "type": "int",
+        "description": "Badges earned",
+        "example": "4"
+      },
+      "total": {
+        "type": "int",
+        "description": "Total badges",
+        "example": "16"
+      }
+    }
+  },
   "badgeEarnedLabel": "EARNED",
+  "@badgeEarnedLabel": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Status on an earned badge. Max ~10 characters."
+  },
   "badgeEarnedToast": "Badge earned · {name}",
-  "@badgeEarnedToast": { "placeholders": { "name": { "type": "String" } } },
+  "@badgeEarnedToast": {
+    "description": "Toast when a badge is earned.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Badge name",
+        "example": "Apprentice"
+      }
+    }
+  },
   "badgeFirstTurn": "First Turn",
+  "@badgeFirstTurn": {
+    "description": "Badge name: first sheet cleared. Workshop rank theme."
+  },
   "badgeApprentice": "Apprentice",
+  "@badgeApprentice": {
+    "description": "Badge name: 10 sheets cleared. Workshop rank theme (apprentice, journeyman, craftsman, chief engineer)."
+  },
   "badgeJourneyman": "Journeyman",
+  "@badgeJourneyman": {
+    "description": "Badge name: 25 sheets cleared. Workshop rank theme."
+  },
   "badgeCraftsman": "Craftsman",
+  "@badgeCraftsman": {
+    "description": "Badge name: 50 sheets cleared. Workshop rank theme."
+  },
   "badgeChiefEngineer": "Chief Engineer",
+  "@badgeChiefEngineer": {
+    "description": "Badge name: 100 sheets cleared. Highest workshop rank."
+  },
   "badgeCleanWork": "Clean Work",
+  "@badgeCleanWork": {
+    "description": "Badge name: mastery on 10 sheets (cleared without hints or restarts)."
+  },
   "badgePerfectionist": "Perfectionist",
+  "@badgePerfectionist": {
+    "description": "Badge name: mastery on 50 sheets."
+  },
   "badgeRegular": "Regular",
+  "@badgeRegular": {
+    "description": "Badge name: played 7 daily sheets."
+  },
   "badgeOnARoll": "On a Roll",
+  "@badgeOnARoll": {
+    "description": "Badge name: 3-day daily streak."
+  },
   "badgeFullWeek": "Full Week",
+  "@badgeFullWeek": {
+    "description": "Badge name: 7-day daily streak."
+  },
   "badgeFortnight": "Fortnight",
+  "@badgeFortnight": {
+    "description": "Badge name: 14-day daily streak."
+  },
   "badgeFirstDetail": "Clear your first sheet",
+  "@badgeFirstDetail": {
+    "description": "Badge requirement line."
+  },
   "badgeClearDetail": "Clear {n} sheets",
-  "@badgeClearDetail": { "placeholders": { "n": { "type": "int" } } },
+  "@badgeClearDetail": {
+    "description": "Badge requirement line.",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "Sheets to clear",
+        "example": "25"
+      }
+    }
+  },
   "badgeChapterDetail": "Finish chapter {n}",
-  "@badgeChapterDetail": { "placeholders": { "n": { "type": "int" } } },
+  "@badgeChapterDetail": {
+    "description": "Badge requirement line. Chapter badges are named after the chapter.",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "Chapter number",
+        "example": "2"
+      }
+    }
+  },
   "badgeMasterDetail": "Earn ◆ on {n} sheets",
-  "@badgeMasterDetail": { "placeholders": { "n": { "type": "int" } } },
+  "@badgeMasterDetail": {
+    "description": "Badge requirement line. The diamond is the mastery mark.",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "Sheets to master",
+        "example": "10"
+      }
+    }
+  },
   "badgeDailyDetail": "Play {n} daily sheets",
-  "@badgeDailyDetail": { "placeholders": { "n": { "type": "int" } } },
+  "@badgeDailyDetail": {
+    "description": "Badge requirement line.",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "Daily sheets to play",
+        "example": "7"
+      }
+    }
+  },
   "badgeStreakDetail": "Reach a {n}-day streak",
-  "@badgeStreakDetail": { "placeholders": { "n": { "type": "int" } } },
+  "@badgeStreakDetail": {
+    "description": "Badge requirement line.",
+    "placeholders": {
+      "n": {
+        "type": "int",
+        "description": "Streak length in days",
+        "example": "7"
+      }
+    }
+  },
   "share": "SHARE",
+  "@share": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 10 characters max; longer text is scaled down). Share button on the daily result card."
+  },
   "shareResult": "Share result",
+  "@shareResult": {
+    "description": "Daily screen button that shares today's result."
+  },
   "shareDailyTitle": "Screw Out · {code}",
-  "@shareDailyTitle": { "placeholders": { "code": { "type": "String" } } },
+  "@shareDailyTitle": {
+    "description": "First line of the shared daily result text (sent to other apps). Keep the brand.",
+    "placeholders": {
+      "code": {
+        "type": "String",
+        "description": "Daily sheet code, for example \"D-288\"",
+        "example": "D-288"
+      }
+    }
+  },
   "shareDailyMoves": "{moves, plural, =1{1 move} other{{moves} moves}} · {time}",
-  "@shareDailyMoves": { "placeholders": { "moves": { "type": "int" }, "time": { "type": "String" } } },
+  "@shareDailyMoves": {
+    "description": "Second line of the shared daily result text.",
+    "placeholders": {
+      "moves": {
+        "type": "int",
+        "description": "Moves used",
+        "example": "14"
+      },
+      "time": {
+        "type": "String",
+        "description": "Time as m:ss",
+        "example": "0:52"
+      }
+    }
+  },
   "shareDailyStreak": "{days}-day streak",
-  "@shareDailyStreak": { "placeholders": { "days": { "type": "int" } } },
+  "@shareDailyStreak": {
+    "description": "Optional line of the shared daily result text.",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "description": "Streak length in days",
+        "example": "4"
+      }
+    }
+  },
   "signOutSheetTitle": "Sign out?",
+  "@signOutSheetTitle": {
+    "description": "Title of the sign-out confirmation sheet."
+  },
   "signOutSheetBody": "Signing out clears your progress from this device. Everything already backed up comes back when you sign in again, but anything not synced yet (for example, sheets played offline) would be lost.",
+  "@signOutSheetBody": {
+    "description": "Body of the sign-out confirmation sheet."
+  },
   "staySignedIn": "Stay signed in",
+  "@staySignedIn": {
+    "description": "Button/chip label: keep it short (about 24 characters max; longer text is scaled down). Main (safe) button on the sign-out sheet."
+  },
   "signOutConfirm": "Sign out",
+  "@signOutConfirm": {
+    "description": "Button/chip label: keep it short (about 24 characters max; longer text is scaled down). Secondary button on the sign-out sheet that signs out."
+  },
   "rateApp": "Rate Screw Out",
+  "@rateApp": {
+    "description": "Settings link row that opens the store listing."
+  },
   "sendFeedback": "Send feedback",
+  "@sendFeedback": {
+    "description": "Settings link row that opens an email to the developer."
+  },
   "replayTutorial": "Replay tutorial",
+  "@replayTutorial": {
+    "description": "Settings link row that replays the first-sheet tutorial."
+  },
   "feedbackNoEmailApp": "No email app found. Write to us at {email}",
-  "@feedbackNoEmailApp": { "placeholders": { "email": { "type": "String" } } },
+  "@feedbackNoEmailApp": {
+    "description": "Toast when no email app is installed.",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "description": "Support email address",
+        "example": "support@example.com"
+      }
+    }
+  },
   "updateChip": "UPDATE",
+  "@updateChip": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 10 characters max; longer text is scaled down). Chip on the home screen when an app update is downloaded."
+  },
   "updateReadyRestart": "Update downloaded. Restart to install it.",
+  "@updateReadyRestart": {
+    "description": "Accessibility label of the update chip."
+  },
   "deleteSheetTitle": "Delete your account?",
+  "@deleteSheetTitle": {
+    "description": "Title of the delete account sheet."
+  },
   "deleteSheetBody": "This permanently deletes your account and everything saved with it: progress on every sheet, coins, themes, your daily streak and leaderboard places. It can't be undone.",
+  "@deleteSheetBody": {
+    "description": "Body of the delete account sheet."
+  },
   "deleteSheetPro": "You have Screw Out Pro. Deleting your account does not cancel it: cancel the subscription in {store} or you'll keep being billed.",
-  "@deleteSheetPro": { "placeholders": { "store": { "type": "String" } } },
+  "@deleteSheetPro": {
+    "description": "Warning on the delete account sheet for Pro subscribers.",
+    "placeholders": {
+      "store": {
+        "type": "String",
+        "description": "Store name from storeAppStore or storeGooglePlay",
+        "example": "Google Play"
+      }
+    }
+  },
   "manageSubscription": "Manage subscription",
+  "@manageSubscription": {
+    "description": "Button/chip label: keep it short (about 24 characters max; longer text is scaled down). Button on the delete account sheet that opens the store subscription page."
+  },
   "deleteForever": "Delete my account",
+  "@deleteForever": {
+    "description": "Button/chip label: keep it short (about 24 characters max; longer text is scaled down). Destructive button on the delete account sheet."
+  },
   "deleting": "Deleting…",
+  "@deleting": {
+    "description": "Button/chip label: keep it short (about 24 characters max; longer text is scaled down). Delete button while deleting."
+  },
   "keepAccount": "Keep my account",
+  "@keepAccount": {
+    "description": "Button/chip label: keep it short (about 24 characters max; longer text is scaled down). Main (safe) button on the delete account sheet."
+  },
   "deleteOffline": "You're offline. Connect to the internet to delete your account.",
+  "@deleteOffline": {
+    "description": "Toast when deleting the account without a connection."
+  },
   "deleteFailed": "Couldn't delete your account. Please try again.",
+  "@deleteFailed": {
+    "description": "Toast when deleting the account fails."
+  },
   "restoreNothing": "Nothing to restore on this account.",
+  "@restoreNothing": {
+    "description": "Toast when there is nothing to restore."
+  },
   "hintBoughtToast": "−{coins} ¢ · +1 hint",
-  "@hintBoughtToast": { "placeholders": { "coins": { "type": "int" } } },
+  "@hintBoughtToast": {
+    "description": "Toast after buying a hint with coins. The cent sign stands for coins.",
+    "placeholders": {
+      "coins": {
+        "type": "int",
+        "description": "Coins spent",
+        "example": "40"
+      }
+    }
+  },
   "hintEarnedToast": "+1 hint · thanks for watching",
+  "@hintEarnedToast": {
+    "description": "Toast after watching a video for a hint."
+  },
   "rescueToast": "+1 tray slot for this sheet",
+  "@rescueToast": {
+    "description": "Toast after getting an extra tray slot."
+  },
   "rescuePaidToast": "−{coins} ¢ · +1 tray slot",
-  "@rescuePaidToast": { "placeholders": { "coins": { "type": "int" } } },
+  "@rescuePaidToast": {
+    "description": "Toast after buying an extra tray slot with coins.",
+    "placeholders": {
+      "coins": {
+        "type": "int",
+        "description": "Coins spent",
+        "example": "50"
+      }
+    }
+  },
   "adNotCompleted": "Video didn't finish, so no reward this time.",
+  "@adNotCompleted": {
+    "description": "Toast when a rewarded video was closed early."
+  },
   "themeEquippedToast": "{name} equipped",
-  "@themeEquippedToast": { "placeholders": { "name": { "type": "String" } } },
+  "@themeEquippedToast": {
+    "description": "Toast after equipping a board theme.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Theme name",
+        "example": "Walnut Workshop"
+      }
+    }
+  },
   "chapterDownloadedToast": "Chapter {chapter} is ready",
-  "@chapterDownloadedToast": { "placeholders": { "chapter": { "type": "String" } } },
+  "@chapterDownloadedToast": {
+    "description": "Toast after a chapter download finishes.",
+    "placeholders": {
+      "chapter": {
+        "type": "String",
+        "description": "the chapter number, zero-padded, for example \"02\"",
+        "example": "06"
+      }
+    }
+  },
   "signInFailed": "Sign-in didn't complete.",
+  "@signInFailed": {
+    "description": "Toast when sign-in did not complete."
+  },
   "themePurchased": "Theme unlocked.",
+  "@themePurchased": {
+    "description": "Toast after buying a theme."
+  },
   "themeBuyStore": "OR BUY · {price}",
   "@themeBuyStore": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 18 characters max; longer text is scaled down). Secondary button: buy a theme pack with real money.",
     "placeholders": {
       "price": {
-        "type": "String"
+        "type": "String",
+        "description": "Store price with currency, already formatted",
+        "example": "$1.99"
       }
     }
   },
   "themesBundleTitle": "All themes",
+  "@themesBundleTitle": {
+    "description": "Title of the card that sells every theme at once."
+  },
   "themesBundleBody": "Every paid theme, yours to keep. Pro includes them too.",
+  "@themesBundleBody": {
+    "description": "Body of the all-themes card."
+  },
   "themesBundleBuy": "BUY · {price}",
   "@themesBundleBuy": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 16 characters max; longer text is scaled down). Buy button on the all-themes card.",
     "placeholders": {
       "price": {
-        "type": "String"
-      }
-    }
-  },
-  "proPerYear": "/ YEAR",
-  "proPerMonth": "/ MONTH",
-  "sheetsTotal": "{count} SHEETS",
-  "@sheetsTotal": {
-    "placeholders": {
-      "count": {
-        "type": "int"
+        "type": "String",
+        "description": "Store price with currency, already formatted",
+        "example": "$4.99"
       }
     }
   },
   "dailyWeekDone": "Done",
+  "@dailyWeekDone": {
+    "description": "Appended to a weekday in accessibility labels of the daily week strip when that day was played."
+  },
   "masteredCount": "{count} MASTERED",
   "@masteredCount": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Caption on the chapter complete screen.",
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "int",
+        "description": "Sheets mastered in the chapter",
+        "example": "14"
       }
     }
   },
-
   "reminderTitle": "Today's sheet is ready",
+  "@reminderTitle": {
+    "description": "Title of the daily reminder notification."
+  },
   "reminderBody": "One fresh drawing, same for everyone. No timer.",
+  "@reminderBody": {
+    "description": "Body of the daily reminder notification."
+  },
   "comebackReminderTitle": "Your next sheet is on the bench",
+  "@comebackReminderTitle": {
+    "description": "Title of the reminder notification for players who have not played for a while."
+  },
   "comebackReminderBody": "A few calm minutes, a few screws. Pick up where you left off.",
-
+  "@comebackReminderBody": {
+    "description": "Body of the comeback reminder notification."
+  },
   "signInEmail": "Continue with email",
+  "@signInEmail": {
+    "description": "Sign-in button that opens the email form."
+  },
   "emailSignInTitle": "Sign in",
+  "@emailSignInTitle": {
+    "description": "Title and submit button of the email sign-in sheet."
+  },
   "emailCreateTitle": "Create account",
+  "@emailCreateTitle": {
+    "description": "Title and submit button of the email sheet in create-account mode."
+  },
   "emailTabSignIn": "SIGN IN",
+  "@emailTabSignIn": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 14 characters max; longer text is scaled down). Tab on the email sheet. Two tabs share one row."
+  },
   "emailTabCreate": "CREATE ACCOUNT",
+  "@emailTabCreate": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Button/chip label: keep it short (about 16 characters max; longer text is scaled down). Tab on the email sheet. Two tabs share one row."
+  },
   "emailSheetBody": "Your progress on this device comes with you.",
+  "@emailSheetBody": {
+    "description": "Body of the email sign-in sheet."
+  },
   "emailLabel": "EMAIL",
+  "@emailLabel": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Field label on the email sheet."
+  },
   "passwordLabel": "PASSWORD",
+  "@passwordLabel": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Field label for the password."
+  },
   "showPassword": "Show password",
+  "@showPassword": {
+    "description": "Tooltip of the eye button in the password field."
+  },
   "hidePassword": "Hide password",
+  "@hidePassword": {
+    "description": "Tooltip of the eye button in the password field."
+  },
   "passwordHint": "At least {min} characters",
-  "@passwordHint": { "placeholders": { "min": { "type": "int" } } },
+  "@passwordHint": {
+    "description": "Helper text under the password field when creating an account.",
+    "placeholders": {
+      "min": {
+        "type": "int",
+        "description": "Minimum password length",
+        "example": "8"
+      }
+    }
+  },
   "emailRequired": "Enter your email.",
+  "@emailRequired": {
+    "description": "Field error."
+  },
   "emailInvalid": "That email address doesn't look right.",
+  "@emailInvalid": {
+    "description": "Field error."
+  },
   "passwordRequired": "Enter your password.",
+  "@passwordRequired": {
+    "description": "Field error."
+  },
   "passwordTooShort": "Use at least {min} characters.",
-  "@passwordTooShort": { "placeholders": { "min": { "type": "int" } } },
+  "@passwordTooShort": {
+    "description": "Field error.",
+    "placeholders": {
+      "min": {
+        "type": "int",
+        "description": "Minimum password length",
+        "example": "8"
+      }
+    }
+  },
   "forgotPassword": "Forgot password?",
+  "@forgotPassword": {
+    "description": "Link on the email sign-in sheet."
+  },
   "forgotNeedsEmail": "Enter your email above, then tap Forgot password.",
+  "@forgotNeedsEmail": {
+    "description": "Error when Forgot password is tapped without an email. Match the wording of forgotPassword."
+  },
   "resetSent": "If {email} has an account, a reset link is on its way.",
-  "@resetSent": { "placeholders": { "email": { "type": "String" } } },
+  "@resetSent": {
+    "description": "Info after a password reset is requested.",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "description": "The email the player typed",
+        "example": "me@example.com"
+      }
+    }
+  },
   "emailWorking": "One moment…",
+  "@emailWorking": {
+    "description": "Submit button text while the email sheet is busy."
+  },
   "authErrWrongCredentials": "Wrong email or password.",
+  "@authErrWrongCredentials": {
+    "description": "Sign-in error."
+  },
   "authErrEmailInUse": "This email already has an account. Sign in instead.",
+  "@authErrEmailInUse": {
+    "description": "Sign-in error."
+  },
   "authErrWeakPassword": "Pick a stronger password.",
+  "@authErrWeakPassword": {
+    "description": "Sign-in error."
+  },
   "authErrDisabled": "This account has been disabled.",
+  "@authErrDisabled": {
+    "description": "Sign-in error."
+  },
   "authErrNotEnabled": "Email sign-in isn't available right now.",
+  "@authErrNotEnabled": {
+    "description": "Sign-in error."
+  },
   "authErrTooMany": "Too many tries. Wait a moment and try again.",
+  "@authErrTooMany": {
+    "description": "Sign-in error."
+  },
   "authErrNetwork": "No connection. Check your internet and try again.",
+  "@authErrNetwork": {
+    "description": "Sign-in error."
+  },
   "authErrGeneric": "Couldn't sign in. Please try again.",
+  "@authErrGeneric": {
+    "description": "Sign-in error."
+  },
   "deletePasswordBody": "Enter your password to confirm it's you.",
+  "@deletePasswordBody": {
+    "description": "Line on the delete account sheet asking for the password."
+  },
   "deleteWrongPassword": "That password doesn't match this account.",
+  "@deleteWrongPassword": {
+    "description": "Field error on the delete account sheet."
+  },
   "purchaseSaveTitle": "Keep your purchase",
+  "@purchaseSaveTitle": {
+    "description": "Title of the sheet suggesting sign-in after a purchase."
+  },
   "purchaseSaveBody": "Optional: sign in to keep your purchases and progress on all your devices. Your purchase already works on this one.",
-  "purchaseNeedsConnection": "Couldn't reach the server. Check your connection and try again."
+  "@purchaseSaveBody": {
+    "description": "Body of the sheet suggesting sign-in after a purchase."
+  },
+  "purchaseNeedsConnection": "Couldn't reach the server. Check your connection and try again.",
+  "@purchaseNeedsConnection": {
+    "description": "Toast when a purchase cannot be verified with the server."
+  },
+  "languageSystemDefault": "System default",
+  "@languageSystemDefault": {
+    "description": "Language picker option (and Settings row value) that follows the device language."
+  },
+  "startupFailed": "SOMETHING WENT WRONG WHILE STARTING.\nCLOSE THE APP AND OPEN IT AGAIN.",
+  "@startupFailed": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Recovery screen shown if the app fails to start. Keep the line break."
+  },
+  "notificationChannelDescription": "Daily sheet reminders and account notices",
+  "@notificationChannelDescription": {
+    "description": "Description of the app's notification channel, shown in the Android system notification settings."
+  },
+  "storeAppStore": "the App Store",
+  "@storeAppStore": {
+    "description": "Name of Apple's store as it fits inside deleteSheetPro and accountDeletedProToast (\"cancel it in {store}\"). Include an article only if your grammar needs it there."
+  },
+  "storeGooglePlay": "Google Play",
+  "@storeGooglePlay": {
+    "description": "Name of Google's store as it fits inside deleteSheetPro and accountDeletedProToast (\"cancel it in {store}\")."
+  },
+  "a11yScrew": "Screw, plate {plate}",
+  "@a11yScrew": {
+    "description": "Screen reader label of a screw on the board.",
+    "placeholders": {
+      "plate": {
+        "type": "String",
+        "description": "Plate tag, for example \"PL-03\" (do not translate)",
+        "example": "PL-03"
+      }
+    }
+  },
+  "a11yScrewBlocked": "Screw, plate {plate}, blocked by {blocker}",
+  "@a11yScrewBlocked": {
+    "description": "Screen reader label of a screw that another plate covers.",
+    "placeholders": {
+      "plate": {
+        "type": "String",
+        "description": "Plate tag of the screw (do not translate)",
+        "example": "PL-03"
+      },
+      "blocker": {
+        "type": "String",
+        "description": "Plate tag of the covering plate (do not translate)",
+        "example": "PL-04"
+      }
+    }
+  },
+  "a11yTray": "{label} {filled} of {total}",
+  "@a11yTray": {
+    "description": "Screen reader label of the tray: how many slots are filled.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "description": "The tray header (tray or trayFull)",
+        "example": "TRAY"
+      },
+      "filled": {
+        "type": "int",
+        "description": "Filled slots",
+        "example": "2"
+      },
+      "total": {
+        "type": "int",
+        "description": "Total slots",
+        "example": "3"
+      }
+    }
+  },
+  "chapterName1": "Workshop Basics",
+  "@chapterName1": {
+    "description": "Name of chapter 1 of the campaign. Shown as a title on the home screen, campaign card, chapter map and chapter complete screen (very large there, followed by a full stop). Also the name of the chapter 1 badge. Keep it short (max ~18 characters)."
+  },
+  "chapterName2": "Layer by Layer",
+  "@chapterName2": {
+    "description": "Name of chapter 2 of the campaign. Shown as a title on the home screen, campaign card, chapter map and chapter complete screen (very large there, followed by a full stop). Also the name of the chapter 2 badge. Keep it short (max ~18 characters)."
+  },
+  "chapterName3": "Make Room",
+  "@chapterName3": {
+    "description": "Name of chapter 3 of the campaign. Shown as a title on the home screen, campaign card, chapter map and chapter complete screen (very large there, followed by a full stop). Also the name of the chapter 3 badge. Keep it short (max ~18 characters)."
+  },
+  "chapterName4": "Interlocking",
+  "@chapterName4": {
+    "description": "Name of chapter 4 of the campaign. Shown as a title on the home screen, campaign card, chapter map and chapter complete screen (very large there, followed by a full stop). Also the name of the chapter 4 badge. Keep it short (max ~18 characters)."
+  },
+  "chapterName5": "Master Builder",
+  "@chapterName5": {
+    "description": "Name of chapter 5 of the campaign. Shown as a title on the home screen, campaign card, chapter map and chapter complete screen (very large there, followed by a full stop). Also the name of the chapter 5 badge. Keep it short (max ~18 characters)."
+  },
+  "chapterGoal1": "Tap, remove, release",
+  "@chapterGoal1": {
+    "description": "One-line caption under the chapter 1 name (\"Workshop Basics\") on its campaign card. Max ~28 characters."
+  },
+  "chapterGoal2": "Overlap & reveal order",
+  "@chapterGoal2": {
+    "description": "One-line caption under the chapter 2 name (\"Layer by Layer\") on its campaign card. Max ~28 characters."
+  },
+  "chapterGoal3": "Plan around a tight tray",
+  "@chapterGoal3": {
+    "description": "One-line caption under the chapter 3 name (\"Make Room\") on its campaign card. Max ~28 characters."
+  },
+  "chapterGoal4": "Shared supports",
+  "@chapterGoal4": {
+    "description": "One-line caption under the chapter 4 name (\"Interlocking\") on its campaign card. Max ~28 characters."
+  },
+  "chapterGoal5": "Everything, fairly",
+  "@chapterGoal5": {
+    "description": "One-line caption under the chapter 5 name (\"Master Builder\") on its campaign card. Max ~28 characters."
+  },
+  "chapterPitch1": "Tap a screw. Drop a plate. That is the whole rule.",
+  "@chapterPitch1": {
+    "description": "One-line teaser for chapter 1 (\"Workshop Basics\"), shown on the previous chapter's completion screen."
+  },
+  "chapterPitch2": "Plates hide plates. Work from the top down.",
+  "@chapterPitch2": {
+    "description": "One-line teaser for chapter 2 (\"Layer by Layer\"), shown on the previous chapter's completion screen."
+  },
+  "chapterPitch3": "Tighter trays. Plan which screws to pull first.",
+  "@chapterPitch3": {
+    "description": "One-line teaser for chapter 3 (\"Make Room\"), shown on the previous chapter's completion screen."
+  },
+  "chapterPitch4": "One plate pins several. Find the key piece.",
+  "@chapterPitch4": {
+    "description": "One-line teaser for chapter 4 (\"Interlocking\"), shown on the previous chapter's completion screen."
+  },
+  "chapterPitch5": "Deep stacks, every idea at once. Take your time.",
+  "@chapterPitch5": {
+    "description": "One-line teaser for chapter 5 (\"Master Builder\"), shown on the previous chapter's completion screen."
+  },
+  "chapterNameDrawingSet": "Drawing Set {number}",
+  "@chapterNameDrawingSet": {
+    "description": "Name of a downloaded chapter beyond the first five (a \"drawing set\" is a set of technical drawings).",
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "description": "Chapter number, zero-padded",
+        "example": "06"
+      }
+    }
+  },
+  "chapterGoalDownloaded": "Master-level sheets",
+  "@chapterGoalDownloaded": {
+    "description": "Caption on the campaign card of a downloaded chapter. Max ~28 characters."
+  },
+  "chapterPitchDownloaded": "More sheets, same fair rules.",
+  "@chapterPitchDownloaded": {
+    "description": "Teaser for a downloaded chapter, shown on the previous chapter's completion screen."
+  },
+  "mechanicOverlap": "OVERLAP",
+  "@mechanicOverlap": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Short tag for a puzzle mechanic (plates overlap each other), shown as \"NEW: ...\" on the chapter map. Max ~14 characters."
+  },
+  "mechanicTray": "TRAY",
+  "@mechanicTray": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Short tag for a puzzle mechanic (the tray of collected screws), shown as \"NEW: ...\" on the chapter map. Max ~14 characters."
+  },
+  "mechanicLayers": "LAYERS",
+  "@mechanicLayers": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Short tag for a puzzle mechanic (several stacked layers of plates), shown as \"NEW: ...\" on the chapter map. Max ~14 characters."
+  },
+  "mechanicCircles": "CIRCLES",
+  "@mechanicCircles": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Short tag for a puzzle mechanic (round plates), shown as \"NEW: ...\" on the chapter map. Max ~14 characters."
+  },
+  "mechanicTraps": "TRAPS",
+  "@mechanicTraps": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Short tag for a puzzle mechanic (a tempting move that fills the tray), shown as \"NEW: ...\" on the chapter map. Max ~14 characters."
+  },
+  "mechanicSupports": "SUPPORTS",
+  "@mechanicSupports": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Short tag for a puzzle mechanic (one plate holds down others), shown as \"NEW: ...\" on the chapter map. Max ~14 characters."
+  },
+  "sheetObjective004": "LIFT THE TOP PLATE TO REACH THE SCREW BELOW",
+  "@sheetObjective004": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 4 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "sheetObjective006": "THE TRAY HOLDS 3. A RELEASED PLATE FREES ITS SLOTS",
+  "@sheetObjective006": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 6 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "sheetObjective011": "THREE LAYERS. WORK FROM THE TOP DOWN",
+  "@sheetObjective011": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 11 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "sheetObjective012": "LIFT PL-04 BEFORE THE PLATES BELOW",
+  "@sheetObjective012": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 12 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "sheetObjective017": "ONE TEMPTING MOVE FILLS THE TRAY",
+  "@sheetObjective017": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 17 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "sheetObjective021": "ROUND PLATES COVER LIKE ANY OTHER",
+  "@sheetObjective021": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 21 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "sheetObjective024": "REMOVE PL-04 TO REACH THE CORNER",
+  "@sheetObjective024": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 24 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "sheetObjective041": "TIGHT TRAY. FREE A PLATE BEFORE IT FILLS",
+  "@sheetObjective041": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 41 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "sheetObjective061": "ONE PLATE CAN HOLD DOWN SEVERAL OTHERS",
+  "@sheetObjective061": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 61 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "sheetObjective081": "EVERYTHING YOU HAVE LEARNED. TAKE YOUR TIME",
+  "@sheetObjective081": {
+    "description": "Shown in UPPERCASE in a monospace font; translate in capitals where the script has them. Objective chip shown above the board on sheet 81 until the first move (the app adds an arrow in front). Plate tags like PL-04 must stay as is. Max ~48 characters."
+  },
+  "themeNameBlueprint": "Clean Blueprint",
+  "@themeNameBlueprint": {
+    "description": "Name of a cosmetic board theme (default blue technical-drawing look). Shown on the themes screen, chapter complete screen and toasts. Max ~20 characters."
+  },
+  "themeNameWalnut": "Walnut Workshop",
+  "@themeNameWalnut": {
+    "description": "Name of a cosmetic board theme (warm wood colours). Shown on the themes screen, chapter complete screen and toasts. Max ~20 characters."
+  },
+  "themeNameOcean": "Ocean Teal",
+  "@themeNameOcean": {
+    "description": "Name of a cosmetic board theme (teal and grey colours). Shown on the themes screen, chapter complete screen and toasts. Max ~20 characters."
+  },
+  "themeNameCopper": "Warm Copper",
+  "@themeNameCopper": {
+    "description": "Name of a cosmetic board theme (copper and dark brown colours). Shown on the themes screen, chapter complete screen and toasts. Max ~20 characters."
+  },
+  "themeNameMidnight": "Midnight Workshop",
+  "@themeNameMidnight": {
+    "description": "Name of a cosmetic board theme (dark colours with red accents). Shown on the themes screen, chapter complete screen and toasts. Max ~20 characters."
+  },
+  "themeNamePastel": "Pastel Studio",
+  "@themeNamePastel": {
+    "description": "Name of a cosmetic board theme (soft pastel colours). Shown on the themes screen, chapter complete screen and toasts. Max ~20 characters."
+  },
+  "sheetTitleNumbered": "Sheet {number}",
+  "@sheetTitleNumbered": {
+    "description": "Fallback title for a downloaded sheet that has no name.",
+    "placeholders": {
+      "number": {
+        "type": "int",
+        "description": "Sheet number",
+        "example": "101"
+      }
+    }
+  },
+  "sheetTitle001": "First Turn",
+  "@sheetTitle001": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 1 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle002": "Two Point",
+  "@sheetTitle002": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 2 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle003": "Side by Side",
+  "@sheetTitle003": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 3 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle004": "Cover Plate",
+  "@sheetTitle004": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 4 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle005": "Reveal",
+  "@sheetTitle005": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 5 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle006": "Tray Day",
+  "@sheetTitle006": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 6 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle007": "Small Plan",
+  "@sheetTitle007": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 7 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle008": "Tight Fit",
+  "@sheetTitle008": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 8 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle009": "Round Stock",
+  "@sheetTitle009": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 9 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle010": "Checkpoint",
+  "@sheetTitle010": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 10 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle011": "Third Layer",
+  "@sheetTitle011": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 11 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle012": "Cross Brace",
+  "@sheetTitle012": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 12 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle013": "Free a Slot",
+  "@sheetTitle013": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 13 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle014": "Two Ahead",
+  "@sheetTitle014": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 14 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle015": "Painted Steel",
+  "@sheetTitle015": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 15 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle016": "Workbench",
+  "@sheetTitle016": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 16 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle017": "Tempting",
+  "@sheetTitle017": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 17 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle018": "Cascade",
+  "@sheetTitle018": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 18 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle019": "Shop Mix",
+  "@sheetTitle019": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 19 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle020": "Assembly",
+  "@sheetTitle020": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 20 (chapter 1), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle021": "Washer Stack",
+  "@sheetTitle021": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 21 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle022": "Gasket",
+  "@sheetTitle022": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 22 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle023": "Lens Cap",
+  "@sheetTitle023": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 23 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle024": "Hidden Bracket",
+  "@sheetTitle024": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 24 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle025": "Shim Set",
+  "@sheetTitle025": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 25 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle026": "Bezel",
+  "@sheetTitle026": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 26 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle027": "Grommet",
+  "@sheetTitle027": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 27 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle028": "Breather",
+  "@sheetTitle028": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 28 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle029": "Flange Ring",
+  "@sheetTitle029": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 29 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle030": "Porthole",
+  "@sheetTitle030": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 30 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle031": "Spacer",
+  "@sheetTitle031": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 31 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle032": "Collar",
+  "@sheetTitle032": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 32 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle033": "End Cap",
+  "@sheetTitle033": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 33 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle034": "Quiet Shift",
+  "@sheetTitle034": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 34 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle035": "Bulkhead",
+  "@sheetTitle035": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 35 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle036": "Inspection Port",
+  "@sheetTitle036": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 36 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle037": "Faceplate",
+  "@sheetTitle037": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 37 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle038": "Light Duty",
+  "@sheetTitle038": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 38 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle039": "Rosette",
+  "@sheetTitle039": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 39 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle040": "Layer Cake",
+  "@sheetTitle040": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 40 (chapter 2), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle041": "Make Room",
+  "@sheetTitle041": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 41 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle042": "Bin Space",
+  "@sheetTitle042": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 42 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle043": "Overflow",
+  "@sheetTitle043": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 43 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle044": "Cubby",
+  "@sheetTitle044": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 44 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle045": "Parts Bin",
+  "@sheetTitle045": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 45 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle046": "Short Stock",
+  "@sheetTitle046": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 46 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle047": "Pigeonhole",
+  "@sheetTitle047": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 47 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle048": "Easy Out",
+  "@sheetTitle048": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 48 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle049": "Slot Machine",
+  "@sheetTitle049": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 49 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle050": "Full House",
+  "@sheetTitle050": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 50 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle051": "Backlog",
+  "@sheetTitle051": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 51 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle052": "Spare Slot",
+  "@sheetTitle052": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 52 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle053": "Clearance",
+  "@sheetTitle053": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 53 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle054": "Loose Fit",
+  "@sheetTitle054": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 54 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle055": "Inventory",
+  "@sheetTitle055": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 55 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle056": "Allowance",
+  "@sheetTitle056": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 56 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle057": "Tolerance",
+  "@sheetTitle057": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 57 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle058": "Day Off",
+  "@sheetTitle058": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 58 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle059": "Head Room",
+  "@sheetTitle059": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 59 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle060": "Storage",
+  "@sheetTitle060": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 60 (chapter 3), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle061": "Interlock",
+  "@sheetTitle061": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 61 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle062": "Gusset",
+  "@sheetTitle062": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 62 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle063": "Keystone",
+  "@sheetTitle063": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 63 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle064": "Lap Joint",
+  "@sheetTitle064": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 64 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle065": "Splice Plate",
+  "@sheetTitle065": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 65 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle066": "Dovetail",
+  "@sheetTitle066": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 66 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle067": "Lintel",
+  "@sheetTitle067": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 67 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle068": "Off Cut",
+  "@sheetTitle068": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 68 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle069": "Strut",
+  "@sheetTitle069": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 69 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle070": "Truss",
+  "@sheetTitle070": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 70 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle071": "Clevis",
+  "@sheetTitle071": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 71 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle072": "Yoke",
+  "@sheetTitle072": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 72 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle073": "Saddle",
+  "@sheetTitle073": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 73 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle074": "Footing",
+  "@sheetTitle074": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 74 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle075": "Bracket Pair",
+  "@sheetTitle075": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 75 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle076": "Clamp Bar",
+  "@sheetTitle076": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 76 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle077": "Tie Plate",
+  "@sheetTitle077": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 77 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle078": "Plain Panel",
+  "@sheetTitle078": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 78 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle079": "Cantilever",
+  "@sheetTitle079": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 79 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle080": "Moment Frame",
+  "@sheetTitle080": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 80 (chapter 4), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle081": "Master Plan",
+  "@sheetTitle081": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 81 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle082": "Subassembly",
+  "@sheetTitle082": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 82 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle083": "Exploded View",
+  "@sheetTitle083": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 83 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle084": "Fit Check",
+  "@sheetTitle084": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 84 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle085": "Torque Spec",
+  "@sheetTitle085": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 85 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle086": "Jig",
+  "@sheetTitle086": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 86 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle087": "Fixture",
+  "@sheetTitle087": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 87 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle088": "Calm Bench",
+  "@sheetTitle088": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 88 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle089": "Gearbox",
+  "@sheetTitle089": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 89 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle090": "Housing",
+  "@sheetTitle090": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 90 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle091": "Chassis",
+  "@sheetTitle091": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 91 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle092": "Panel Bay",
+  "@sheetTitle092": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 92 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle093": "Cover Set",
+  "@sheetTitle093": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 93 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle094": "Easy Torque",
+  "@sheetTitle094": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 94 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle095": "Engine Mount",
+  "@sheetTitle095": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 95 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle096": "Switchgear",
+  "@sheetTitle096": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 96 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle097": "Control Box",
+  "@sheetTitle097": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 97 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle098": "Drafting Table",
+  "@sheetTitle098": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 98 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle099": "Final Inspection",
+  "@sheetTitle099": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 99 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  },
+  "sheetTitle100": "Sign Off",
+  "@sheetTitle100": {
+    "description": "Glossary: a \"sheet\" is one puzzle level (styled as a technical drawing), a \"plate\" is a board piece held by screws, the \"tray\" holds removed screws. Name of campaign sheet 100 (chapter 5), also used for daily sheets. Workshop and technical drawing vocabulary; a natural short name or pun beats a literal translation. Shown in the gameplay header, chapter map and daily card. Max ~18 characters."
+  }
 }

@@ -9,6 +9,7 @@ import '../../services/ports.dart';
 import '../../core/theme/blueprint_tokens.dart';
 import '../../game/generator/curriculum.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/content_l10n.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
 import '../../router/routes.dart';
@@ -16,6 +17,7 @@ import '../../services/cosmetics.dart';
 import '../../services/level_repository.dart';
 import '../../services/progress_service.dart';
 import '../../widgets/bp/bp_buttons.dart';
+import '../../widgets/bp/bp_directional.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
 
@@ -95,7 +97,7 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
             children: [
               Text(l.chapterComplete(pad2(chapter)), style: BpType.label.copyWith(letterSpacing: 1.54, color: BpColor.success)),
               const SizedBox(height: 10),
-              Text('${info.name}.', style: BpType.hero.copyWith(fontSize: 54, letterSpacing: -2.43, color: BpColor.line)),
+              Text('${l.chapterName(chapter, packName: info.name)}.', style: BpType.hero.copyWith(fontSize: 54, letterSpacing: -2.43, color: BpColor.line)),
               const SizedBox(height: 22),
               AnimatedBuilder(
                 animation: _ticks,
@@ -114,12 +116,34 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
               ),
               const SizedBox(height: 10),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(l.sheetsCount(progress.clearedIn(chapter), total), style: BpType.caption.copyWith(letterSpacing: .8, color: BpColor.textMuted)),
-                  const Spacer(),
-                  Text(l.masteredCount(progress.masteredIn(chapter)), style: BpType.caption.copyWith(letterSpacing: .8, color: BpColor.textMuted)),
-                  const SizedBox(width: 6),
-                  const BpDiamond(size: 10, color: BpColor.textMuted),
+                  Flexible(
+                    child: Text(
+                      l.sheetsCount(progress.clearedIn(chapter), total),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: BpType.caption.copyWith(letterSpacing: .8, color: BpColor.textMuted),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            l.masteredCount(progress.masteredIn(chapter)),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: BpType.caption.copyWith(letterSpacing: .8, color: BpColor.textMuted),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        const BpDiamond(size: 10, color: BpColor.textMuted),
+                      ],
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 34),
@@ -131,7 +155,7 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
                     children: [
                       Expanded(
                         child: Container(
-                          decoration: const BoxDecoration(border: Border(right: BorderSide(color: BpColor.lineDefault, width: BpSize.stroke))),
+                          decoration: const BoxDecoration(border: BorderDirectional(end: BorderSide(color: BpColor.lineDefault, width: BpSize.stroke))),
                           padding: const EdgeInsets.all(16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +186,7 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
                                   children: [
                                     ThemeSwatch(theme: theme, size: 40),
                                     const SizedBox(width: 10),
-                                    Expanded(child: Text(theme.name, style: BpType.body.copyWith(fontWeight: FontWeight.w700, fontVariations: const [FontVariation('wght', 700)], height: 1.2, color: BpColor.line))),
+                                    Expanded(child: Text(l.themeName(theme), style: BpType.body.copyWith(fontWeight: FontWeight.w700, fontVariations: const [FontVariation('wght', 700)], height: 1.2, color: BpColor.line))),
                                   ],
                                 )
                               else
@@ -186,9 +210,9 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
                     children: [
                       Text(l.nextChapter(pad2(next)), style: small),
                       const SizedBox(height: 6),
-                      Text(nextInfo.name, style: BpType.stuckTitle.copyWith(color: BpColor.line)),
+                      Text(l.chapterName(next, packName: nextInfo.name), style: BpType.stuckTitle.copyWith(color: BpColor.line)),
                       const SizedBox(height: 6),
-                      Text(nextInfo.pitch, style: BpType.monoBody.copyWith(fontSize: 11, color: BpColor.textSecondary)),
+                      Text(l.chapterPitch(next), style: BpType.monoBody.copyWith(fontSize: 11, color: BpColor.textSecondary)),
                     ],
                   ),
                 ),
@@ -204,9 +228,11 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
                       child: Text(
                         hasNext ? l.startChapter(pad2(next)) : l.sheets,
                         style: BpType.button.copyWith(fontSize: 17, color: BpColor.ink),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Icon(Symbols.arrow_forward_sharp, size: 26),
+                    const BpMirrorRtl(child: Icon(Symbols.arrow_forward_sharp, size: 26)),
                   ],
                 ),
               ),
@@ -214,10 +240,10 @@ class _ChapterCompleteScreenState extends State<ChapterCompleteScreen> with Sing
               if (theme != null && progress.equippedTheme != theme.id)
                 Center(
                   child: TextButtonLike(
-                    label: l.equipTheme(theme.name.toUpperCase()),
+                    label: l.equipTheme(l.themeName(theme).toUpperCase()),
                     onTap: () async {
                       await context.read<ProgressCubit>().equipTheme(theme.id);
-                      if (context.mounted) showBpToast(context, l.themeEquippedToast(theme.name), kind: BpToastKind.success);
+                      if (context.mounted) showBpToast(context, l.themeEquippedToast(l.themeName(theme)), kind: BpToastKind.success);
                     },
                   ),
                 ),

@@ -80,13 +80,17 @@ class ScreenEnv {
     final premium = PremiumCubit(db);
     await premium.initialize();
     if (pro) await premium.apply(isPro: true, proExpiresAt: DateTime.utc(2099), proPlan: 'yearly', adsRemoved: false);
-    final store = MemorySettingsStore()..value = SettingsState(tutorialDone: tutorialDone);
+    // English picked explicitly, so the settings golden reads "English"
+    // (the default, null, reads "System default").
+    final store = MemorySettingsStore()..value = SettingsState(tutorialDone: tutorialDone, localeCode: 'en');
     final settings = SettingsCubit(store);
     await settings.load(osReducedMotion: false);
     return ScreenEnv._(db, repo, service, progressCubit, premium, settings, AuthCubit(auth ?? GuestAuth()));
   }
 
-  Widget wrap(Widget child, {GoRouter? router}) => MultiRepositoryProvider(
+  /// [strings] replaces the app's localizations (e.g. stretched pseudo
+  /// text) and [locale] the app locale (e.g. ar for right-to-left).
+  Widget wrap(Widget child, {GoRouter? router, LocalizationsDelegate<AppLocalizations>? strings, Locale? locale}) => MultiRepositoryProvider(
     providers: [
       RepositoryProvider<LevelRepository>.value(value: repo),
       RepositoryProvider<ProgressService>.value(value: progress),
@@ -107,14 +111,16 @@ class ScreenEnv {
       child: router != null
           ? MaterialApp.router(
               debugShowCheckedModeBanner: false,
-              localizationsDelegates: _delegates,
-              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: _delegatesFor(strings),
+              supportedLocales: locale == null ? AppLocalizations.supportedLocales : [locale],
+              locale: locale,
               routerConfig: router,
             )
           : MaterialApp(
               debugShowCheckedModeBanner: false,
-              localizationsDelegates: _delegates,
-              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: _delegatesFor(strings),
+              supportedLocales: locale == null ? AppLocalizations.supportedLocales : [locale],
+              locale: locale,
               home: child,
             ),
     ),
@@ -126,8 +132,8 @@ class ScreenEnv {
   }
 }
 
-const _delegates = [
-  AppLocalizations.delegate,
+List<LocalizationsDelegate<dynamic>> _delegatesFor(LocalizationsDelegate<AppLocalizations>? strings) => [
+  strings ?? AppLocalizations.delegate,
   ...GlobalMaterialLocalizations.delegates,
 ];
 

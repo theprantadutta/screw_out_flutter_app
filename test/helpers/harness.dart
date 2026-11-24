@@ -45,15 +45,22 @@ void useDesignFrame(WidgetTester tester) {
   addTearDown(tester.view.reset);
 }
 
-Widget appShell({required Widget child, SettingsCubit? settings}) => BlocProvider<SettingsCubit>(
+/// [strings] and [locale]: see ScreenEnv.wrap.
+Widget appShell({
+  required Widget child,
+  SettingsCubit? settings,
+  LocalizationsDelegate<AppLocalizations>? strings,
+  Locale? locale,
+}) => BlocProvider<SettingsCubit>(
   create: (_) => settings ?? SettingsCubit(MemorySettingsStore()),
   child: MaterialApp(
     debugShowCheckedModeBanner: false,
-    localizationsDelegates: const [
-      AppLocalizations.delegate,
+    localizationsDelegates: [
+      strings ?? AppLocalizations.delegate,
       ...GlobalMaterialLocalizations.delegates,
     ],
-    supportedLocales: AppLocalizations.supportedLocales,
+    supportedLocales: locale == null ? AppLocalizations.supportedLocales : [locale],
+    locale: locale,
     home: child,
   ),
 );

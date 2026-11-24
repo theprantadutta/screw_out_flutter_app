@@ -10,6 +10,7 @@ import '../../game/domain/level.dart';
 import '../../game/generator/curriculum.dart';
 import '../../game/generator/daily.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/content_l10n.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
 import '../../router/routes.dart';
@@ -17,6 +18,7 @@ import '../../services/cosmetics.dart';
 import '../../services/level_repository.dart';
 import '../../services/ports.dart';
 import '../../widgets/bp/bp_buttons.dart';
+import '../../widgets/bp/bp_directional.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_mini_board.dart';
 import '../../widgets/bp/bp_screen.dart';
@@ -100,7 +102,7 @@ class HomeScreen extends StatelessWidget {
                     width: 110,
                     child: Text(
                       l.homeFigure(level?.panels.length ?? 0, level?.screws.length ?? 0),
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.end,
                       style: BpType.caption.copyWith(letterSpacing: 0, height: 1.5, color: BpColor.textMuted),
                     ),
                   ),
@@ -119,7 +121,7 @@ class HomeScreen extends StatelessWidget {
             _TitleBlock(
               nextCode: allDone ? l.allCleared : codeFor(currentId),
               chapterLabel: l.chapterLabel(pad2(chapter)),
-              chapterName: info.name,
+              chapterName: l.chapterName(chapter, packName: info.name),
               done: progress.totalCleared,
               total: total,
               ticks: [
@@ -148,7 +150,7 @@ class HomeScreen extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const Icon(Symbols.arrow_forward_sharp, size: 26),
+                  const BpMirrorRtl(child: Icon(Symbols.arrow_forward_sharp, size: 26)),
                 ],
               ),
             ),
@@ -450,7 +452,7 @@ class _TitleBlock extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    decoration: const BoxDecoration(border: Border(right: line, bottom: line)),
+                    decoration: const BoxDecoration(border: BorderDirectional(end: line, bottom: line)),
                     padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

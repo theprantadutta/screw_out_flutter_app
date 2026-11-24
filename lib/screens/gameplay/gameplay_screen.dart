@@ -13,11 +13,13 @@ import '../../game/presentation/game_feedback.dart';
 import '../../game/presentation/gameplay_visuals.dart';
 import '../../game/presentation/tray_view.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/content_l10n.dart';
 import '../../presentation/bloc/game/game_cubit.dart';
 import '../../presentation/bloc/game/game_host.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
 import '../../services/cosmetics.dart';
 import '../../widgets/bp/bp_buttons.dart';
+import '../../widgets/bp/bp_directional.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
 import 'widgets/game_sheets.dart';
@@ -256,7 +258,7 @@ class _GameplayScreenState extends State<GameplayScreen>
           height: 52,
           child: _Header(
             code: s.level.code,
-            title: s.level.title,
+            title: l.levelTitle(s.level),
             coins: (s.reward != null && !_coinsCounted) ? s.reward!.balanceBefore : widget.coins,
             showControls: !won,
             showCoins: widget.tutorial == null,
@@ -265,7 +267,7 @@ class _GameplayScreenState extends State<GameplayScreen>
           ),
         ),
         // Objective chip - collapses after the first valid move.
-        if (s.level.objective != null)
+        if (l.levelObjective(s.level) case final objective?)
           Positioned(
             top: top + 64,
             left: 0,
@@ -276,7 +278,12 @@ class _GameplayScreenState extends State<GameplayScreen>
                 opacity: _objective.value * _visuals.objectiveIn.value,
                 child: Transform.translate(offset: Offset(0, -8 * (1 - _objective.value)), child: child),
               ),
-              child: Center(child: _ObjectiveChip(text: s.level.objective!)),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: BpSpace.gameplay),
+                  child: _ObjectiveChip(text: objective),
+                ),
+              ),
             ),
           ),
         // Board.
@@ -324,7 +331,7 @@ class _GameplayScreenState extends State<GameplayScreen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Symbols.undo_sharp, size: 20),
+                      const BpMirrorRtl(child: Icon(Symbols.undo_sharp, size: 20)),
                       const SizedBox(width: 8),
                       Text(l.undo),
                     ],
@@ -616,24 +623,29 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) => Stack(
     alignment: Alignment.center,
     children: [
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(code, style: BpType.caption.copyWith(color: BpColor.textMuted)),
-          const SizedBox(height: 2),
-          Text(title, style: BpType.title.copyWith(color: BpColor.line), maxLines: 1, overflow: TextOverflow.ellipsis),
-        ],
+      // Side room for the pause button and coin chip, so a long
+      // (translated) title ellipsizes instead of running under them.
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: showControls ? 76 : 0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(code, style: BpType.caption.copyWith(color: BpColor.textMuted)),
+            const SizedBox(height: 2),
+            Text(title, style: BpType.title.copyWith(color: BpColor.line), maxLines: 1, overflow: TextOverflow.ellipsis),
+          ],
+        ),
       ),
       if (showControls) ...[
         Align(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: BpIconButton(
             icon: const Icon(Symbols.pause_sharp, fill: 1),
             onPressed: onPause,
             semanticLabel: pauseLabel,
           ),
         ),
-        if (showCoins) Align(alignment: Alignment.centerRight, child: BpCoinChip(coins: coins)),
+        if (showCoins) Align(alignment: AlignmentDirectional.centerEnd, child: BpCoinChip(coins: coins)),
       ],
     ],
   );
@@ -650,7 +662,11 @@ class _ObjectiveChip extends StatelessWidget {
     child: Container(
       color: BpColor.sheet,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-      child: Text(text, style: BpType.objective.copyWith(color: BpColor.line)),
+      // The arrow points along the reading direction.
+      child: Text(
+        '${Directionality.of(context) == TextDirection.rtl ? '←' : '→'} $text',
+        style: BpType.objective.copyWith(color: BpColor.line),
+      ),
     ),
   );
 }

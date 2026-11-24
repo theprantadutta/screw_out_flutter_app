@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../core/theme/blueprint_tokens.dart';
+import '../../l10n/app_localizations.dart';
 import '../domain/game_state.dart';
 import '../domain/level.dart';
 import 'gameplay_visuals.dart';
@@ -44,6 +45,7 @@ class BoardView extends StatelessWidget {
     final play = BpSize.boardPlay * scale;
     visuals.scale = scale;
     final level = visuals.level;
+    final l = AppLocalizations.of(context);
 
     final pieces = <(int, int, Widget)>[];
     for (var i = 0; i < level.panels.length; i++) {
@@ -79,7 +81,7 @@ class BoardView extends StatelessWidget {
           removed: state.removed.contains(s.id),
           onTap: onTapScrew,
           onPress: onPressScrew,
-          semanticLabel: _semantics(level, s),
+          semanticLabel: _semantics(l, level, s),
         ),
       ));
     }
@@ -97,37 +99,42 @@ class BoardView extends StatelessWidget {
           ),
         );
       },
-      child: SizedBox.square(
-        dimension: size,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            const Positioned.fill(child: IgnorePointer(child: CustomPaint(painter: _CornerMarks()))),
-            Positioned(
-              left: inset,
-              top: inset,
-              width: play,
-              height: play,
-              child: IgnorePointer(
-                ignoring: !interactive,
-                child: Stack(
-                  key: visuals.boardKey,
-                  clipBehavior: Clip.none,
-                  children: [for (final p in pieces) p.$3],
+      // The drawing is geometry, not text: it never mirrors in RTL locales.
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: SizedBox.square(
+          dimension: size,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              const Positioned.fill(child: IgnorePointer(child: CustomPaint(painter: _CornerMarks()))),
+              Positioned(
+                left: inset,
+                top: inset,
+                width: play,
+                height: play,
+                child: IgnorePointer(
+                  ignoring: !interactive,
+                  child: Stack(
+                    key: visuals.boardKey,
+                    clipBehavior: Clip.none,
+                    children: [for (final p in pieces) p.$3],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  String _semantics(Level level, Screw s) {
+  String _semantics(AppLocalizations l, Level level, Screw s) {
     final panel = level.panelById(s.panelId);
     final blocker = visuals.board.blockerOf(s.id, state.released);
-    final by = blocker == null ? '' : ', blocked by ${level.panelById(blocker).label}';
-    return 'Screw, plate ${panel.label}$by';
+    return blocker == null
+        ? l.a11yScrew(panel.label)
+        : l.a11yScrewBlocked(panel.label, level.panelById(blocker).label);
   }
 }
 

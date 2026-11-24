@@ -9,6 +9,8 @@ import '../../core/theme/blueprint_tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../router/routes.dart';
 import 'bp_buttons.dart';
+import 'bp_directional.dart';
+import 'bp_fit.dart';
 import 'bp_grid.dart';
 
 /// Top inset of the header row: the design frame's 38 dp status bar maps to
@@ -28,7 +30,7 @@ class BpBackButton extends StatelessWidget {
   Widget build(BuildContext context) => BpIconButton(
     size: 44,
     iconSize: 22,
-    icon: const Icon(Symbols.arrow_back_sharp),
+    icon: const BpMirrorRtl(child: Icon(Symbols.arrow_back_sharp)),
     semanticLabel: AppLocalizations.of(context).back,
     onPressed: onPressed ?? () => bpBack(context),
   );
@@ -95,10 +97,14 @@ class BpScreenScaffold extends StatelessWidget {
           child: SizedBox(
             height: 44,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (showBack) BpBackButton(onPressed: onBack),
-                const Spacer(),
-                ?trailing,
+                if (showBack) BpBackButton(onPressed: onBack) else const SizedBox.shrink(),
+                // Long (translated) captions shrink instead of overflowing.
+                if (trailing != null)
+                  Flexible(
+                    child: BpShrinkToFit(child: trailing!),
+                  ),
               ],
             ),
           ),
@@ -256,7 +262,7 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
                 foregroundPainter: BpBorderPainter(color: color == BpColor.line ? BpColor.lineDefault : color),
                 child: Container(
                   color: BpColor.card,
-                  padding: const EdgeInsets.fromLTRB(12, 11, 14, 11),
+                  padding: const EdgeInsetsDirectional.fromSTEB(12, 11, 14, 11),
                   child: Row(
                     children: [
                       Container(

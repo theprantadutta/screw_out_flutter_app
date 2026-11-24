@@ -10,6 +10,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../presentation/bloc/game/game_host.dart';
 import '../../../services/share_result.dart';
 import '../../../widgets/bp/bp_buttons.dart';
+import '../../../widgets/bp/bp_directional.dart';
 import '../../../widgets/bp/bp_grid.dart';
 import '../../../widgets/bp/bp_sheet.dart';
 
@@ -294,7 +295,7 @@ class _ResultCardState extends State<ResultCard> {
                   SizedBox(
                     height: 26,
                     child: Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: AlignmentDirectional.centerStart,
                       child: r.mastered
                           ? const BpDiamond(size: 20)
                           : Text('-', style: valueStyle.copyWith(color: BpColor.textMuted)),
@@ -336,8 +337,15 @@ class _ResultCardState extends State<ResultCard> {
           onPressed: widget.onNext,
           child: Row(
             children: [
-              Expanded(child: Text(widget.nextLabel, style: BpType.button.copyWith(fontSize: 17, color: BpColor.ink))),
-              const Icon(Symbols.arrow_forward_sharp, size: 24),
+              Expanded(
+                child: Text(
+                  widget.nextLabel,
+                  style: BpType.button.copyWith(fontSize: 17, color: BpColor.ink),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const BpMirrorRtl(child: Icon(Symbols.arrow_forward_sharp, size: 24)),
             ],
           ),
         ),

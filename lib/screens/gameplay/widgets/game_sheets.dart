@@ -4,6 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../../../core/theme/blueprint_tokens.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../widgets/bp/bp_buttons.dart';
+import '../../../widgets/bp/bp_directional.dart';
 import '../../../widgets/bp/bp_grid.dart';
 import '../../../widgets/bp/bp_sheet.dart';
 
@@ -130,7 +131,7 @@ class StuckSheet extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Symbols.undo_sharp, size: 22),
+              const BpMirrorRtl(child: Icon(Symbols.undo_sharp, size: 22)),
               const SizedBox(width: 8),
               Text(l.undoLastMove),
             ],
@@ -268,7 +269,7 @@ class OutOfHintsSheet extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Icon(Symbols.chevron_right_sharp, size: 22, color: BpColor.line),
+                  const BpMirrorRtl(child: Icon(Symbols.chevron_right_sharp, size: 22, color: BpColor.line)),
                 ],
               ),
             ),

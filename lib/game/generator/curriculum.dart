@@ -24,6 +24,8 @@ final class ChapterInfo {
 const kLevelsPerChapter = 20;
 const kBundledChapters = 5;
 
+/// English source text. The UI shows `chapterNameN` / `chapterGoalN` /
+/// `chapterPitchN` from the ARB instead (ContentL10n); keep both in step.
 const kChapters = <ChapterInfo>[
   ChapterInfo(1, 'Workshop Basics', 'Tap, remove, release', null, 'Tap a screw. Drop a plate. That is the whole rule.'),
   ChapterInfo(2, 'Layer by Layer', 'Overlap & reveal order', 'CIRCLES', 'Plates hide plates. Work from the top down.'),
@@ -38,7 +40,8 @@ ChapterInfo chapterInfo(int chapter, {String? name, String? goal}) =>
     ? kChapters[chapter - 1]
     : ChapterInfo(chapter, name ?? 'Drawing Set ${chapter.toString().padLeft(2, '0')}', goal ?? 'Master-level sheets', null, 'More sheets, same fair rules.');
 
-/// Label for a mechanic tag, used for "NEW: …" on the map preview.
+/// Label for a mechanic tag, used for "NEW: …" on the map preview. The UI
+/// shows the ARB `mechanic*` key for each id (ContentL10n.mechanicLabel).
 const kMechanicLabels = {
   'overlap': 'OVERLAP',
   'tray': 'TRAY',
@@ -262,6 +265,10 @@ final _chapterOne = <int, SheetPlan>{
 
 /// Sheet titles - drafting vocabulary. Index = sheet id − 1; downloaded
 /// chapters reuse the list with a roman suffix.
+///
+/// The English text is the lookup key: the UI shows `sheetTitleNNN` from
+/// the ARB (NNN = index + 1, see ContentL10n). Never reorder or rename an
+/// entry without moving its ARB key too.
 const kSheetTitles = <String>[
   'First Turn', 'Two Point', 'Side by Side', 'Cover Plate', 'Reveal', //
   'Tray Day', 'Small Plan', 'Tight Fit', 'Round Stock', 'Checkpoint',

@@ -218,7 +218,7 @@ class _EmailAuthSheetState extends State<EmailAuthSheet> {
                             constraints: const BoxConstraints(minHeight: 40),
                             child: Align(
                               widthFactor: 1,
-                              alignment: Alignment.centerRight,
+                              alignment: AlignmentDirectional.centerEnd,
                               child: Text(
                                 l.forgotPassword,
                                 style: BpType.monoBody.copyWith(

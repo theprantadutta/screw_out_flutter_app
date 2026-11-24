@@ -23,7 +23,7 @@ class UpdateReadyChip extends StatelessWidget {
         if (!ready) return const SizedBox.shrink();
         final l = AppLocalizations.of(context);
         return Padding(
-          padding: const EdgeInsets.only(right: 8),
+          padding: const EdgeInsetsDirectional.only(end: 8),
           child: BpPrimaryButton(
             height: 40,
             shadow: 3,

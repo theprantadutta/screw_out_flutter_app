@@ -92,7 +92,7 @@ class _BadgeTile extends StatelessWidget {
                   Expanded(
                     child: Container(
                       height: 4,
-                      alignment: Alignment.centerLeft,
+                      alignment: AlignmentDirectional.centerStart,
                       color: BpColor.lineFaint.withValues(alpha: .25),
                       child: FractionallySizedBox(
                         widthFactor: status.progress / b.target,

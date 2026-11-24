@@ -2,5 +2,12 @@ arb-dir: lib/l10n
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 output-class: AppLocalizations
-untranslated-messages-file: l10n_untranslated.txt
 nullable-getter: false
+# Translations live next to the template as app_<locale>.arb (app_es.arb,
+# app_pt.arb, app_zh_Hant.arb ...). Missing keys fall back to English and
+# are listed in this file after each gen-l10n run.
+untranslated-messages-file: l10n_untranslated.txt
+# English stays the fallback for device languages the app doesn't ship.
+preferred-supported-locales: [en]
+# Every key must carry an "@key" description for translators.
+required-resource-attributes: true
