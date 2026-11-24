@@ -93,6 +93,25 @@ abstract final class BpType {
   static const medium = _w500;
 }
 
+/// Bundled Noto fallbacks for scripts Space Grotesk / JetBrains Mono lack
+/// (Cyrillic, Arabic, Devanagari, Bengali, CJK). Applied app-wide through
+/// the theme and DefaultTextStyle (see app.dart), so the [BpType] styles
+/// stay const and Latin text renders exactly as before.
+abstract final class BpFonts {
+  static const _scripts = ['NotoSans', 'NotoSansArabic', 'NotoSansDevanagari', 'NotoSansBengali'];
+
+  /// Han characters exist in all three CJK fonts with regional glyph
+  /// shapes, so the active language's font comes first.
+  static List<String> fallbackFor(Locale locale) => [
+    ..._scripts,
+    ...switch (locale.languageCode) {
+      'ko' => const ['NotoSansKR', 'NotoSansJP', 'NotoSansTC'],
+      'zh' => const ['NotoSansTC', 'NotoSansJP', 'NotoSansKR'],
+      _ => const ['NotoSansJP', 'NotoSansKR', 'NotoSansTC'],
+    },
+  ];
+}
+
 abstract final class BpSpace {
   static const s1 = 4.0, s2 = 8.0, s3 = 12.0, s4 = 16.0, s5 = 20.0, s6 = 24.0;
   static const s8 = 32.0, s10 = 40.0, s12 = 48.0;

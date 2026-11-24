@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
 import '../../core/theme/blueprint_tokens.dart';
+import '../../l10n/app_localizations.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../domain/game_state.dart';
 import 'gameplay_visuals.dart';
@@ -35,7 +36,7 @@ class TrayView extends StatelessWidget {
     final headerColor = stuck ? BpColor.caution : BpColor.textSecondary;
     final header = BpType.trayLabel.copyWith(color: headerColor);
     return Semantics(
-      label: '$trayLabel $filled of $n',
+      label: AppLocalizations.of(context).a11yTray(stuck ? trayFullLabel : trayLabel, filled, n),
       child: CustomPaint(
         foregroundPainter: BpBorderPainter(
           color: stuck ? BpColor.caution : BpColor.lineDefault,

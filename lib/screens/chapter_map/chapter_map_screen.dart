@@ -10,6 +10,7 @@ import '../../core/theme/blueprint_tokens.dart';
 import '../../game/domain/level.dart';
 import '../../game/generator/curriculum.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/content_l10n.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
 import '../../router/routes.dart';
@@ -54,7 +55,7 @@ class _ChapterMapScreenState extends State<ChapterMapScreen> {
 
     return BpScreenScaffold(
       caption: l.chapterLabel(pad2(_chapter)),
-      title: info.name,
+      title: l.chapterName(_chapter, packName: info.name),
       trailing: Text(
         l.sheetsCount(progress.clearedIn(_chapter), pack.levels.length),
         style: BpType.label.copyWith(letterSpacing: 1.1, color: BpColor.textSecondary, fontFeatures: const [FontFeature.tabularFigures()]),
@@ -120,14 +121,14 @@ class _ChapterMapScreenState extends State<ChapterMapScreen> {
     );
   }
 
-  /// Mechanic tags this sheet is the first to use (campaign order).
+  /// Mechanic id this sheet is the first to use (campaign order).
   static String? _newMechanic(LevelRepository repo, Level level) {
     final seen = <String>{};
     for (var id = 1; id < level.id; id++) {
       seen.addAll(repo.level(id)?.mechanics ?? const []);
     }
     for (final m in level.mechanics) {
-      if (!seen.contains(m) && kMechanicLabels.containsKey(m)) return kMechanicLabels[m];
+      if (!seen.contains(m) && kMechanicLabels.containsKey(m)) return m;
     }
     return null;
   }
@@ -406,8 +407,8 @@ class _Node extends StatelessWidget {
             alignment: Alignment.center,
             child: Text('$number', style: BpType.title.copyWith(fontSize: 18, color: BpColor.sheet, fontFeatures: const [FontFeature.tabularFigures()])),
           ),
-          Positioned(
-            right: -2,
+          PositionedDirectional(
+            end: -2,
             bottom: -2,
             child: Container(
               width: 20,
@@ -420,7 +421,7 @@ class _Node extends StatelessWidget {
               child: const Icon(Symbols.check_sharp, size: 14, weight: 700, color: BpColor.line),
             ),
           ),
-          if (mastered) const Positioned(top: -6, right: 0, child: BpDiamond(size: 14)),
+          if (mastered) const PositionedDirectional(top: -6, end: 0, child: BpDiamond(size: 14)),
         ],
       );
     } else {
@@ -462,7 +463,8 @@ class _PreviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final head = newMechanic == null ? level.code : '${level.code} · ${l.newMechanic(newMechanic!)}';
+    final tag = newMechanic == null ? null : l.mechanicLabel(newMechanic!);
+    final head = tag == null ? level.code : '${level.code} · ${l.newMechanic(tag)}';
     return BpOutlined(
       fill: BpColor.card,
       padding: const EdgeInsets.all(16),
@@ -483,7 +485,7 @@ class _PreviewCard extends StatelessWidget {
               children: [
                 Text(head, style: BpType.caption.copyWith(letterSpacing: 1, color: BpColor.action)),
                 const SizedBox(height: 4),
-                Text(level.title, style: BpType.title.copyWith(fontSize: 18, color: BpColor.line), maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text(l.levelTitle(level), style: BpType.title.copyWith(fontSize: 18, color: BpColor.line), maxLines: 1, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 4),
                 Text(
                   l.sheetMeta(level.panels.length, layerCount(level), level.trayCapacity),

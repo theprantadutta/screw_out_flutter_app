@@ -114,3 +114,26 @@ flutter:
         - asset: assets/fonts/JetBrainsMono-Variable.ttf
         - asset: assets/fonts/JetBrainsMono-Italic-Variable.ttf
           style: italic
+    # Fallbacks for scripts the two brand fonts lack (OFL, google/fonts).
+    # BpFonts.fallbackFor picks the order per locale.
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/NotoSans-Variable.ttf
+    - family: NotoSansArabic
+      fonts:
+        - asset: assets/fonts/NotoSansArabic-Variable.ttf
+    - family: NotoSansBengali
+      fonts:
+        - asset: assets/fonts/NotoSansBengali-Variable.ttf
+    - family: NotoSansDevanagari
+      fonts:
+        - asset: assets/fonts/NotoSansDevanagari-Variable.ttf
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/NotoSansJP-Variable.ttf
+    - family: NotoSansKR
+      fonts:
+        - asset: assets/fonts/NotoSansKR-Variable.ttf
+    - family: NotoSansTC
+      fonts:
+        - asset: assets/fonts/NotoSansTC-Variable.ttf

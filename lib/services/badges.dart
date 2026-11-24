@@ -3,6 +3,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../game/generator/curriculum.dart';
 import '../l10n/app_localizations.dart';
+import '../l10n/content_l10n.dart';
 import 'progress_service.dart';
 
 /// One workshop-record milestone, derived purely from progress already on
@@ -66,7 +67,7 @@ Badge _chapterBadge(int chapter) => Badge(
   id: 'chapter_$chapter',
   icon: Symbols.verified_sharp,
   target: kLevelsPerChapter,
-  title: (_) => chapterInfo(chapter).name,
+  title: (l) => l.chapterName(chapter),
   detail: (l) => l.badgeChapterDetail(chapter),
   measure: (s) => s.clearedIn(chapter),
 );

@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../../core/theme/blueprint_tokens.dart';
-import '../../game/generator/curriculum.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/content_l10n.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../router/routes.dart';
 import '../../services/badges.dart';
@@ -83,8 +83,8 @@ class _CampaignScreenState extends State<CampaignScreen> {
           for (final pack in packs) ...[
             _ChapterCard(
               number: pad2(pack.chapter),
-              name: chapterInfo(pack.chapter, name: pack.name).name,
-              goal: chapterInfo(pack.chapter, goal: pack.goal).goal,
+              name: l.chapterName(pack.chapter, packName: pack.name),
+              goal: l.chapterGoal(pack.chapter, packGoal: pack.goal),
               status: progress.clearedIn(pack.chapter) == pack.levels.length
                   ? _Status.done
                   : (pack.chapter == current ? _Status.active : (pack.chapter < current ? _Status.active : _Status.locked)),

@@ -22,11 +22,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
-  String coinsBalance(int coins) {
-    return '$coins coins';
-  }
-
-  @override
   String get tray => 'TRAY';
 
   @override
@@ -84,9 +79,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stuckTitle => 'No open slots left.';
 
   @override
-  String get stuckRescueTitle => 'OR BUY ONE EXTRA SLOT FOR THIS SHEET';
-
-  @override
   String stuckReasonHolding(String plate, int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -103,12 +95,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get undoLastMove => 'Undo last move';
-
-  @override
-  String get hint => 'HINT';
-
-  @override
-  String get rescueSlot => 'EXTRA SLOT';
 
   @override
   String rescueSlotCoins(int coins) {
@@ -188,26 +174,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sheets => 'SHEETS';
 
   @override
-  String get home => 'HOME';
-
-  @override
-  String get dailyDone => 'Daily sheet done';
-
-  @override
   String get backHome => 'Back home';
 
   @override
   String chapterComplete(String chapter) {
     return 'CHAPTER $chapter · COMPLETE';
   }
-
-  @override
-  String chapterSheetsMastered(int done, int total, int mastered) {
-    return '$done / $total SHEETS · $mastered MASTERED ◆';
-  }
-
-  @override
-  String get rewardCoins => 'COINS';
 
   @override
   String get themeUnlocked => 'THEME UNLOCKED';
@@ -317,10 +289,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chaptersTitle => 'Chapters';
 
   @override
-  String get masteryNote =>
-      '◆ MASTERY = CLEARED WITHOUT A HINT OR RESTART. PURELY COSMETIC, NEVER NEEDED TO PROGRESS.';
-
-  @override
   String chapterProgress(int done, int total) {
     return '$done/$total';
   }
@@ -368,9 +336,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chapterBonus => 'CHAPTER BONUS';
-
-  @override
-  String get play => 'Play';
 
   @override
   String get dailySheet => 'DAILY SHEET';
@@ -592,13 +557,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notNow => 'NOT NOW';
 
   @override
-  String get offline => 'OFFLINE';
-
-  @override
   String get somethingWentWrong => 'Something went wrong.';
-
-  @override
-  String get tryAgain => 'Try again';
 
   @override
   String get purchaseThanks => 'Thank you! Purchase applied.';
@@ -623,9 +582,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreSheetsCaption => 'New drawing sets arrive here';
-
-  @override
-  String get languageEnglish => 'English';
 
   @override
   String get equip => 'EQUIP';
@@ -1073,17 +1029,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get proPerYear => '/ YEAR';
-
-  @override
-  String get proPerMonth => '/ MONTH';
-
-  @override
-  String sheetsTotal(int count) {
-    return '$count SHEETS';
-  }
-
-  @override
   String get dailyWeekDone => 'Done';
 
   @override
@@ -1211,4 +1156,466 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get purchaseNeedsConnection =>
       'Couldn\'t reach the server. Check your connection and try again.';
+
+  @override
+  String get languageSystemDefault => 'System default';
+
+  @override
+  String get startupFailed =>
+      'SOMETHING WENT WRONG WHILE STARTING.\nCLOSE THE APP AND OPEN IT AGAIN.';
+
+  @override
+  String get notificationChannelDescription =>
+      'Daily sheet reminders and account notices';
+
+  @override
+  String get storeAppStore => 'the App Store';
+
+  @override
+  String get storeGooglePlay => 'Google Play';
+
+  @override
+  String a11yScrew(String plate) {
+    return 'Screw, plate $plate';
+  }
+
+  @override
+  String a11yScrewBlocked(String plate, String blocker) {
+    return 'Screw, plate $plate, blocked by $blocker';
+  }
+
+  @override
+  String a11yTray(String label, int filled, int total) {
+    return '$label $filled of $total';
+  }
+
+  @override
+  String get chapterName1 => 'Workshop Basics';
+
+  @override
+  String get chapterName2 => 'Layer by Layer';
+
+  @override
+  String get chapterName3 => 'Make Room';
+
+  @override
+  String get chapterName4 => 'Interlocking';
+
+  @override
+  String get chapterName5 => 'Master Builder';
+
+  @override
+  String get chapterGoal1 => 'Tap, remove, release';
+
+  @override
+  String get chapterGoal2 => 'Overlap & reveal order';
+
+  @override
+  String get chapterGoal3 => 'Plan around a tight tray';
+
+  @override
+  String get chapterGoal4 => 'Shared supports';
+
+  @override
+  String get chapterGoal5 => 'Everything, fairly';
+
+  @override
+  String get chapterPitch1 =>
+      'Tap a screw. Drop a plate. That is the whole rule.';
+
+  @override
+  String get chapterPitch2 => 'Plates hide plates. Work from the top down.';
+
+  @override
+  String get chapterPitch3 => 'Tighter trays. Plan which screws to pull first.';
+
+  @override
+  String get chapterPitch4 => 'One plate pins several. Find the key piece.';
+
+  @override
+  String get chapterPitch5 =>
+      'Deep stacks, every idea at once. Take your time.';
+
+  @override
+  String chapterNameDrawingSet(String number) {
+    return 'Drawing Set $number';
+  }
+
+  @override
+  String get chapterGoalDownloaded => 'Master-level sheets';
+
+  @override
+  String get chapterPitchDownloaded => 'More sheets, same fair rules.';
+
+  @override
+  String get mechanicOverlap => 'OVERLAP';
+
+  @override
+  String get mechanicTray => 'TRAY';
+
+  @override
+  String get mechanicLayers => 'LAYERS';
+
+  @override
+  String get mechanicCircles => 'CIRCLES';
+
+  @override
+  String get mechanicTraps => 'TRAPS';
+
+  @override
+  String get mechanicSupports => 'SUPPORTS';
+
+  @override
+  String get sheetObjective004 => 'LIFT THE TOP PLATE TO REACH THE SCREW BELOW';
+
+  @override
+  String get sheetObjective006 =>
+      'THE TRAY HOLDS 3. A RELEASED PLATE FREES ITS SLOTS';
+
+  @override
+  String get sheetObjective011 => 'THREE LAYERS. WORK FROM THE TOP DOWN';
+
+  @override
+  String get sheetObjective012 => 'LIFT PL-04 BEFORE THE PLATES BELOW';
+
+  @override
+  String get sheetObjective017 => 'ONE TEMPTING MOVE FILLS THE TRAY';
+
+  @override
+  String get sheetObjective021 => 'ROUND PLATES COVER LIKE ANY OTHER';
+
+  @override
+  String get sheetObjective024 => 'REMOVE PL-04 TO REACH THE CORNER';
+
+  @override
+  String get sheetObjective041 => 'TIGHT TRAY. FREE A PLATE BEFORE IT FILLS';
+
+  @override
+  String get sheetObjective061 => 'ONE PLATE CAN HOLD DOWN SEVERAL OTHERS';
+
+  @override
+  String get sheetObjective081 => 'EVERYTHING YOU HAVE LEARNED. TAKE YOUR TIME';
+
+  @override
+  String get themeNameBlueprint => 'Clean Blueprint';
+
+  @override
+  String get themeNameWalnut => 'Walnut Workshop';
+
+  @override
+  String get themeNameOcean => 'Ocean Teal';
+
+  @override
+  String get themeNameCopper => 'Warm Copper';
+
+  @override
+  String get themeNameMidnight => 'Midnight Workshop';
+
+  @override
+  String get themeNamePastel => 'Pastel Studio';
+
+  @override
+  String sheetTitleNumbered(int number) {
+    return 'Sheet $number';
+  }
+
+  @override
+  String get sheetTitle001 => 'First Turn';
+
+  @override
+  String get sheetTitle002 => 'Two Point';
+
+  @override
+  String get sheetTitle003 => 'Side by Side';
+
+  @override
+  String get sheetTitle004 => 'Cover Plate';
+
+  @override
+  String get sheetTitle005 => 'Reveal';
+
+  @override
+  String get sheetTitle006 => 'Tray Day';
+
+  @override
+  String get sheetTitle007 => 'Small Plan';
+
+  @override
+  String get sheetTitle008 => 'Tight Fit';
+
+  @override
+  String get sheetTitle009 => 'Round Stock';
+
+  @override
+  String get sheetTitle010 => 'Checkpoint';
+
+  @override
+  String get sheetTitle011 => 'Third Layer';
+
+  @override
+  String get sheetTitle012 => 'Cross Brace';
+
+  @override
+  String get sheetTitle013 => 'Free a Slot';
+
+  @override
+  String get sheetTitle014 => 'Two Ahead';
+
+  @override
+  String get sheetTitle015 => 'Painted Steel';
+
+  @override
+  String get sheetTitle016 => 'Workbench';
+
+  @override
+  String get sheetTitle017 => 'Tempting';
+
+  @override
+  String get sheetTitle018 => 'Cascade';
+
+  @override
+  String get sheetTitle019 => 'Shop Mix';
+
+  @override
+  String get sheetTitle020 => 'Assembly';
+
+  @override
+  String get sheetTitle021 => 'Washer Stack';
+
+  @override
+  String get sheetTitle022 => 'Gasket';
+
+  @override
+  String get sheetTitle023 => 'Lens Cap';
+
+  @override
+  String get sheetTitle024 => 'Hidden Bracket';
+
+  @override
+  String get sheetTitle025 => 'Shim Set';
+
+  @override
+  String get sheetTitle026 => 'Bezel';
+
+  @override
+  String get sheetTitle027 => 'Grommet';
+
+  @override
+  String get sheetTitle028 => 'Breather';
+
+  @override
+  String get sheetTitle029 => 'Flange Ring';
+
+  @override
+  String get sheetTitle030 => 'Porthole';
+
+  @override
+  String get sheetTitle031 => 'Spacer';
+
+  @override
+  String get sheetTitle032 => 'Collar';
+
+  @override
+  String get sheetTitle033 => 'End Cap';
+
+  @override
+  String get sheetTitle034 => 'Quiet Shift';
+
+  @override
+  String get sheetTitle035 => 'Bulkhead';
+
+  @override
+  String get sheetTitle036 => 'Inspection Port';
+
+  @override
+  String get sheetTitle037 => 'Faceplate';
+
+  @override
+  String get sheetTitle038 => 'Light Duty';
+
+  @override
+  String get sheetTitle039 => 'Rosette';
+
+  @override
+  String get sheetTitle040 => 'Layer Cake';
+
+  @override
+  String get sheetTitle041 => 'Make Room';
+
+  @override
+  String get sheetTitle042 => 'Bin Space';
+
+  @override
+  String get sheetTitle043 => 'Overflow';
+
+  @override
+  String get sheetTitle044 => 'Cubby';
+
+  @override
+  String get sheetTitle045 => 'Parts Bin';
+
+  @override
+  String get sheetTitle046 => 'Short Stock';
+
+  @override
+  String get sheetTitle047 => 'Pigeonhole';
+
+  @override
+  String get sheetTitle048 => 'Easy Out';
+
+  @override
+  String get sheetTitle049 => 'Slot Machine';
+
+  @override
+  String get sheetTitle050 => 'Full House';
+
+  @override
+  String get sheetTitle051 => 'Backlog';
+
+  @override
+  String get sheetTitle052 => 'Spare Slot';
+
+  @override
+  String get sheetTitle053 => 'Clearance';
+
+  @override
+  String get sheetTitle054 => 'Loose Fit';
+
+  @override
+  String get sheetTitle055 => 'Inventory';
+
+  @override
+  String get sheetTitle056 => 'Allowance';
+
+  @override
+  String get sheetTitle057 => 'Tolerance';
+
+  @override
+  String get sheetTitle058 => 'Day Off';
+
+  @override
+  String get sheetTitle059 => 'Head Room';
+
+  @override
+  String get sheetTitle060 => 'Storage';
+
+  @override
+  String get sheetTitle061 => 'Interlock';
+
+  @override
+  String get sheetTitle062 => 'Gusset';
+
+  @override
+  String get sheetTitle063 => 'Keystone';
+
+  @override
+  String get sheetTitle064 => 'Lap Joint';
+
+  @override
+  String get sheetTitle065 => 'Splice Plate';
+
+  @override
+  String get sheetTitle066 => 'Dovetail';
+
+  @override
+  String get sheetTitle067 => 'Lintel';
+
+  @override
+  String get sheetTitle068 => 'Off Cut';
+
+  @override
+  String get sheetTitle069 => 'Strut';
+
+  @override
+  String get sheetTitle070 => 'Truss';
+
+  @override
+  String get sheetTitle071 => 'Clevis';
+
+  @override
+  String get sheetTitle072 => 'Yoke';
+
+  @override
+  String get sheetTitle073 => 'Saddle';
+
+  @override
+  String get sheetTitle074 => 'Footing';
+
+  @override
+  String get sheetTitle075 => 'Bracket Pair';
+
+  @override
+  String get sheetTitle076 => 'Clamp Bar';
+
+  @override
+  String get sheetTitle077 => 'Tie Plate';
+
+  @override
+  String get sheetTitle078 => 'Plain Panel';
+
+  @override
+  String get sheetTitle079 => 'Cantilever';
+
+  @override
+  String get sheetTitle080 => 'Moment Frame';
+
+  @override
+  String get sheetTitle081 => 'Master Plan';
+
+  @override
+  String get sheetTitle082 => 'Subassembly';
+
+  @override
+  String get sheetTitle083 => 'Exploded View';
+
+  @override
+  String get sheetTitle084 => 'Fit Check';
+
+  @override
+  String get sheetTitle085 => 'Torque Spec';
+
+  @override
+  String get sheetTitle086 => 'Jig';
+
+  @override
+  String get sheetTitle087 => 'Fixture';
+
+  @override
+  String get sheetTitle088 => 'Calm Bench';
+
+  @override
+  String get sheetTitle089 => 'Gearbox';
+
+  @override
+  String get sheetTitle090 => 'Housing';
+
+  @override
+  String get sheetTitle091 => 'Chassis';
+
+  @override
+  String get sheetTitle092 => 'Panel Bay';
+
+  @override
+  String get sheetTitle093 => 'Cover Set';
+
+  @override
+  String get sheetTitle094 => 'Easy Torque';
+
+  @override
+  String get sheetTitle095 => 'Engine Mount';
+
+  @override
+  String get sheetTitle096 => 'Switchgear';
+
+  @override
+  String get sheetTitle097 => 'Control Box';
+
+  @override
+  String get sheetTitle098 => 'Drafting Table';
+
+  @override
+  String get sheetTitle099 => 'Final Inspection';
+
+  @override
+  String get sheetTitle100 => 'Sign Off';
 }

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../services/ports.dart';
 import '../../core/theme/blueprint_tokens.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/content_l10n.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../services/cosmetics.dart';
@@ -168,7 +169,7 @@ class _ThemeCardState extends State<_ThemeCard> {
   @override
   Widget build(BuildContext context) => Semantics(
     button: true,
-    label: '${widget.theme.name}, ${widget.status}',
+    label: '${AppLocalizations.of(context).themeName(widget.theme)}, ${widget.status}',
     child: GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapDown: (_) => setState(() => _down = true),
@@ -198,9 +199,19 @@ class _ThemeCardState extends State<_ThemeCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.theme.name, style: BpType.button.copyWith(fontSize: 14, color: BpColor.line), maxLines: 2),
+                      Text(
+                        AppLocalizations.of(context).themeName(widget.theme),
+                        style: BpType.button.copyWith(fontSize: 14, color: BpColor.line),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       const SizedBox(height: 3),
-                      Text(widget.status, style: BpType.trayLabel.copyWith(letterSpacing: .8, color: widget.statusColor)),
+                      Text(
+                        widget.status,
+                        style: BpType.trayLabel.copyWith(letterSpacing: .8, color: widget.statusColor),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
                 ),
@@ -262,7 +273,7 @@ class _PreviewSheet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            Expanded(child: Text(theme.name, style: BpType.sheetTitle.copyWith(color: BpColor.line))),
+            Expanded(child: Text(l.themeName(theme), style: BpType.sheetTitle.copyWith(color: BpColor.line))),
             Text(l.previewOnly, style: BpType.caption.copyWith(color: BpColor.textMuted)),
           ],
         ),
@@ -282,7 +293,7 @@ class _PreviewSheet extends StatelessWidget {
                           ? null
                           : () async {
                               await progress.equipTheme(theme.id);
-                              if (context.mounted) showBpToast(context, l.themeEquippedToast(theme.name), kind: BpToastKind.success);
+                              if (context.mounted) showBpToast(context, l.themeEquippedToast(l.themeName(theme)), kind: BpToastKind.success);
                               onClose();
                             },
                       child: Text(equipped ? l.equipped : l.equip, style: BpType.monoButtonBold.copyWith(color: BpColor.ink)),

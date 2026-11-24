@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/theme/blueprint_tokens.dart';
+import 'bp_fit.dart';
 import 'bp_grid.dart';
 
 /// Called on every UI press (sound `sfx_tick` + `selectionClick` haptic).
@@ -10,6 +11,15 @@ VoidCallback? bpUiTick;
 
 /// Called when a toggle flips (latch click). Set once at startup.
 VoidCallback? bpUiToggle;
+
+/// Keeps a button label on one line: a label too long for the button (a
+/// long translation) scales down instead of wrapping past the fixed button
+/// height. Labels that fit render unchanged. Rows with Expanded/Flexible
+/// children manage their own width (ellipsis) and are left alone.
+Widget bpFitLabel(Widget child) {
+  final fixed = child is Text || (child is Row && !child.children.any((c) => c is Flexible));
+  return fixed ? BpShrinkToFit(child: child) : child;
+}
 
 /// Primary action: drafting-yellow, hard offset ink shadow, no blur.
 /// Pressed → translate (+2, +2) and the shadow collapses (90 ms).
@@ -77,7 +87,7 @@ class _BpPrimaryButtonState extends State<BpPrimaryButton> {
                 style: BpType.button.copyWith(color: BpColor.ink),
                 child: IconTheme.merge(
                   data: const IconThemeData(color: BpColor.ink, size: 24),
-                  child: Center(child: widget.child),
+                  child: Center(child: bpFitLabel(widget.child)),
                 ),
               ),
             ),
@@ -157,7 +167,7 @@ class _BpOutlineButtonState extends State<BpOutlineButton> {
                 textAlign: TextAlign.center,
                 child: IconTheme.merge(
                   data: IconThemeData(color: widget.textColor, size: 20),
-                  child: Center(child: widget.child),
+                  child: Center(child: bpFitLabel(widget.child)),
                 ),
               ),
             ),
@@ -235,10 +245,10 @@ class BpToggle extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              AnimatedPositioned(
+              AnimatedPositionedDirectional(
                 duration: BpMotion.toggle,
                 curve: BpMotion.toggleCurve,
-                left: value ? 23 - BpSize.stroke : 3 - BpSize.stroke,
+                start: value ? 23 - BpSize.stroke : 3 - BpSize.stroke,
                 top: 3 - BpSize.stroke,
                 child: AnimatedContainer(
                   duration: BpMotion.feedback,

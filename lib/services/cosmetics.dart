@@ -19,6 +19,9 @@ final class BoardTheme {
   });
 
   final String id;
+
+  /// English name; the UI shows the ARB `themeName*` key for [id]
+  /// (ContentL10n.themeName).
   final String name;
 
   /// Theme card swatch background (screen 14).

@@ -24,7 +24,10 @@ import '../../widgets/bp/bp_screen.dart';
 import '../../widgets/purchase_gate.dart';
 import '../../widgets/sign_in_buttons.dart';
 import '../../widgets/sync_notices.dart';
+import '../../widgets/bp/bp_directional.dart';
+import '../../widgets/bp/bp_fit.dart';
 import 'delete_account_sheet.dart';
+import 'language_sheet.dart';
 import 'sign_out_sheet.dart';
 
 /// Hosted by privacy-project (Projects/screw_out); bundled copies live in
@@ -82,8 +85,12 @@ class SettingsScreen extends StatelessWidget {
           const _RefreshRateRow(),
           _LinkRow(
             label: l.language,
-            value: l.languageEnglish,
+            value: languageNativeName(s.localeCode) ?? l.languageSystemDefault,
             icon: Symbols.chevron_right_sharp,
+            onTap: () async {
+              final choice = await pickLanguage(context, current: s.localeCode);
+              if (choice != null) await cubit.setLocale(choice.code);
+            },
             last: true,
           ),
           const SizedBox(height: 18),
@@ -255,9 +262,13 @@ class _LinkRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(child: Text(label, style: BpType.body.copyWith(color: BpColor.line))),
+            // Native language names are short; the label wraps around them.
             if (value != null) Text(value!, style: BpType.monoBody.copyWith(color: BpColor.lineDefault)),
             const SizedBox(width: 4),
-            Icon(icon, size: 20, color: BpColor.line),
+            if (icon == Symbols.chevron_right_sharp)
+              BpMirrorRtl(child: Icon(icon, size: 20, color: BpColor.line))
+            else
+              Icon(icon, size: 20, color: BpColor.line),
           ],
         ),
       ),
@@ -300,7 +311,7 @@ class _AccountBlock extends StatelessWidget {
         Container(
           constraints: const BoxConstraints(minHeight: 50),
           decoration: const BoxDecoration(border: Border(top: _divider)),
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: Text(l.signedInAs(name), style: BpType.body.copyWith(color: BpColor.line)),
         ),
         Row(
@@ -331,7 +342,7 @@ class _AccountBlock extends StatelessWidget {
                   final (msg, kind) = switch (outcome) {
                     AccountDeletion.deleted => (l.accountDeletedToast, BpToastKind.success),
                     AccountDeletion.deletedProStillBilled => (
-                      l.accountDeletedProToast(subscriptionStoreName()),
+                      l.accountDeletedProToast(subscriptionStoreName(l)),
                       BpToastKind.info,
                     ),
                     AccountDeletion.offline => (l.deleteOffline, BpToastKind.error),
@@ -513,13 +524,16 @@ class _PriceLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = ink ? BpColor.ink : BpColor.line;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(top, style: BpType.monoSmallButton.copyWith(color: c)),
-        if (note != null) Text(note!, style: BpType.caption.copyWith(letterSpacing: .4, color: c)),
-        if (bottom != null) Text(bottom!, style: BpType.caption.copyWith(letterSpacing: .4, color: ink ? BpColor.ink : BpColor.textMuted)),
-      ],
+    // One line each; the block scales down if a translation is too wide.
+    return BpShrinkToFit(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(top, style: BpType.monoSmallButton.copyWith(color: c)),
+          if (note != null) Text(note!, style: BpType.caption.copyWith(letterSpacing: .4, color: c)),
+          if (bottom != null) Text(bottom!, style: BpType.caption.copyWith(letterSpacing: .4, color: ink ? BpColor.ink : BpColor.textMuted)),
+        ],
+      ),
     );
   }
 }

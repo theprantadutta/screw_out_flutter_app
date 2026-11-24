@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../services/leaderboard_service.dart';
 import '../../widgets/bp/bp_buttons.dart';
+import '../../widgets/bp/bp_fit.dart';
 import '../../widgets/bp/bp_grid.dart';
 import '../../widgets/bp/bp_screen.dart';
 import '../../widgets/sign_in_buttons.dart';
@@ -178,9 +179,11 @@ class _Tabs extends StatelessWidget {
                   color: b == selected ? BpColor.line : BpColor.transparent,
                   border: Border.all(color: b == selected ? BpColor.line : BpColor.lineMuted, width: BpSize.stroke),
                 ),
-                child: Text(
-                  labels[b]!,
-                  style: BpType.label.copyWith(color: b == selected ? BpColor.sheet : BpColor.textSecondary),
+                child: BpShrinkToFit(
+                  child: Text(
+                    labels[b]!,
+                    style: BpType.label.copyWith(color: b == selected ? BpColor.sheet : BpColor.textSecondary),
+                  ),
                 ),
               ),
             ),

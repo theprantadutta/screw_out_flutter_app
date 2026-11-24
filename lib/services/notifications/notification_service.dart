@@ -13,6 +13,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../../core/network/api_service.dart';
 import '../../core/network/install_identity.dart';
+import '../../l10n/app_locales.dart';
 import '../../l10n/app_localizations.dart';
 import '../app_log.dart';
 import '../user_service.dart';
@@ -39,7 +40,6 @@ class NotificationService {
 
   static const channelId = 'screw_out_notifications';
   static const _channelName = 'Screw Out';
-  static const _channelDescription = 'Daily sheet reminders and account notices';
   static const _smallIcon = 'ic_notification';
   static const _reminderId = 1901;
   static const _comebackId = 1902;
@@ -51,6 +51,11 @@ class NotificationService {
   String? _token;
   String? _pendingRoute;
   bool _appReady = false;
+
+  /// Channel description in Android's notification settings: a system
+  /// screen, so it follows the device language rather than the app's.
+  late final String _channelDescription =
+      lookupAppLocalizations(resolveAppLocale(null)).notificationChannelDescription;
 
   /// Set by main once the router exists.
   void Function(String route)? navigate;
@@ -76,7 +81,7 @@ class NotificationService {
       await _local
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(
-            const AndroidNotificationChannel(
+            AndroidNotificationChannel(
               channelId,
               _channelName,
               description: _channelDescription,
@@ -148,7 +153,7 @@ class NotificationService {
     );
   }
 
-  static const _details = NotificationDetails(
+  NotificationDetails get _details => NotificationDetails(
     android: AndroidNotificationDetails(
       channelId,
       _channelName,
@@ -157,7 +162,7 @@ class NotificationService {
       priority: Priority.high,
       icon: _smallIcon,
     ),
-    iOS: DarwinNotificationDetails(),
+    iOS: const DarwinNotificationDetails(),
   );
 
   // ------------------------------------------------------- registration
@@ -238,7 +243,7 @@ class NotificationService {
   ///
   /// Called at launch, on pause and when settings or the daily change, so
   /// the comeback reminder is pushed back every time the player plays.
-  Future<void> scheduleDailyReminder({required bool enabled, required bool todayDone, String localeCode = 'en'}) async {
+  Future<void> scheduleDailyReminder({required bool enabled, required bool todayDone, String? localeCode}) async {
     if (!_initialized) return;
     try {
       await _local.cancel(id: _reminderId);
@@ -246,7 +251,8 @@ class NotificationService {
       if (!enabled) return;
       final now = DateTime.now();
       final fire = ReminderPlan.dailyAt(now: now, todayDone: todayDone);
-      final l = lookupAppLocalizations(Locale(localeCode));
+      // Null code = the device language (resolved to a shipped locale).
+      final l = lookupAppLocalizations(resolveAppLocale(localeCode));
       await _local.zonedSchedule(
         id: _reminderId,
         title: l.reminderTitle,

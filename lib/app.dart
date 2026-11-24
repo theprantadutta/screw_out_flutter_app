@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import 'core/di/injection.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/blueprint_tokens.dart';
+import 'l10n/app_locales.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
 import 'presentation/bloc/display/display_cubit.dart';
@@ -53,8 +55,10 @@ class ScrewOutApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: buildAppTheme(),
           routerConfig: router,
-          locale: settings.localeCode == null ? null : Locale(settings.localeCode!),
+          // Null follows the device; codes like 'zh_Hant' keep their script.
+          locale: localeFromCode(settings.localeCode),
           supportedLocales: AppLocalizations.supportedLocales,
+          localeListResolutionCallback: appLocaleResolution,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             // Material, Cupertino and Widgets delegates (material_ui).
@@ -64,9 +68,21 @@ class ScrewOutApp extends StatelessWidget {
             // Text scale: honour the OS within a range the layout survives.
             final mq = MediaQuery.of(context);
             final scale = mq.textScaler.scale(1).clamp(0.9, 1.3);
-            return MediaQuery(
-              data: mq.copyWith(textScaler: TextScaler.linear(scale)),
-              child: BpTabletScale(child: child!),
+            // Script fallbacks for the brand fonts, CJK order per language.
+            final fallback = BpFonts.fallbackFor(Localizations.localeOf(context));
+            final theme = Theme.of(context);
+            return Theme(
+              data: theme.copyWith(
+                textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
+                primaryTextTheme: theme.primaryTextTheme.apply(fontFamilyFallback: fallback),
+              ),
+              child: DefaultTextStyle.merge(
+                style: TextStyle(fontFamilyFallback: fallback),
+                child: MediaQuery(
+                  data: mq.copyWith(textScaler: TextScaler.linear(scale)),
+                  child: BpTabletScale(child: child!),
+                ),
+              ),
             );
           },
         ),

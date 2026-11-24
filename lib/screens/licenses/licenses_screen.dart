@@ -7,13 +7,21 @@ import '../../core/theme/blueprint_tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/bp/bp_screen.dart';
 
-/// Registers the bundled OFL font licences (Space Grotesk, JetBrains Mono)
-/// with Flutter's licence registry. Call once from main.
+/// Registers the bundled OFL font licences (Space Grotesk, JetBrains Mono
+/// and the Noto fallbacks for other scripts) with Flutter's licence
+/// registry. Call once from main.
 void registerFontLicenses() {
   LicenseRegistry.addLicense(() async* {
     for (final (pkg, file) in const [
       ('Space Grotesk', 'assets/legal/OFL-SpaceGrotesk.txt'),
       ('JetBrains Mono', 'assets/legal/OFL-JetBrainsMono.txt'),
+      ('Noto Sans', 'assets/legal/OFL-NotoSans.txt'),
+      ('Noto Sans Arabic', 'assets/legal/OFL-NotoSansArabic.txt'),
+      ('Noto Sans Bengali', 'assets/legal/OFL-NotoSansBengali.txt'),
+      ('Noto Sans Devanagari', 'assets/legal/OFL-NotoSansDevanagari.txt'),
+      ('Noto Sans JP', 'assets/legal/OFL-NotoSansJP.txt'),
+      ('Noto Sans KR', 'assets/legal/OFL-NotoSansKR.txt'),
+      ('Noto Sans TC', 'assets/legal/OFL-NotoSansTC.txt'),
     ]) {
       yield LicenseEntryWithLineBreaks([pkg], await rootBundle.loadString(file));
     }
