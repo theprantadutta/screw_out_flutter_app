@@ -14,22 +14,28 @@ import '../ports.dart';
 import 'ad_banner.dart';
 import 'ad_config.dart';
 import 'ad_gate.dart';
+import 'tap_guard.dart';
 
 /// google_mobile_ads + UMP consent + iOS ATT (ported from snake-classic).
 ///
 /// * Rewarded is always an *optional* choice (hints, rescue) - never forced.
 /// * Interstitial only at natural breaks (after a result card), capped by
-///   [AdGate]; never during a level, never on the first sheets.
+///   [AdGate]; never during a level, never on the first sheets, never in
+///   the install's first session, and always behind a short [TapGuard].
 /// * Banner only on menu screens; app-open only after ≥ 30 min away.
 /// * Pro / Remove-ads turn off interstitial, banner and app-open.
 /// * Consent: UMP; ad requests only when `canRequestAds()` allows.
 class AdService implements AdsPort {
-  AdService({required PremiumCubit premium, required AnalyticsPort analytics})
+  AdService({required PremiumCubit premium, required AnalyticsPort analytics, OverlayState? Function()? overlay})
     : _premium = premium,
-      _analytics = analytics;
+      _analytics = analytics,
+      _overlay = overlay;
 
   final PremiumCubit _premium;
   final AnalyticsPort _analytics;
+
+  /// The app's root overlay, for the [TapGuard] before an interstitial.
+  final OverlayState? Function()? _overlay;
 
   static bool get _mobile => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
@@ -59,6 +65,7 @@ class AdService implements AdsPort {
   static const _kLastFullScreen = 'ads_last_full_screen_ms';
   static const _kLastAppOpen = 'ads_last_app_open_ms';
   static const _kClears = 'ads_clears_this_install';
+  static const _kSessions = 'ads_session_count';
   static const _retryDelays = [2, 10, 45, 180, 600];
 
   bool get _noAds => _premium.state.noAds;
@@ -69,6 +76,7 @@ class AdService implements AdsPort {
     _initialized = true;
     try {
       _prefs = await SharedPreferences.getInstance();
+      await _countSession();
       _premiumSub = _premium.stream.listen((_) => _onPremiumChanged());
       await MobileAds.instance.updateRequestConfiguration(
         RequestConfiguration(maxAdContentRating: MaxAdContentRating.pg),
@@ -91,6 +99,16 @@ class AdService implements AdsPort {
     } on Object catch (e) {
       AppLog.warn('AdService init failed: $e');
     }
+  }
+
+  /// Sessions this install has had (cold launches plus resumes after
+  /// [AdGate.sessionGapMs] away); 1 during the very first one.
+  int get _sessionNumber => _prefs?.getInt(_kSessions) ?? 1;
+
+  Future<void> _countSession() async {
+    final prefs = _prefs;
+    if (prefs == null) return;
+    await prefs.setInt(_kSessions, (prefs.getInt(_kSessions) ?? 0) + 1);
   }
 
   // --------------------------------------------------------------- consent
@@ -313,6 +331,7 @@ class AdService implements AdsPort {
       isDaily: isDaily,
       levelId: levelId,
       clearsThisInstall: clears,
+      sessionNumber: _sessionNumber,
       completionsSinceLastAd: since,
       msSinceLastInterstitial: _msSince(_kLastInterstitial),
       msSinceAnyFullScreenAd: _msSince(_kLastFullScreen),
@@ -342,6 +361,14 @@ class AdService implements AdsPort {
     _fullScreenShowing = true;
     await prefs.setInt(_kCompletions, 0);
     await prefs.setInt(_kLastInterstitial, DateTime.now().millisecondsSinceEpoch);
+    // A tap meant for "Next sheet" must never land on the ad.
+    await TapGuard.absorb(_overlay?.call());
+    if (_noAds) {
+      // Pro arrived during the guard: drop the ad.
+      _fullScreenEnded();
+      ad.dispose();
+      return;
+    }
     _analytics.track('ad_impression', {'format': 'interstitial', 'level_id': levelId});
     await ad.show();
     await done.future.timeout(const Duration(minutes: 2), onTimeout: () {});
@@ -385,6 +412,7 @@ class AdService implements AdsPort {
 
   Future<void> onResumed() async {
     final away = _backgroundedAt == null ? 0 : DateTime.now().difference(_backgroundedAt!).inMilliseconds;
+    if (AdGate.startsNewSession(msAway: away)) await _countSession();
     final suppressed = _suppressAppOpen || _fullScreenShowing;
     _suppressAppOpen = false;
     // App-open ads expire after 4 h.

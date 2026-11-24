@@ -17,6 +17,7 @@ import '../../l10n/app_localizations.dart';
 import '../app_log.dart';
 import '../user_service.dart';
 import 'notification_primer.dart';
+import 'reminder_plan.dart';
 
 /// FCM + local notifications (ported from snake-classic).
 ///
@@ -28,6 +29,8 @@ import 'notification_primer.dart';
 ///   app is ready.
 /// * A local 19:00 reminder is the offline fallback for the daily sheet; the
 ///   server's reminder covers players with a backend session.
+/// * New players also get a local comeback reminder about a day after they
+///   last played, during their first week ([ReminderPlan]).
 class NotificationService {
   NotificationService({required ApiService api, required UserService user}) : _api = api, _user = user;
 
@@ -39,6 +42,7 @@ class NotificationService {
   static const _channelDescription = 'Daily sheet reminders and account notices';
   static const _smallIcon = 'ic_notification';
   static const _reminderId = 1901;
+  static const _comebackId = 1902;
   static const _primerAskedKey = 'notif_primer_asked';
   static const _lastTokenKey = 'fcm_last_registered_token';
 
@@ -223,21 +227,25 @@ class NotificationService {
 
   // ------------------------------------------------- local daily reminder
 
-  /// Schedules (or cancels) the 19:00 reminder for today's sheet.
+  /// Schedules (or cancels) the 19:00 reminder for today's sheet, and the
+  /// first-week comeback reminder ([ReminderPlan]).
   ///
   /// The device owns this reminder for every player, signed in or not: it
   /// works offline and needs no server. (It used to be skipped whenever the
   /// app had an API session, leaving it to a server push that never ran, so
   /// nobody who allowed notifications got one.) The server only sends what
   /// it alone knows: streak-at-risk, win-back and Pro coins.
+  ///
+  /// Called at launch, on pause and when settings or the daily change, so
+  /// the comeback reminder is pushed back every time the player plays.
   Future<void> scheduleDailyReminder({required bool enabled, required bool todayDone, String localeCode = 'en'}) async {
     if (!_initialized) return;
     try {
       await _local.cancel(id: _reminderId);
+      await _local.cancel(id: _comebackId);
       if (!enabled) return;
       final now = DateTime.now();
-      var fire = DateTime(now.year, now.month, now.day, 19);
-      if (todayDone || !fire.isAfter(now)) fire = fire.add(const Duration(days: 1));
+      final fire = ReminderPlan.dailyAt(now: now, todayDone: todayDone);
       final l = lookupAppLocalizations(Locale(localeCode));
       await _local.zonedSchedule(
         id: _reminderId,
@@ -248,6 +256,24 @@ class NotificationService {
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         payload: jsonEncode({'type': 'daily_reminder', 'nav_route': '/daily'}),
       );
+      final comeback = ReminderPlan.comebackAt(
+        now: now,
+        installedAt: InstallIdentity.current?.installedAt,
+        enabled: enabled,
+        permitted: await areNotificationsEnabled(),
+        dailyAt: fire,
+      );
+      if (comeback != null) {
+        await _local.zonedSchedule(
+          id: _comebackId,
+          title: l.comebackReminderTitle,
+          body: l.comebackReminderBody,
+          scheduledDate: tz.TZDateTime.from(comeback, tz.UTC),
+          notificationDetails: _details,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          payload: jsonEncode({'type': 'comeback_reminder', 'nav_route': '/home'}),
+        );
+      }
     } on Object catch (e) {
       AppLog.warn('Scheduling reminder failed: $e');
     }

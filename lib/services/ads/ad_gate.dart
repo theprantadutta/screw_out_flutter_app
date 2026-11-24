@@ -6,6 +6,12 @@ abstract final class AdGate {
   static const minClearsBeforeInterstitial = 15;
   static const firstAdSheet = 16;
 
+  /// Never in the install's first session, however fast someone plays:
+  /// day-0 players who get several calm rounds in come back far more.
+  /// A session starts at a cold launch or a resume after [sessionGapMs].
+  static const firstAdSession = 2;
+  static const sessionGapMs = 30 * 60 * 1000;
+
   /// Show at most every Nth level completion…
   static const everyNCompletions = 6;
 
@@ -23,6 +29,7 @@ abstract final class AdGate {
     required bool isDaily,
     required int levelId,
     required int clearsThisInstall,
+    required int sessionNumber,
     required int completionsSinceLastAd,
     required int msSinceLastInterstitial,
     required int msSinceAnyFullScreenAd,
@@ -30,6 +37,7 @@ abstract final class AdGate {
     if (noAds || !adsEnabled || !loaded) return false;
     if (isDaily) return false;
     if (levelId < firstAdSheet || clearsThisInstall < minClearsBeforeInterstitial) return false;
+    if (sessionNumber < firstAdSession) return false;
     if (completionsSinceLastAd + 1 < everyNCompletions) return false;
     if (msSinceLastInterstitial < minGapMs) return false;
     if (msSinceAnyFullScreenAd < minFullScreenGapMs) return false;
@@ -38,6 +46,9 @@ abstract final class AdGate {
 
   static const appOpenMinAwayMs = 30 * 60 * 1000;
   static const appOpenMinGapMs = 30 * 60 * 1000;
+
+  /// A resume after this long away starts a new session.
+  static bool startsNewSession({required int msAway}) => msAway >= sessionGapMs;
 
   /// App-open ad on resume?
   static bool appOpen({

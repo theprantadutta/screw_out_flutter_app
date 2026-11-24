@@ -7,6 +7,7 @@ import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/premium/premium_cubit.dart';
 import '../../presentation/bloc/progress/progress_cubit.dart';
 import '../../presentation/bloc/settings/settings_cubit.dart';
+import '../../router/app_router.dart';
 import '../../services/audio/audio_service.dart';
 import '../../services/leaderboard_service.dart';
 import '../../services/ads/ad_service.dart';
@@ -86,7 +87,11 @@ void configureDependencies({required bool firebase, AppDatabase? database}) {
   // Platform services behind the UI ports.
   getIt
     ..registerLazySingleton<AdService>(
-      () => AdService(premium: getIt<PremiumCubit>(), analytics: getIt<AnalyticsPort>()),
+      () => AdService(
+        premium: getIt<PremiumCubit>(),
+        analytics: getIt<AnalyticsPort>(),
+        overlay: () => rootNavigatorKey.currentState?.overlay,
+      ),
     )
     ..registerLazySingleton<AdsPort>(() => getIt<AdService>())
     ..registerLazySingleton<PurchaseService>(
