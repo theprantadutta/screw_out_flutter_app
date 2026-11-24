@@ -28,8 +28,9 @@ class MainActivity : FlutterActivity() {
     // become go_router's initial location. Deep links use data.nav_route.
     override fun getInitialRoute(): String? = null
 
-    // Opens this app's system notification settings (a permanently denied
-    // POST_NOTIFICATIONS can only be re-enabled there).
+    // Platform channels: opening this app's system notification settings (a
+    // permanently denied POST_NOTIFICATIONS can only be re-enabled there)
+    // and the Firebase Test Lab check.
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "screw_out/notification_settings")
@@ -41,6 +42,22 @@ class MainActivity : FlutterActivity() {
                     }
                     startActivity(intent)
                     result.success(true)
+                } else {
+                    result.notImplemented()
+                }
+            }
+        // Firebase Test Lab (also behind Play's pre-launch report) sets this
+        // system setting on its devices. Dart turns analytics, crash reports
+        // and ads off there so robots never count as players or click ads.
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "screw_out/test_lab")
+            .setMethodCallHandler { call, result ->
+                if (call.method == "isTestLab") {
+                    val flag = try {
+                        Settings.System.getString(contentResolver, "firebase.test.lab")
+                    } catch (e: Exception) {
+                        null
+                    }
+                    result.success(flag == "true")
                 } else {
                     result.notImplemented()
                 }

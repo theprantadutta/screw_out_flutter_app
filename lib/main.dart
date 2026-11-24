@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -39,6 +40,7 @@ import 'services/notifications/notification_service.dart';
 import 'services/ports.dart';
 import 'services/purchases/purchase_service.dart';
 import 'services/sync/sync_engine.dart';
+import 'services/test_lab_detector.dart';
 import 'services/user_service.dart';
 import 'services/update/in_app_update_service.dart';
 import 'widgets/bp/bp_buttons.dart';
@@ -49,8 +51,8 @@ Future<void> main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: binding);
   try {
-    final firebase = await _preBoot();
-    configureDependencies(firebase: firebase);
+    final (:firebase, :testLab) = await _preBoot();
+    configureDependencies(firebase: firebase, testLab: testLab);
     final ready = _bootstrapServices(firebase: firebase);
     final router = createAppRouter(
       ready: ready,
@@ -73,8 +75,12 @@ Future<void> main() async {
 }
 
 /// Everything that must exist before the first frame. Returns whether
-/// Firebase is available.
-Future<bool> _preBoot() async {
+/// Firebase is available and whether this is a Firebase Test Lab / Play
+/// pre-launch robot (analytics, crash reports and ads stay off there).
+Future<({bool firebase, bool testLab})> _preBoot() async {
+  // Asked first, so Analytics can be switched off right after Firebase
+  // starts and before the app logs any event of its own.
+  final testLab = await TestLabDetector().isTestLab();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   try {
@@ -85,15 +91,27 @@ Future<bool> _preBoot() async {
   var firebase = false;
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    if (testLab) await _silenceAnalytics();
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     firebase = true;
-    await _setUpCrashlytics();
+    await _setUpCrashlytics(testLab: testLab);
   } on Object catch (e) {
     AppLog.warn('Firebase unavailable - accounts, push and analytics off: $e');
   }
   registerFontLicenses();
   await InstallIdentity.load();
-  return firebase;
+  return (firebase: firebase, testLab: testLab);
+}
+
+/// Test Lab robots must not count as players: stops Firebase Analytics
+/// collection on this device (the SDK persists the choice). The app's own
+/// events are also never routed to Firebase there (see injection.dart).
+Future<void> _silenceAnalytics() async {
+  try {
+    await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(false);
+  } on Object catch (e) {
+    AppLog.warn('Could not disable Analytics on a Test Lab device: $e');
+  }
 }
 
 /// Crash reporting (Firebase Crashlytics), release builds only: debug runs
@@ -101,10 +119,13 @@ Future<bool> _preBoot() async {
 /// Uncaught Flutter and platform errors are reported as crashes; handled
 /// ones logged through [AppLog.error] as non-fatal issues. Nothing personal
 /// is attached (no user id, no emails): stack traces, device and version.
-Future<void> _setUpCrashlytics() async {
+/// Off on Test Lab / Play pre-launch robots, whose crashes are already in
+/// the pre-launch report and would only skew the real crash-free rate.
+Future<void> _setUpCrashlytics({required bool testLab}) async {
   final crashlytics = FirebaseCrashlytics.instance;
-  await crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
-  if (kDebugMode) return;
+  final enabled = !kDebugMode && !testLab;
+  await crashlytics.setCrashlyticsCollectionEnabled(enabled);
+  if (!enabled) return;
   FlutterError.onError = crashlytics.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
     unawaited(crashlytics.recordError(error, stack, fatal: true));

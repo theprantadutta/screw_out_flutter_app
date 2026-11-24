@@ -35,7 +35,9 @@ final getIt = GetIt.instance;
 ///
 /// [firebase] is false when Firebase could not initialise (desktop, tests,
 /// a broken google-services config): Firebase-backed clients are skipped.
-void configureDependencies({required bool firebase, AppDatabase? database}) {
+/// [testLab] is true on a Firebase Test Lab / Play pre-launch robot: no
+/// Firebase Analytics client and no ads (see TestLabDetector).
+void configureDependencies({required bool firebase, bool testLab = false, AppDatabase? database}) {
   if (getIt.isRegistered<AppDatabase>()) return;
 
   // Data.
@@ -64,7 +66,7 @@ void configureDependencies({required bool firebase, AppDatabase? database}) {
     )
     ..registerLazySingleton<AnalyticsPort>(
       () => AnalyticsFacade([
-        if (kDebugMode) DebugAnalyticsClient() else if (firebase) FirebaseAnalyticsClient(),
+        ...platformAnalyticsClients(debug: kDebugMode, firebase: firebase, testLab: testLab),
         getIt<TelemetryRecorder>(),
       ]),
     );
@@ -86,7 +88,7 @@ void configureDependencies({required bool firebase, AppDatabase? database}) {
   // Platform services behind the UI ports.
   getIt
     ..registerLazySingleton<AdService>(
-      () => AdService(premium: getIt<PremiumCubit>(), analytics: getIt<AnalyticsPort>()),
+      () => AdService(premium: getIt<PremiumCubit>(), analytics: getIt<AnalyticsPort>(), testLab: testLab),
     )
     ..registerLazySingleton<AdsPort>(() => getIt<AdService>())
     ..registerLazySingleton<PurchaseService>(

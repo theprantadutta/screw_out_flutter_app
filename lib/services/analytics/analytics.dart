@@ -40,6 +40,22 @@ class AnalyticsFacade implements AnalyticsPort {
   }
 }
 
+/// The platform analytics destination for this run: the console in debug,
+/// Firebase in release, and nothing on a Firebase Test Lab / Play
+/// pre-launch robot (it must never count as a player) or when Firebase is
+/// unavailable. Backend telemetry is added separately.
+List<AnalyticsClient> platformAnalyticsClients({
+  required bool debug,
+  required bool firebase,
+  required bool testLab,
+  AnalyticsClient Function()? firebaseClient,
+}) => [
+  if (debug)
+    DebugAnalyticsClient()
+  else if (firebase && !testLab)
+    (firebaseClient ?? FirebaseAnalyticsClient.new)(),
+];
+
 /// Firebase Analytics (release builds). Params are coerced to the types
 /// GA4 accepts; nothing personal is ever sent.
 class FirebaseAnalyticsClient implements AnalyticsClient {

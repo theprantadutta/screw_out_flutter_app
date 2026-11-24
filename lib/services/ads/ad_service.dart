@@ -24,14 +24,21 @@ import 'ad_gate.dart';
 /// * Pro / Remove-ads turn off interstitial, banner and app-open.
 /// * Consent: UMP; ad requests only when `canRequestAds()` allows.
 class AdService implements AdsPort {
-  AdService({required PremiumCubit premium, required AnalyticsPort analytics})
+  AdService({required PremiumCubit premium, required AnalyticsPort analytics, bool testLab = false})
     : _premium = premium,
-      _analytics = analytics;
+      _analytics = analytics,
+      _testLab = testLab;
 
   final PremiumCubit _premium;
   final AnalyticsPort _analytics;
 
-  static bool get _mobile => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+  /// Firebase Test Lab / Play pre-launch robot: the SDK is never started and
+  /// no ad is ever requested (robot clicks are invalid traffic). The game
+  /// stays fully playable; rewarded extras simply report unavailable.
+  final bool _testLab;
+
+  bool get _mobile => !_testLab && _platformMobile;
+  static bool get _platformMobile => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   bool _sdkReady = false;
   bool _canRequestAds = false;
