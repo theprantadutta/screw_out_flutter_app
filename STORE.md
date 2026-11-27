@@ -17,6 +17,11 @@ All product IDs use the `com.pranta.screwout.` prefix.
 
 ## Store listing (Google Play)
 
+> **Google Play only.** The App Store name is `Screw Out: Blueprint Puzzle` and its
+> listing avoids this genre wording on purpose: Apple rejected the app under 4.3
+> (Spam) for it on 2026-10-23. App Store text lives in `store_listings/app-store-i18n/`.
+> Never copy the Play title, short description or keywords into App Store Connect.
+
 **App name** (30 max): `Screw Out: Screw Puzzle` (sent for review 2026-11-24).
 The search term ("screw puzzle") is in the title because Play search drives
 almost all organic installs; plain "Screw Out" didn't rank for it.

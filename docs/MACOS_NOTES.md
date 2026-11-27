@@ -109,7 +109,11 @@ no real purchase on either platform.
       The app ships in 14 languages (en plus es, pt-BR, fr, de, ru, tr, id,
       hi, ar, bn, ja, ko, zh-Hant). Add each as a localization in App Store
       Connect (Spanish as both es-MX and es-ES, Portuguese as pt-BR, Chinese
-      as zh-Hant). Use `store_listings/play-listing-i18n/listings.json` as the
+      as zh-Hant). **Superseded 2026-11-27: do NOT use the Play listing for
+      App Store Connect.** Apple rejected the app under 4.3 for that genre
+      wording; the App Store keeps the Blueprint name and text, in
+      `store_listings/app-store-i18n/` (see CLAUDE.md). Original note:
+      Use `store_listings/play-listing-i18n/listings.json` as the
       source: its `title` is the App Store **name** (30 max), `short` fits the
       **subtitle** only if cut to 30 (write a 30-char subtitle with the same
       search keyword), `full` is the **description**, `whatsnew` the
